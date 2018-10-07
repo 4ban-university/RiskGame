@@ -1,6 +1,9 @@
 # soen6441
 The risk game
 
+# The Google drive folder
+Presentation and documentation should be [here](https://drive.google.com/open?id=1huxtpM3wpLfRqsBpULZw2bwL_oJIjaIN)
+
 # Development
 Open project in Intellij Idea and run Launcher via default build configuration.
 
