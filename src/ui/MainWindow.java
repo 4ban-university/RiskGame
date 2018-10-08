@@ -9,6 +9,9 @@ import java.awt.event.ActionEvent;
 import javax.swing.*;
 
 
+/**
+ * The type Main window.
+ */
 public class MainWindow {
 
     private JFrame frame;
@@ -17,6 +20,13 @@ public class MainWindow {
     private String title;
     private int width, height;
 
+    /**
+     * Instantiates a new Main window.
+     *
+     * @param title  the title
+     * @param width  the width
+     * @param height the height
+     */
     public MainWindow(String title, int width, int height){
         this.title = title;
         this.width = width;
@@ -63,7 +73,9 @@ public class MainWindow {
 //        return menubar;
 //    }
 
-    // close the application.
+    /**
+     * Quit.
+     */
     protected void quit() {
         System.exit(0);
     }
