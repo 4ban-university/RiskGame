@@ -5,6 +5,7 @@ import map_editor.StartEditor;
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.*;
+import java.io.File;
 
 public class MainWindow extends JFrame {
 

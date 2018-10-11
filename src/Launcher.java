@@ -2,13 +2,9 @@ import ui.MainWindow;
 
 public class Launcher {
 
-    private MainWindow window;
-    public int width, height;
-
     public Launcher(String title, int width, int height){
-        this.width = width;
-        this.height = height;
-        window = new MainWindow(title, width, height);
+        System.out.println("DEBUG: Launcher is tarted\n-------------------------\n");
+        MainWindow window = new MainWindow(title, width, height);
     }
 
     public static void main(String[] args){
