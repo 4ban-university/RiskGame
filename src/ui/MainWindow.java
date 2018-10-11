@@ -1,5 +1,7 @@
 package ui;
 
+import map_editor.StartEditor;
+
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.*;
@@ -42,19 +44,19 @@ public class MainWindow extends JFrame {
         player2.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent arg0) {
-                System.out.println ("ActionListener.actionPerformed : 2 players");
+                System.out.println ("DEBUG: Chosen 2 players\n ------------------------ \n");
             }
         });
         player3.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent arg0) {
-                System.out.println ("ActionListener.actionPerformed : 3 players");
+                System.out.println ("DEBUG: Chosen 3 players\n ------------------------ \n");
             }
         });
         player4.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent arg0) {
-                System.out.println ("ActionListener.actionPerformed : 4 players");
+                System.out.println ("DEBUG: Chosen 4 players\n ------------------------ \n");
             }
         });
         return newGame;
@@ -67,7 +69,8 @@ public class MainWindow extends JFrame {
         editor.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent arg0) {
-                System.out.println ("ActionListener.actionPerformed : Open map editor");
+                System.out.println ("DEBUG: Launch Map_editor\n ------------------------ \n");
+                StartEditor editor = new StartEditor();
             }
         });
         return mapEditor;
