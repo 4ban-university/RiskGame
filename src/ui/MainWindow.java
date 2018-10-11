@@ -1,6 +1,7 @@
 package ui;
 
 import map_editor.StartEditor;
+import utils.MapLoader;
 
 import javax.swing.*;
 import javax.swing.filechooser.FileSystemView;
@@ -49,7 +50,7 @@ public class MainWindow extends JFrame {
                 System.out.println ("DEBUG: Chosen 2 players\n ------------------------ \n");
                 int players = 2;
                 String filePath = filePath();
-
+                MapLoader loader = new MapLoader(players, filePath);
             }
         });
         player3.addActionListener(new ActionListener() {
@@ -58,6 +59,7 @@ public class MainWindow extends JFrame {
                 System.out.println ("DEBUG: Chosen 3 players\n ------------------------ \n");
                 int players = 3;
                 String filePath = filePath();
+                MapLoader loader = new MapLoader(players, filePath);
             }
         });
         player4.addActionListener(new ActionListener() {
@@ -66,6 +68,7 @@ public class MainWindow extends JFrame {
                 System.out.println ("DEBUG: Chosen 4 players\n ------------------------ \n");
                 int players = 4;
                 String filePath = filePath();
+                MapLoader loader = new MapLoader(players, filePath);
             }
         });
         return newGame;
