@@ -3,6 +3,7 @@ package ui;
 import map_editor.StartEditor;
 
 import javax.swing.*;
+import javax.swing.filechooser.FileSystemView;
 import java.awt.*;
 import java.awt.event.*;
 import java.io.File;
@@ -46,18 +47,25 @@ public class MainWindow extends JFrame {
             @Override
             public void actionPerformed(ActionEvent arg0) {
                 System.out.println ("DEBUG: Chosen 2 players\n ------------------------ \n");
+                int players = 2;
+                String filePath = filePath();
+
             }
         });
         player3.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent arg0) {
                 System.out.println ("DEBUG: Chosen 3 players\n ------------------------ \n");
+                int players = 3;
+                String filePath = filePath();
             }
         });
         player4.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent arg0) {
                 System.out.println ("DEBUG: Chosen 4 players\n ------------------------ \n");
+                int players = 4;
+                String filePath = filePath();
             }
         });
         return newGame;
@@ -90,5 +98,15 @@ public class MainWindow extends JFrame {
         public void actionPerformed(ActionEvent e) {
             System.exit(0);
         }
+    }
+    private String filePath() {
+        JFileChooser fileChooser = new JFileChooser(FileSystemView.getFileSystemView().getHomeDirectory());
+        int returnValue = fileChooser.showOpenDialog(null);
+
+        if (returnValue == JFileChooser.APPROVE_OPTION) {
+            File selectedFile = fileChooser.getSelectedFile();
+            return selectedFile.getAbsolutePath();
+        }
+        return "default.map";
     }
 }
