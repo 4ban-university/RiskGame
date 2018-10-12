@@ -24,14 +24,14 @@ public class MainWindow extends JFrame {
         setSize(this.width, this.height);
         setResizable(false);
         setLocationRelativeTo(null);
-        add(new JLabel(new ImageIcon("src/resources/back.jpeg")));
+        add(new JLabel(new ImageIcon("src/resources/back.jpg")));
 
         JMenuBar menuBar = new JMenuBar();
         menuBar.add(newGame());
         menuBar.add(mapEditor());
         menuBar.add(exit());
         setJMenuBar(menuBar);
-        // pack(); // ignore sizing
+        pack(); // ignore sizing
         setVisible(true);
     }
 
@@ -110,6 +110,7 @@ public class MainWindow extends JFrame {
             File selectedFile = fileChooser.getSelectedFile();
             return selectedFile.getAbsolutePath();
         }
+        System.out.println("DEBUG: Using the default map!\n---------------------------------------\n");
         return "default.map";
     }
 }
