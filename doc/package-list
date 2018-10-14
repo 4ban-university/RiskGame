@@ -1,2 +1,7 @@
 
+game
+map_editor
+model
 ui
+utils
+ui.view
