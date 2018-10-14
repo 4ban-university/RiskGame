@@ -15,34 +15,31 @@ import model.Player;
 public class MapLoader {
     public static int RADIUS = 20;
     public static List<Country> countries = new ArrayList<>();
+    public static List<Country> countriesTemp = new ArrayList<>();
     public static List<Neighbour> neighbours = new ArrayList<>();
 
     public MapLoader(int players, String filePath) {
         String line;
-        // TODO Create players;
-        // create additional array of players
-        //Player player1 = new Player("Player 1 Name", Color.BLUE);
-        Random r = new Random();
-        Player player1 = new Player("Player 1 Name", Color.BLUE);
-        player1.setInfantry(r.nextInt(100));
-        player1.setCavalry(r.nextInt(100));
-        player1.setArtillery(r.nextInt(100));
-        player1.setWildcards(r.nextInt(100));
-        player1.setBonus(r.nextInt(100));
 
-        Player player2 = new Player("Player 2 Name", Color.PINK);
-        player2.setInfantry(r.nextInt(100));
-        player2.setCavalry(r.nextInt(100));
-        player2.setArtillery(r.nextInt(100));
-        player2.setWildcards(r.nextInt(100));
-        player2.setBonus(r.nextInt(100));
+        Player player1 = new Player("Player 1", Color.BLUE);
+        Player player2 = new Player("Player 2", Color.PINK);
+        Player player3 = new Player("Player 3", Color.CYAN);
+        Player player4 = new Player("Player 3", Color.GREEN);
 
-        Player player3 = new Player("Player 3 Name", Color.CYAN);
-        player3.setInfantry(r.nextInt(100));
-        player3.setCavalry(r.nextInt(100));
-        player3.setArtillery(r.nextInt(100));
-        player3.setWildcards(r.nextInt(100));
-        player3.setBonus(r.nextInt(100));
+        Color[] playerColor = new Color[4];
+
+        playerColor[0] = Color.BLUE;
+        playerColor[1] = Color.PINK;
+        playerColor[2] = Color.CYAN;
+        playerColor[3] = Color.GREEN;
+
+        Player[] playerList = new Player[players];
+
+        int[] countriesPerPlayer = new int[players];
+        for (int i=0; i<players; i++) {
+            playerList[i] = new Player("Player " + (i + 1), playerColor[i]);
+            countriesPerPlayer[i] = 0;
+        }
 
         try {
             FileReader fileReader = new FileReader(filePath);
@@ -52,13 +49,27 @@ public class MapLoader {
                 System.out.println(line);
                 if (flag) {
                     String[] countryDetails = line.split(",");
-                    countries.add(new Country(countryDetails[0], Integer.parseInt(countryDetails[1]), Integer.parseInt(countryDetails[2]), RADIUS, player1));
+                    countries.add(new Country(countryDetails[0], Integer.parseInt(countryDetails[1]), Integer.parseInt(countryDetails[2]), RADIUS, playerList[0]));
                 }
                 if (line.equals("[Territories]"))
                     flag = true;
                 //TODO load the map into structure
             }
             bufferedReader.close();
+
+            int playerDistrib = countries.size() / playerList.length;
+            int changeDistrib = playerDistrib * players;
+            Random rand = new Random();
+
+            for (int i=0; i<countries.size(); i++) {
+                int newPlayer = rand.nextInt(players);
+                if (i+1 <= changeDistrib) {
+                    while (countriesPerPlayer[newPlayer] >= playerDistrib)
+                        newPlayer = rand.nextInt(players);
+                }
+                countries.get(i).setPlayer(playerList[newPlayer]);
+                countriesPerPlayer[newPlayer]++;
+            }
 
             //TODO Create countries and assign player via random get from additional player array
             //countries.add(new Country("RRRRR", 130, 100, RADIUS, player1));
@@ -78,8 +89,8 @@ public class MapLoader {
 //            countries.add(new Country("China", 400, 450, RADIUS, player3));
 //            countries.add(new Country("Japan", 400, 300, RADIUS, player3));
 
-            neighbours.add(new Neighbour(countries.get(0), countries.get(1)));
-            neighbours.add(new Neighbour(countries.get(1), countries.get(2)));
+            //neighbours.add(new Neighbour(countries.get(0), countries.get(1)));
+           // neighbours.add(new Neighbour(countries.get(1), countries.get(2)));
 //            neighbours.add(new Neighbour(countries.get(1), countries.get(4)));
 //            neighbours.add(new Neighbour(countries.get(2), countries.get(3)));
 //
