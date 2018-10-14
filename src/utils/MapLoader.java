@@ -47,7 +47,7 @@ public class MapLoader {
                     String[] countryDetails = line.split(",");
                     countries.add(new Country(countryDetails[0], Integer.parseInt(countryDetails[1]), Integer.parseInt(countryDetails[2]), RADIUS, playerList[0]));
                     String neighbour = "";
-                    for (int i=3; i<countryDetails.length; i++) {
+                    for (int i=4; i<countryDetails.length; i++) {
                         neighbour += countryDetails[i];
                         if (i!=countryDetails.length-1)
                             neighbour += ",";
