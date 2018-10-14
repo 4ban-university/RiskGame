@@ -29,7 +29,7 @@ public class Main {
         frame.setDefaultLookAndFeelDecorated(true);
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         frame.setResizable(false);
-        frame.getRootPane().setWindowDecorationStyle(JRootPane.NONE);
+        //frame.getRootPane().setWindowDecorationStyle(JRootPane.NONE);
 
         // Top Status Game Info Bar
         TopStatusPanel topStatusPanel = new TopStatusPanel(width, 30);
