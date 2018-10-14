@@ -10,14 +10,20 @@ public class Country {
     private int ARMY_BACKGROUND_WITHT = 6;
 
     private String name;
-    private int x;
-    private int y;
-    private int radius;
-    private int army;
-    private List<Country> neighbours = new ArrayList<>();
-    private boolean isSelected;
-    private boolean isHighlited;
     private Player player;
+
+    private int x = 0;
+    private int y = 0;
+    private int radius = 0;
+    private int army = 0;
+    private List<Country> neighbours = new ArrayList<>();
+    private boolean isSelected = false;
+    private boolean isHighlited = false;
+
+    public Country(String name, Player player) {
+        this.name = name;
+        this.player = player;
+    }
 
     public Country(String name, int x, int y, int radius, Player player) {
         this.name = name;
@@ -25,10 +31,6 @@ public class Country {
         this.y = y;
         this.radius = radius;
         this.player = player;
-
-        this.army = 1;
-        this.isSelected = false;
-        this.isHighlited = false;
     }
 
     public String getName() {
@@ -125,7 +127,7 @@ public class Country {
 
         } else if (isHighlited){
             Ellipse2D.Double highlight = new Ellipse2D.Double(x - radius - HIGHLIGHT_BORDER_WITHT/2, y - radius -HIGHLIGHT_BORDER_WITHT/2 , radius * 2 + HIGHLIGHT_BORDER_WITHT, radius * 2 + HIGHLIGHT_BORDER_WITHT);
-            g2d.setColor(Color.YELLOW);
+            g2d.setColor(Color.RED);
             g2d.fill(highlight);
             g2d.setColor(Color.BLACK);
             g2d.draw(highlight);
@@ -147,6 +149,6 @@ public class Country {
         g2d.drawString(Integer.toString(army), x - 3, y + 5);
 
         g2d.setColor(Color.BLACK);
-        g2d.drawString(name, x - radius, y - radius);
+        g2d.drawString(name, x - radius, y - radius - ARMY_BACKGROUND_WITHT);
     }
 }
