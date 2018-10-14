@@ -8,7 +8,7 @@ public class Launcher {
     }
 
     public static void main(String[] args){
-        new Launcher("RiskGame by Team 3", 1100, 750);
+        new Launcher("RiskGame by Team 3", 450, 250);
     }
 
 }
