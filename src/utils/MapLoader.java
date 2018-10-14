@@ -20,18 +20,12 @@ public class MapLoader {
 
     public MapLoader(int players, String filePath) {
         String line;
-
-        Player player1 = new Player("Player 1", Color.BLUE);
-        Player player2 = new Player("Player 2", Color.PINK);
-        Player player3 = new Player("Player 3", Color.CYAN);
-        Player player4 = new Player("Player 3", Color.GREEN);
-
         Color[] playerColor = new Color[4];
 
         playerColor[0] = Color.BLUE;
-        playerColor[1] = Color.PINK;
+        playerColor[1] = Color.ORANGE;
         playerColor[2] = Color.CYAN;
-        playerColor[3] = Color.GREEN;
+        playerColor[3] = Color.GRAY;
 
         Player[] playerList = new Player[players];
 
@@ -40,6 +34,8 @@ public class MapLoader {
             playerList[i] = new Player("Player " + (i + 1), playerColor[i]);
             countriesPerPlayer[i] = 0;
         }
+
+        List<String> neighboursList = new ArrayList<String>();
 
         try {
             FileReader fileReader = new FileReader(filePath);
@@ -50,6 +46,13 @@ public class MapLoader {
                 if (flag) {
                     String[] countryDetails = line.split(",");
                     countries.add(new Country(countryDetails[0], Integer.parseInt(countryDetails[1]), Integer.parseInt(countryDetails[2]), RADIUS, playerList[0]));
+                    String neighbour = "";
+                    for (int i=3; i<countryDetails.length; i++) {
+                        neighbour += countryDetails[i];
+                        if (i!=countryDetails.length-1)
+                            neighbour += ",";
+                    }
+                    neighboursList.add(neighbour);
                 }
                 if (line.equals("[Territories]"))
                     flag = true;
@@ -70,24 +73,17 @@ public class MapLoader {
                 countries.get(i).setPlayer(playerList[newPlayer]);
                 countriesPerPlayer[newPlayer]++;
             }
+            //String str = ""
+            for (int i=0; i < countries.size(); i++) {
+                String[] str = neighboursList.get(i).split(",");
+                for (int j=0; j<str.length; j++) {
+                    for (int k=0; k<countries.size(); k++)
+                        if (str[j].equals(countries.get(k).getName()))
+                            neighbours.add(new Neighbour(countries.get(i), countries.get(k)));
+                }
+                //System.out.println(str);
 
-            //TODO Create countries and assign player via random get from additional player array
-            //countries.add(new Country("RRRRR", 130, 100, RADIUS, player1));
-
-            //Create neighbour via getting the country from country array
-            //neighbours.add(new Neighbour(countries.get(0), countries.get(1)));
-
-            //-------------------------------------------------------------------
-            // Temporary map example
-
-
-//            countries.add(new Country("Canada", 100, 100, RADIUS, player1));
-//            countries.add(new Country("USA", 100, 300, RADIUS, player1));
-//            countries.add(new Country("England", 300, 100, RADIUS, player2));
-//            countries.add(new Country("France", 300, 200, RADIUS, player2));
-//            countries.add(new Country("Mexico", 150, 400, RADIUS, player2));
-//            countries.add(new Country("China", 400, 450, RADIUS, player3));
-//            countries.add(new Country("Japan", 400, 300, RADIUS, player3));
+            }
 
             //neighbours.add(new Neighbour(countries.get(0), countries.get(1)));
            // neighbours.add(new Neighbour(countries.get(1), countries.get(2)));
