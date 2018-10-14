@@ -6,11 +6,12 @@ import model.Player;
 import utils.MapLoader;
 
 import java.util.List;
+import java.awt.*;
 
 public class Game {
-    int RADIUS = MapLoader.RADIUS;
-    List<Country> countries = MapLoader.countries;
-    List<Neighbour> neighbours = MapLoader.neighbours;
+    public int RADIUS = MapLoader.RADIUS;
+    public List<Country> countries = MapLoader.countries;
+    public List<Neighbour> neighbours = MapLoader.neighbours;
 
     public int getRADIUS() {
         return RADIUS;
@@ -31,4 +32,5 @@ public class Game {
     public void setNeighbours(List<Neighbour> neighbours) {
         this.neighbours = neighbours;
     }
+
 }
