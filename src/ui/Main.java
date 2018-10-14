@@ -1,14 +1,19 @@
-package game;
+package ui;
 
-import view.DicePanel;
-import view.MapPanel;
-import view.PlayerStatusPanel;
+import game.Game;
+import ui.view.DicePanel;
+import ui.view.MapPanel;
+import ui.view.RightStatusPanel;
+import ui.view.TopStatusPanel;
 
 import javax.swing.*;
 import javax.swing.border.LineBorder;
 import java.awt.*;
 
 public class Main {
+
+    private int width = 1200;
+    private int height = 700;
 
     public Main(Game game) {
         SwingUtilities.invokeLater(new Runnable() {
@@ -18,57 +23,53 @@ public class Main {
         });
     }
 
-    private static void createAndShowGui(Game game) {
+    private void createAndShowGui(Game game) {
         final JFrame frame = new JFrame("Risk");
-        frame.setPreferredSize(new Dimension(800, 600));
+        frame.setPreferredSize(new Dimension(width,height));
+        frame.setDefaultLookAndFeelDecorated(true);
+        frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        frame.setResizable(false);
+        frame.getRootPane().setWindowDecorationStyle(JRootPane.NONE);
 
         // Top Status Game Info Bar
-        JPanel statusMessagePanel = new JPanel();
-        statusMessagePanel.setPreferredSize(new Dimension(600 - 2, 30 - 2));
-        statusMessagePanel.add(new Label("Status panel"), Component.CENTER_ALIGNMENT);
-
+        TopStatusPanel topStatusPanel = new TopStatusPanel(width, 30);
+        //topStatusPanel.setBorder(new LineBorder(Color.BLUE, 1));
+        topStatusPanel.setBackground(new Color(121,180,115));
 
         // Right Panel
         // Right Controls Panel
         JPanel infoPanel = new JPanel(new FlowLayout());
-        infoPanel.setPreferredSize(new Dimension(200 - 2, 600 - 2));
+        infoPanel.setPreferredSize(new Dimension(250, height));
+        infoPanel.setBackground(new Color(65,102,138));
 
         // Right Info Panel
         // Player Panel
-        PlayerStatusPanel playerStatusPanel = new PlayerStatusPanel(200 - 2, 100 - 2);
-        playerStatusPanel.setBorder(new LineBorder(Color.BLUE, 1));
-
+        RightStatusPanel rightStatusPanel = new RightStatusPanel(220, 360);
+        //rightStatusPanel.setBorder(new LineBorder(Color.BLUE, 1));
+        rightStatusPanel.setBackground(new Color(65,64,115));
 
         // Player Panel
-        DicePanel dicePanel = new DicePanel(100 - 2, 150 - 2);
-//        dicePanel.setBorder(new LineBorder(Color.BLACK, 1));
-
+        DicePanel dicePanel = new DicePanel(100, 170);
+        //dicePanel.setBorder(new LineBorder(Color.BLACK, 1));
+        dicePanel.setBackground(new Color(255,255,255));
 
         // Left Panel
         // Map Panel Map
         //TODO: Extract Logic and reshuffle top to bottom left to right.
-        MapPanel mapPanel = new MapPanel(new Dimension(600 - 2, 570 - 2), game.getCountries(), game.neighbours, playerStatusPanel);
-        mapPanel.setBorder(new LineBorder(Color.BLACK, 1));
-
+        MapPanel mapPanel = new MapPanel(new Dimension(950, height), game.getCountries(), game.neighbours, topStatusPanel, rightStatusPanel);
+        //mapPanel.setBorder(new LineBorder(Color.BLACK, 4));
+        mapPanel.setBackground(new Color(119,178,140));
 
         // Adding panels
-        infoPanel.add(playerStatusPanel);
+        infoPanel.add(rightStatusPanel);
         infoPanel.add(dicePanel);
-        infoPanel.setBorder(new LineBorder(Color.RED, 1));
+        //infoPanel.setBorder(new LineBorder(Color.RED, 1));
 
-        JPanel boardPanel = new JPanel(new BorderLayout());
-
-        boardPanel.setBorder(new LineBorder(Color.BLACK, 1));
-        boardPanel.add(mapPanel);
-
-        frame.add(statusMessagePanel, BorderLayout.NORTH);
-        frame.add(boardPanel, BorderLayout.WEST);
-
+        frame.add(topStatusPanel, BorderLayout.NORTH);
+        frame.add(mapPanel, BorderLayout.WEST);
         frame.add(infoPanel, BorderLayout.EAST);
 
         frame.pack();
-        frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        frame.setResizable(false);
         frame.setVisible(true);
     }
 }
