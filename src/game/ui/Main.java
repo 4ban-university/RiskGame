@@ -25,12 +25,12 @@ public class Main {
     private void createAndShowGui(Game game) {
         final JFrame frame = new JFrame("Risk");
         frame.setPreferredSize(new Dimension(width,height));
-        frame.setDefaultLookAndFeelDecorated(true);
+        //frame.setDefaultLookAndFeelDecorated(true);
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         frame.setResizable(false);
 
         // Line below fix window in the middle and forbid to close so I commented out
-        // frame.getRootPane().setWindowDecorationStyle(JRootPane.NONE);
+         frame.getRootPane().setWindowDecorationStyle(JRootPane.INFORMATION_DIALOG);
 
         // Top Status Game Info Bar
         TopStatusPanel topStatusPanel = new TopStatusPanel(width, 30);

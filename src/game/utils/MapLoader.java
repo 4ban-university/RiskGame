@@ -15,7 +15,6 @@ import game.model.Player;
 public class MapLoader {
     public static int RADIUS = 20;
     public static List<Country> countries = new ArrayList<>();
-    public static List<Country> countriesTemp = new ArrayList<>();
     public static List<Neighbour> neighbours = new ArrayList<>();
 
     public MapLoader(int players, String filePath) {
@@ -56,7 +55,6 @@ public class MapLoader {
                 }
                 if (line.equals("[Territories]"))
                     flag = true;
-                //TODO load the map into structure
             }
             bufferedReader.close();
 
@@ -73,7 +71,6 @@ public class MapLoader {
                 countries.get(i).setPlayer(playerList[newPlayer]);
                 countriesPerPlayer[newPlayer]++;
             }
-            //String str = ""
             for (int i=0; i < countries.size(); i++) {
                 String[] str = neighboursList.get(i).split(",");
                 for (int j=0; j<str.length; j++) {
@@ -82,20 +79,7 @@ public class MapLoader {
                             neighbours.add(new Neighbour(countries.get(i), countries.get(k)));
                 }
                 //System.out.println(str);
-
             }
-
-            //neighbours.add(new Neighbour(countries.get(0), countries.get(1)));
-           // neighbours.add(new Neighbour(countries.get(1), countries.get(2)));
-//            neighbours.add(new Neighbour(countries.get(1), countries.get(4)));
-//            neighbours.add(new Neighbour(countries.get(2), countries.get(3)));
-//
-//            neighbours.add(new Neighbour(countries.get(5), countries.get(6)));
-//            neighbours.add(new Neighbour(countries.get(3), countries.get(5)));
-//            neighbours.add(new Neighbour(countries.get(2), countries.get(6)));
-//            neighbours.add(new Neighbour(countries.get(1), countries.get(6)));
-
-            //---------------------------------------------------------------------
             // Create the instance of the game class and send it to Main
             Game game = new Game();
             new Main(game);
