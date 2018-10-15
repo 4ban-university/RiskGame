@@ -32,6 +32,7 @@ public class Main {
         TopStatusPanel topStatusPanel = new TopStatusPanel(width, 30);
         //topStatusPanel.setBorder(new LineBorder(Color.BLUE, 1));
         topStatusPanel.setBackground(new Color(121,180,115));
+        game.topStatusPanel = topStatusPanel;
 
         // Right Panel
         // Right Controls Panel
@@ -44,23 +45,28 @@ public class Main {
         RightStatusPanel rightStatusPanel = new RightStatusPanel(220, 250);
         //rightStatusPanel.setBorder(new LineBorder(Color.BLUE, 1));
         rightStatusPanel.setBackground(new Color(65,102,138));
+        game.rightStatusPanel = rightStatusPanel;
 
         // Player Panel
         DicePanel dicePanel = new DicePanel(100, 170);
         //dicePanel.setBorder(new LineBorder(Color.BLACK, 1));
         dicePanel.setBackground(new Color(255,255,255));
+        game.dicePanel = dicePanel;
 
         // Left Panel
         // Map Panel Map
         //TODO: Extract Logic and reshuffle top to bottom left to right.
-        MapPanel mapPanel = new MapPanel(new Dimension(950, height), game.getCountries(), game.neighbours, topStatusPanel, rightStatusPanel);
+        MapPanel mapPanel = new MapPanel(new Dimension(950, height), game);
         //mapPanel.setBorder(new LineBorder(Color.BLACK, 4));
         mapPanel.setBackground(new Color(119,178,140));
+        game.mapPanel = mapPanel;
 
         // Adding panels
         infoPanel.add(rightStatusPanel);
         infoPanel.add(dicePanel);
         //infoPanel.setBorder(new LineBorder(Color.RED, 1));
+
+        game.initialise();
 
         frame.add(topStatusPanel, BorderLayout.NORTH);
         frame.add(mapPanel, BorderLayout.WEST);

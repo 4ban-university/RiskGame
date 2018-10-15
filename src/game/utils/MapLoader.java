@@ -16,8 +16,9 @@ public class MapLoader {
     public static int RADIUS = 20;
     public static List<Country> countries = new ArrayList<>();
     public static List<Neighbour> neighbours = new ArrayList<>();
+    public static List<Player> players = new ArrayList<>();
 
-    public MapLoader(int players, String filePath) {
+    public MapLoader(int numberOfPlayers, String filePath) {
         String line;
         Color[] playerColor = new Color[4];
 
@@ -26,11 +27,11 @@ public class MapLoader {
         playerColor[2] = Color.CYAN;
         playerColor[3] = Color.GRAY;
 
-        Player[] playerList = new Player[players];
+        //Player[] playerList = new Player[numberOfPlayers];
 
-        int[] countriesPerPlayer = new int[players];
-        for (int i=0; i<players; i++) {
-            playerList[i] = new Player("Player " + (i + 1), playerColor[i]);
+        int[] countriesPerPlayer = new int[numberOfPlayers];
+        for (int i=0; i<numberOfPlayers; i++) {
+            players.add(new Player("Player " + (i + 1), playerColor[i]));
             countriesPerPlayer[i] = 0;
         }
 
@@ -44,7 +45,7 @@ public class MapLoader {
                 System.out.println(line);
                 if (flag) {
                     String[] countryDetails = line.split(",");
-                    countries.add(new Country(countryDetails[0], Integer.parseInt(countryDetails[1]), Integer.parseInt(countryDetails[2]), RADIUS, playerList[0]));
+                    countries.add(new Country(countryDetails[0], Integer.parseInt(countryDetails[1]), Integer.parseInt(countryDetails[2]), RADIUS, players.get(0)));
                     String neighbour = "";
                     for (int i=4; i<countryDetails.length; i++) {
                         neighbour += countryDetails[i];
@@ -58,17 +59,17 @@ public class MapLoader {
             }
             bufferedReader.close();
 
-            int playerDistrib = countries.size() / playerList.length;
-            int changeDistrib = playerDistrib * players;
+            int playerDistrib = countries.size() / players.size();
+            int changeDistrib = playerDistrib * numberOfPlayers;
             Random rand = new Random();
 
             for (int i=0; i<countries.size(); i++) {
-                int newPlayer = rand.nextInt(players);
+                int newPlayer = rand.nextInt(numberOfPlayers);
                 if (i+1 <= changeDistrib) {
                     while (countriesPerPlayer[newPlayer] >= playerDistrib)
-                        newPlayer = rand.nextInt(players);
+                        newPlayer = rand.nextInt(numberOfPlayers);
                 }
-                countries.get(i).setPlayer(playerList[newPlayer]);
+                countries.get(i).setPlayer(players.get(newPlayer));
                 countriesPerPlayer[newPlayer]++;
             }
             for (int i=0; i < countries.size(); i++) {
