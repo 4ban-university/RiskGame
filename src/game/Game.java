@@ -12,6 +12,8 @@ import game.ui.view.TopStatusPanel;
 import game.utils.MapLoader;
 
 import java.awt.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.util.HashMap;
@@ -19,31 +21,34 @@ import java.util.List;
 import java.util.Map;
 import java.util.Random;
 
-import static game.enums.GamePhase.FORTIFYING;
 import static game.enums.GamePhase.PLACING_ARMIES;
 
 public class Game {
-    public int RADIUS = MapLoader.RADIUS;
     public final int DICE_ROW_TO_SHOW = 3;
-
+    public int RADIUS = MapLoader.RADIUS;
     public List<Country> countries = MapLoader.countries;
     public List<Neighbour> neighbours = MapLoader.neighbours;
     public List<Player> players = MapLoader.players;
-
-    private GamePhase gamePhase;
-    private Player currentPlayer;
-    private int armyToPlace = 10;
-
-    private Map<Integer, DiceEnum> diceEnumMap = new HashMap<>();
-    private DiceEnum[] redDice = new DiceEnum[DICE_ROW_TO_SHOW];
-    private DiceEnum[] whiteDice = new DiceEnum[DICE_ROW_TO_SHOW];
-
     public TopStatusPanel topStatusPanel;
     public RightStatusPanel rightStatusPanel;
     public MapPanel mapPanel;
     public DicePanel dicePanel;
+    Map<Integer, GamePhase> gamePhaseMap = new HashMap<>();
+    private Random RANDOM = new Random();
+    private GamePhase currentGamePhase;
+    private Player currentPlayer;
+    private int armyToPlace = 10;
+    private Map<Integer, DiceEnum> diceEnumMap = new HashMap<>();
+    private DiceEnum[] redDice = new DiceEnum[DICE_ROW_TO_SHOW];
+    private DiceEnum[] whiteDice = new DiceEnum[DICE_ROW_TO_SHOW];
 
     public Game() {
+        // Setup Game Phases
+        gamePhaseMap.put(0, GamePhase.PLACING_ARMIES);
+        gamePhaseMap.put(1, GamePhase.ATACKING);
+        gamePhaseMap.put(2, GamePhase.FORTIFYING);
+        gamePhaseMap.put(3, GamePhase.CHANGE_PLAYER);
+
         // Setup dice
         diceEnumMap.put(1, DiceEnum.ONE);
         diceEnumMap.put(2, DiceEnum.TWO);
@@ -53,14 +58,21 @@ public class Game {
         diceEnumMap.put(6, DiceEnum.SIX);
     }
 
-    public void initialise(){
+    public void initialise() {
         // initial setup.
         currentPlayer = players.get(0);
-        gamePhase = PLACING_ARMIES;
+        currentGamePhase = PLACING_ARMIES;
+        for (Country c : countries) {
+            if (c.getPlayer() == currentPlayer) {
+                c.setHighlited(true);
+            }
+        }
+
 
         topStatusPanel.setPlayer(currentPlayer);
-        topStatusPanel.setGamePhase(gamePhase.getName());
+        topStatusPanel.setGamePhase(currentGamePhase.getName());
         topStatusPanel.setTurnPhrase("Armies to place " + armyToPlace);
+        refresh();
     }
 
     public int getRADIUS() {
@@ -84,14 +96,14 @@ public class Game {
     }
 
 
-    public MouseAdapter getMouseAdapter (){
+    public MouseAdapter getMouseAdapter() {
         return new MouseAdapter() {
             public void mousePressed(MouseEvent e) {
                 Point mouse = e.getPoint();
                 System.out.println(" x = " + mouse.x + " y = " + mouse.y);
-                for (Country c : countries) {
-                    c.resetView();
-                }
+//                for (Country c : countries) {
+//                    c.resetView();
+//                }
 
                 for (Country country : countries) {
                     if (country.isInBorder(mouse.x, mouse.y) && country.getPlayer() == currentPlayer) {
@@ -103,32 +115,84 @@ public class Game {
         };
     }
 
-    public void makeAction(Country country){
-        switch (gamePhase){
-            case PLACING_ARMIES:
+    public ActionListener getNextTurnButton() {
+        return new ActionListener() {
+            public void actionPerformed(ActionEvent e) {
                 reset();
 
-                country.setArmy(country.getArmy() + 1);
-                armyToPlace--;
+                GamePhase nextGamePhase = gamePhaseMap.get((currentGamePhase.getNumber() + 1) % gamePhaseMap.size());
+                System.out.println("Next Turn Button Clicked. Next phase is " + nextGamePhase.getName());
+                currentGamePhase = nextGamePhase;
 
-                country.select();
+                switch (currentGamePhase) {
+                    case PLACING_ARMIES:
+                        break;
 
-                if(armyToPlace <= 0){
-                    int nextPlayerIndex = players.lastIndexOf(currentPlayer) + 1;
-                    if(nextPlayerIndex < players.size()) {
-                        currentPlayer = players.get(nextPlayerIndex);
+                    case ATACKING:
+                        for (Country c : countries) {
+                            if (c.getPlayer() == currentPlayer) {
+                                c.setHighlited(false);
+                            }
+                        }
+
+                        // Emulate fights
+                        for (Country c : countries) {
+                            c.setArmy(c.getArmy() - RANDOM.nextInt(c.getArmy()));
+                        }
+
+                        // Init Cards
+                        for(Player player : players){
+                            player.setInfantry(RANDOM.nextInt(10));
+                            player.setCavalry(RANDOM.nextInt(10));
+                            player.setArtillery(RANDOM.nextInt(10));
+                            player.setWildcards(RANDOM.nextInt(10));
+                            player.setBonus(RANDOM.nextInt(10));
+                        }
+
+                        break;
+
+                    case FORTIFYING:
+                        break;
+
+                    case CHANGE_PLAYER:
+                        Player nextPlayer = players.get((players.indexOf(currentPlayer) + 1) % players.size());
+                        System.out.println("Next Turn Button Clicked. Next Player is " + nextPlayer.getName());
+                        currentPlayer = nextPlayer;
                         armyToPlace = 10;
-                    } else {
-                        gamePhase = FORTIFYING;
-                        System.out.println("Game state changed to " + gamePhase.getName());
-                    }
-                    country.unSelect();
+                        currentGamePhase = PLACING_ARMIES;
+                        for (Country country : countries) {
+                            if (country.getPlayer() == currentPlayer) {
+                                country.setHighlited(true);
+                            }
+                        }
+                        break;
                 }
 
-                topStatusPanel.setTurnPhrase("Armies to place " + armyToPlace);
+                refresh();
+            }
+        };
+    }
 
-                rightStatusPanel.setCountry(country);
 
+    public void makeAction(Country country) {
+        switch (currentGamePhase) {
+            case PLACING_ARMIES:
+                if (armyToPlace > 0) {
+                    reset();
+
+//                    country.select();
+                    country.setArmy(country.getArmy() + 1);
+                    armyToPlace--;
+                    topStatusPanel.setTurnPhrase("Armies to place " + armyToPlace);
+                    rightStatusPanel.setCountry(country);
+
+                } else {
+                    for (Country c : countries) {
+                        if (c.getPlayer() == currentPlayer) {
+                            c.setHighlited(false);
+                        }
+                    }
+                }
                 refresh();
                 break;
 
@@ -137,35 +201,29 @@ public class Game {
                 break;
 
             case FORTIFYING:
-                currentPlayer = players.get(0);
-                armyToPlace = 10;
-
-                gamePhase = PLACING_ARMIES;
-                System.out.println("Game state changed to " + gamePhase.getName());
 
                 break;
         }
     }
 
-    private void rollDice(){
-        Random r = new Random();
+    private void rollDice() {
 
         for (int i = 0; i < DICE_ROW_TO_SHOW; i++) {
-            redDice[i] = diceEnumMap.get(r.nextInt(6)+1);
-            whiteDice[i] = diceEnumMap.get(r.nextInt(6)+1);
+            redDice[i] = diceEnumMap.get(RANDOM.nextInt(6) + 1);
+            whiteDice[i] = diceEnumMap.get(RANDOM.nextInt(6) + 1);
         }
 
         dicePanel.setDices(redDice, whiteDice);
     }
 
-    private void refresh(){
+    private void refresh() {
         topStatusPanel.setPlayer(currentPlayer);
-        topStatusPanel.setGamePhase(gamePhase.getName());
+        topStatusPanel.setGamePhase(currentGamePhase.getName());
         mapPanel.repaint();
         rightStatusPanel.setPlayer(currentPlayer);
     }
 
-    private void reset(){
+    private void reset() {
         topStatusPanel.reset();
         mapPanel.repaint();
         rightStatusPanel.reset();
