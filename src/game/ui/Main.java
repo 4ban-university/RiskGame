@@ -25,12 +25,9 @@ public class Main {
     private void createAndShowGui(Game game) {
         final JFrame frame = new JFrame("Risk");
         frame.setPreferredSize(new Dimension(width,height));
-        frame.setDefaultLookAndFeelDecorated(true);
+        //frame.setDefaultLookAndFeelDecorated(true);
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         frame.setResizable(false);
-
-        // Line below fix window in the middle and forbid to close so I commented out
-        // frame.getRootPane().setWindowDecorationStyle(JRootPane.NONE);
 
         // Top Status Game Info Bar
         TopStatusPanel topStatusPanel = new TopStatusPanel(width, 30);
@@ -57,7 +54,7 @@ public class Main {
         // Left Panel
         // Map Panel Map
         //TODO: Extract Logic and reshuffle top to bottom left to right.
-        MapPanel mapPanel = new MapPanel(new Dimension(950, height), game.getCountries(), game.neighbours, topStatusPanel, rightStatusPanel);
+        MapPanel mapPanel = new MapPanel(new Dimension(935, height), game.getCountries(), game.neighbours, topStatusPanel, rightStatusPanel);
         //mapPanel.setBorder(new LineBorder(Color.BLACK, 4));
         mapPanel.setBackground(new Color(119,178,140));
 
