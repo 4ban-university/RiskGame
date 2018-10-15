@@ -20,7 +20,6 @@ public class MainMenu extends JFrame {
         this.width = width;
         this.height = height;
 
-        setDefaultLookAndFeelDecorated(true);
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setSize(this.width, this.height);
         setResizable(false);
