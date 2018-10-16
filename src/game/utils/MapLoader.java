@@ -1,16 +1,19 @@
 package game.utils;
 
-import java.io.*;
-import java.util.ArrayList;
-import java.util.List;
-import java.awt.*;
-import java.util.Random;
-
-import game.ui.Main;
 import game.Game;
 import game.model.Country;
 import game.model.Neighbour;
 import game.model.Player;
+import game.ui.Main;
+
+import java.awt.*;
+import java.io.BufferedReader;
+import java.io.FileNotFoundException;
+import java.io.FileReader;
+import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Random;
 
 public class MapLoader {
     public static int RADIUS = 20;
@@ -63,15 +66,16 @@ public class MapLoader {
             int changeDistrib = playerDistrib * numberOfPlayers;
             Random rand = new Random();
 
-            for (int i=0; i<countries.size(); i++) {
+            for (int i = 0; i < countries.size(); i++) {
                 int newPlayer = rand.nextInt(numberOfPlayers);
-                if (i+1 <= changeDistrib) {
+                if (i + 1 <= changeDistrib) {
                     while (countriesPerPlayer[newPlayer] >= playerDistrib)
                         newPlayer = rand.nextInt(numberOfPlayers);
                 }
                 countries.get(i).setPlayer(players.get(newPlayer));
                 countriesPerPlayer[newPlayer]++;
             }
+
             for (int i=0; i < countries.size(); i++) {
                 String[] str = neighboursList.get(i).split(",");
                 for (int j=0; j<str.length; j++) {
