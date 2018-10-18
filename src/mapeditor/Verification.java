@@ -12,7 +12,7 @@ import java.util.HashMap;
  */
 public class Verification implements IVerification {
 
-	ILoadedMap map; 
+	public ILoadedMap map; 
 	
 	/**
 	 * This is the function called by editor to make verifications.
@@ -161,6 +161,9 @@ public class Verification implements IVerification {
 		ArrayList<String> adjacents = territory.getAdjacents();
 		for(int i = 0; i < adjacents.size(); i++) {
 			ITerritory adjacentTerritory = this.map.getTerritory(adjacents.get(i));
+			if(adjacentTerritory == null) {
+				return;
+			}
 			if(visited.get(adjacentTerritory.getTerritoryName()) == true)
 			{
 				continue;

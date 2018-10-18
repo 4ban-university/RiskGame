@@ -92,7 +92,7 @@ public class MapLoader implements IMapLoader {
 			}
 
 		} catch (IOException e) {
-			e.printStackTrace();
+			System.out.println("File could not be loaded. Please check path");
 		}
 	}
 	
