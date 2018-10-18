@@ -1,5 +1,5 @@
-import map_editor.StartEditor;
 import game.utils.MapLoader;
+import mapeditor.StartEditor;
 
 import javax.swing.*;
 import javax.swing.filechooser.FileSystemView;
