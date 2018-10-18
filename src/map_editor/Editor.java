@@ -1,20 +1,20 @@
-package map_editor;
+package mapeditor;
 
 import java.util.Scanner;
 
 /**
  * This class initializes the map editor and asks user for options
- * to modify the map. It also calls the loader to load map in memory.
+ * to create and modify the map. It also calls the loader to load map in memory.
  * And provides user an option to verify the changes made and save the
  * modified map to file.
- * @author Nikitha Papani
+ * @author Nikitha Papani & Dinesh Pattapu
  *
  */
 public class Editor implements IEditor {
 
 	private ILoadedMap loadedMapObj;
 	Scanner in;
-	
+	String path;
 	/**
 	 * Default constructor for editor.
 	 */
@@ -26,8 +26,29 @@ public class Editor implements IEditor {
 	 * The function to initialize editor, and call the map loader.
 	 */
 	public void initEditor() {
-		getMapToEdit();
-		startEditor();
+		createOrEdit();
+	}
+	
+	public void createOrEdit() {
+		String choice;
+		while(true) {
+			System.out.println("Please make your choice: ");
+			System.out.println("1) Edit Map");
+			System.out.println("2) Create Map");
+			System.out.println("3) Quit");
+			choice = in.next();
+			if(choice.equals("1") == true) {
+				getMapToEdit();
+			}
+			else if(choice.equals("2") == true) {
+				createMapToEdit();
+			}
+			else if(choice.equals("3") == true) {
+				System.out.println("Good Bye!");
+				System.exit(0);
+			}
+			startEditor();
+		}
 	}
 	
 	/**
@@ -35,11 +56,28 @@ public class Editor implements IEditor {
 	 */
 	public void startEditor() {
 		Integer choice = 0;
-		while(choice != 5) {
-			display_editor_options();
+		while((choice != 5) && (choice != 4)) {
+			displayeditoroptions();
 			choice = in.nextInt();
-			process_editor_choice(choice);
+			processeditorchoice(choice);
 		}
+	}
+	
+	/**
+	 * Creates a new map to edit.
+	 */
+	public void createMapToEdit() {
+		System.out.println("Please enter the full path with name of new map: ");
+		String mapPath = "";
+		while(mapPath.length() < 5) {
+			mapPath = in.next();
+			if(mapPath.length() < 5) {
+				System.out.println("Please enter proper path for map : ");
+			}
+		}
+		this.path = mapPath;
+		IMapLoader mapLoaderObj = new MapLoader(mapPath, 2);
+		this.loadedMapObj = mapLoaderObj.getLoadedMap();
 	}
 	
 	/**
@@ -47,15 +85,22 @@ public class Editor implements IEditor {
 	 */
 	public void getMapToEdit() {
 		System.out.println("Please enter the full path of map you want to edit: ");
-		String mapPath = in.next();
-		IMapLoader mapLoaderObj = new MapLoader(mapPath);
+		String mapPath = "";
+		while(mapPath.length() < 5) {
+			mapPath = in.next();
+			if(mapPath.length() < 5) {
+				System.out.println("Please enter proper path for map : ");
+			}
+		}
+		this.path = mapPath;
+		IMapLoader mapLoaderObj = new MapLoader(mapPath, 1);
 		this.loadedMapObj = mapLoaderObj.getLoadedMap();
 	}
 	
 	/**
 	 * The printer function to display functions to user.
 	 */
-	public void display_editor_options() {
+	public void displayeditoroptions() {
 		System.out.println("Loaded Map Made by " + this.loadedMapObj.getAuthor());
 		System.out.println("Please select what would you like to modify: ");
 		System.out.println("1) Basic Properties of Map");
@@ -69,7 +114,7 @@ public class Editor implements IEditor {
 	 * The function to process user choice.
 	 * @param choice The choice entered by user.
 	 */
-	public void process_editor_choice(Integer choice) {
+	public void processeditorchoice(Integer choice) {
 		switch(choice) {
 		case 1:
 			IEditorBasicProp edBasic = new EditorBasicProp();
@@ -85,7 +130,7 @@ public class Editor implements IEditor {
 			break;
 		case 4:
 			Verification verificationObj = new Verification();
-			verificationObj.verifyMap(loadedMapObj);
+			verificationObj.verifyMap(loadedMapObj, path);
 			break;
 		case 5:
 			System.out.println("Good Bye!!");

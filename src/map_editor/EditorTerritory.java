@@ -1,4 +1,4 @@
-package map_editor;
+package mapeditor;
 
 import java.util.ArrayList;
 import java.util.Scanner;
@@ -29,9 +29,9 @@ public class EditorTerritory implements IEditorTerritory {
 	public void startEditorTerritory() {
 		Integer choice = 0;
 		while(choice != 9) {
-			display_territory_options();
+			displayterritoryoptions();
 			choice = in.nextInt();
-			process_territory_choice(choice);
+			processterritorychoice(choice);
 		}
 	}
 	
@@ -40,7 +40,7 @@ public class EditorTerritory implements IEditorTerritory {
 	 * modifications to the territories.
 	 */
 	@Override
-	public void display_territory_options() {
+	public void displayterritoryoptions() {
 		System.out.println("Please select from below:");
 		System.out.println("1) Add Territory");
 		System.out.println("2) Remove Territory");
@@ -59,7 +59,7 @@ public class EditorTerritory implements IEditorTerritory {
 	 * @return The selected territory by user.
 	 */
 	@Override
-	public String display_territory_list() {
+	public String displayterritorylist() {
 		ArrayList<String> territories = this.loadedMapObj.getListOfTerritories();
 		while(true)
 		{
@@ -84,7 +84,7 @@ public class EditorTerritory implements IEditorTerritory {
 				System.out.println("Invalid Choice. Please try again.");
 			}
 			
-			if(choice >= territories.size()) {
+			if((choice - 1) >= territories.size()) {
 				return null;
 			}
 			else {
@@ -98,45 +98,45 @@ public class EditorTerritory implements IEditorTerritory {
 	 * @param choice The user choice.
 	 */
 	@Override
-	public void process_territory_choice(Integer choice) {
+	public void processterritorychoice(Integer choice) {
 		switch(choice) {
 		case 1:
-			if(add_territory() == false) {
+			if(addterritory() == false) {
 				System.out.println("EditorTerritory: process_territory_choice: Failed to add territory");
 			}
 			break;
 		case 2:
-			if(remove_territory() == false) {
+			if(removeterritory() == false) {
 				System.out.println("EditorTerritory: process_territory_choice: Failed to remove territory");
 			}
 			break;
 		case 3:
-			if(modify_territory_X() == false) {
+			if(modifyterritoryX() == false) {
 				System.out.println("EditorTerritory: process_territory_choice: Failed to modify territory X");
 			}
 			break;
 		case 4:
-			if(modify_territory_Y() == false) {
+			if(modifyterritoryY() == false) {
 				System.out.println("EditorTerritory: process_territory_choice: Failed to modify territory Y");
 			}
 			break;
 		case 5:
-			if(modify_territory_name() == false) {
+			if(modifyterritoryname() == false) {
 				System.out.println("EditorTerritory: process_territory_choice: Failed to modify territory name");
 			}
 			break;
 		case 6:
-			if(modify_territory_continent() == false) {
+			if(modifyterritorycontinent() == false) {
 				System.out.println("EditorTerritory: process_territory_choice: Failed to modify territory continent");
 			}
 			break;
 		case 7:
-			if(add_adjacency() == false) {
+			if(addadjacency() == false) {
 				System.out.println("EditorTerritory: process_territory_choice: Failed to add adjacent territory");
 			}
 			break;
 		case 8:
-			if(remove_adjacency() == false) {
+			if(removeadjacency() == false) {
 				System.out.println("EditorTerritory: process_territory_choice: Failed to remove adjacent territory");
 			}
 			break;
@@ -154,7 +154,7 @@ public class EditorTerritory implements IEditorTerritory {
 	 * @return Returns success of failure.
 	 */
 	@Override
-	public boolean add_territory() {
+	public boolean addterritory() {
 		System.out.println("Please enter territory name: ");
 		String territoryName = in.next();
 		System.out.println("Please enter territory X value: ");
@@ -185,8 +185,8 @@ public class EditorTerritory implements IEditorTerritory {
 	 * @return Returns success of failure.
 	 */
 	@Override
-	public boolean remove_territory() {
-		String territoryName = display_territory_list();
+	public boolean removeterritory() {
+		String territoryName = displayterritorylist();
 		if(territoryName == null)
 			return true;
 		
@@ -201,8 +201,8 @@ public class EditorTerritory implements IEditorTerritory {
 	 * @return Returns success or failure.
 	 */
 	@Override
-	public boolean modify_territory_X() {
-		String territoryName = display_territory_list();
+	public boolean modifyterritoryX() {
+		String territoryName = displayterritorylist();
 		if(territoryName == null)
 			return false;
 		ITerritory territory = this.loadedMapObj.getTerritory(territoryName);
@@ -218,8 +218,8 @@ public class EditorTerritory implements IEditorTerritory {
 	 * @return Returns success of failure
 	 */
 	@Override
-	public boolean modify_territory_Y() {
-		String territoryName = display_territory_list();
+	public boolean modifyterritoryY() {
+		String territoryName = displayterritorylist();
 		if(territoryName == null)
 			return false;
 		ITerritory territory = this.loadedMapObj.getTerritory(territoryName);
@@ -235,15 +235,15 @@ public class EditorTerritory implements IEditorTerritory {
 	 * @return Returns success of failure
 	 */
 	@Override
-	public boolean modify_territory_name() {
-		String territoryName = display_territory_list();
+	public boolean modifyterritoryname() {
+		String territoryName = displayterritorylist();
 		if(territoryName == null)
 			return false;
 		ITerritory territory = this.loadedMapObj.getTerritory(territoryName);
 		System.out.println("Please enter new value: ");
 		String newVal = in.next();
 		territory.setTerritoryName(newVal);
-		this.loadedMapObj.handle_territory_name_change(territoryName, newVal, territory);
+		this.loadedMapObj.handleterritorynamechange(territoryName, newVal, territory);
 		return true;
 	}
 
@@ -252,8 +252,8 @@ public class EditorTerritory implements IEditorTerritory {
 	 * @return Returns success or failure.
 	 */
 	@Override
-	public boolean modify_territory_continent() {
-		String territoryName = display_territory_list();
+	public boolean modifyterritorycontinent() {
+		String territoryName = displayterritorylist();
 		if(territoryName == null)
 			return false;
 		ITerritory territory = this.loadedMapObj.getTerritory(territoryName);
@@ -268,8 +268,8 @@ public class EditorTerritory implements IEditorTerritory {
 	 * @return Returns success or failure.
 	 */
 	@Override
-	public boolean add_adjacency() {
-		String territoryName = display_territory_list();
+	public boolean addadjacency() {
+		String territoryName = displayterritorylist();
 		if(territoryName == null)
 			return false;
 		
@@ -286,8 +286,8 @@ public class EditorTerritory implements IEditorTerritory {
 	 * @return Returns success or failure.
 	 */
 	@Override
-	public boolean remove_adjacency() {
-		String territoryName = display_territory_list();
+	public boolean removeadjacency() {
+		String territoryName = displayterritorylist();
 		if(territoryName == null)
 			return false;
 		

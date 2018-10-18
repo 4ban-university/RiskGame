@@ -1,4 +1,4 @@
-package map_editor;
+package mapeditor;
 
 import java.util.ArrayList;
 import java.util.Scanner;
@@ -29,9 +29,9 @@ public class EditorContinent implements IEditorContinent {
 	public void startEditorContinent() {
 		Integer choice = 0;
 		while(choice != 5) {
-			display_continent_options();
+			displaycontinentoptions();
 			choice = in.nextInt();
-			process_continent_choice(choice);
+			processcontinentchoice(choice);
 		}
 	}
 	
@@ -39,7 +39,7 @@ public class EditorContinent implements IEditorContinent {
 	 * The function to display options to user for modifications.
 	 */
 	@Override
-	public void display_continent_options() {
+	public void displaycontinentoptions() {
 		System.out.println("Please select from below: ");
 		System.out.println("1) Add Continent");
 		System.out.println("2) Remove Continent");
@@ -54,7 +54,7 @@ public class EditorContinent implements IEditorContinent {
 	 * @return The choice of user based on selection of continent for modification.
 	 */
 	@Override
-	public String display_continent_list() {
+	public String displaycontinentlist() {
 		ArrayList<String> listOfContinents = this.loadedMapObj.getListOfContinents();
 
 		while(true)
@@ -88,25 +88,25 @@ public class EditorContinent implements IEditorContinent {
 	 * @param choice The choice of user.
 	 */
 	@Override
-	public void process_continent_choice(Integer choice) {
+	public void processcontinentchoice(Integer choice) {
 		switch(choice) {
 		case 1:
-			if(add_continent() == false) {
+			if(addcontinent() == false) {
 				System.out.println("EditorContinent: process_continent_choice: Failed to add continent");
 			}
 			break;
 		case 2:
-			if(remove_continent() == false) {
+			if(removecontinent() == false) {
 				System.out.println("EditorContinent: process_continent_choice: Failed to remove continent");
 			}
 			break;
 		case 3:
-			if(modify_continent_name() == false) {
+			if(modifycontinentname() == false) {
 				System.out.println("EditorContinent: process_continent_choice: Failed to modify name of continent");
 			}
 			break;
 		case 4:
-			if(modify_continent_control_value() == false) {
+			if(modifycontinentcontrolvalue() == false) {
 				System.out.println("EditorContinent: process_continent_choice: Failed to modify control value of continent");
 			}
 			break;
@@ -124,7 +124,7 @@ public class EditorContinent implements IEditorContinent {
 	 * @return Returns success or failure.
 	 */
 	@Override
-	public boolean add_continent() {
+	public boolean addcontinent() {
 		System.out.println("Please enter the continent name: ");
 		String name = in.next();
 		System.out.println("Please enter control value: ");
@@ -139,8 +139,8 @@ public class EditorContinent implements IEditorContinent {
 	 * @return Returns success of failure.
 	 */
 	@Override
-	public boolean remove_continent() {
-		String continentName = display_continent_list();
+	public boolean removecontinent() {
+		String continentName = displaycontinentlist();
 		if(continentName == null)
 			return false;
 		IContinent continent = this.loadedMapObj.getContinent(continentName);
@@ -157,8 +157,8 @@ public class EditorContinent implements IEditorContinent {
 	 * @return Returns success of failure.
 	 */
 	@Override
-	public boolean modify_continent_control_value() {
-		String continentName = display_continent_list();
+	public boolean modifycontinentcontrolvalue() {
+		String continentName = displaycontinentlist();
 		if(continentName == null)
 			return false;
 		
@@ -175,15 +175,15 @@ public class EditorContinent implements IEditorContinent {
 	 * @return Returns succeess of failure.
 	 */
 	@Override
-	public boolean modify_continent_name() {
-		String continentName = display_continent_list();
+	public boolean modifycontinentname() {
+		String continentName = displaycontinentlist();
 		if(continentName == null)
 			return false;
 		System.out.println("Please enter the new name for continent: ");
 		String newName = in.next();
 		IContinent continent = this.loadedMapObj.getContinent(continentName);
 		continent.setContinentName(newName);
-		this.loadedMapObj.handle_continent_name_change(continentName, newName, continent);
+		this.loadedMapObj.handlecontinentnamechange(continentName, newName, continent);
 		return true;
 	}
 }

@@ -1,10 +1,10 @@
-package map_editor;
+package mapeditor;
 
 import java.util.ArrayList;
 
 /**
  * The class to load territory in data structures.
- * @author Dinesh Pattapu
+ * @author Nikitha Papani & Dinesh Pattapu
  *
  */
 public interface ITerritory {

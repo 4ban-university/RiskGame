@@ -1,10 +1,10 @@
-package map_editor;
+package mapeditor;
 
 import java.util.ArrayList;
 
 /**
  * This class is responsible for managing the continents loaded from file.
- * @author Dinesh Pattapu
+ * @author Nikitha Papani & Dinesh Pattapu
  *
  */
 public class Continent implements IContinent {
