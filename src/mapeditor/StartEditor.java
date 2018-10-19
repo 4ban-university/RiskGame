@@ -8,10 +8,9 @@ package mapeditor;
 public class StartEditor {
 
 	/**
-	 * The main fucntion called by operating system
-	 * @param args The command line arguments.
+	 * Constructor of the class
 	 */
-	public static void main(String[] args) {
+	public StartEditor() {
 		Editor editorObj = new Editor();
 		editorObj.initEditor();
 	}
