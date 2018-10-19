@@ -156,6 +156,12 @@ public class MapLoader {
                 }
                 //System.out.println(str);
             }
+
+
+            // TODO Add here the validation checking
+            // Comment the line below to stop exiting every time
+//            new WarningWindow("Map is not valid. Please, use another one.");
+
             // Create the instance of the game class and send it to Main
             Game game = new Game();
             new Main(game, this);
