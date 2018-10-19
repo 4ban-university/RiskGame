@@ -1,4 +1,4 @@
-package map_editor;
+package mapeditor;
 
 import java.io.FileNotFoundException;
 import java.io.UnsupportedEncodingException;
@@ -7,12 +7,12 @@ import java.util.HashMap;
 
 /**
  * This class verifies map data in data structures.
- * @author Dinesh Pattapu
+ * @author Nikitha Papani & Dinesh Pattapu
  *
  */
 public class Verification implements IVerification {
 
-	ILoadedMap map;
+	public ILoadedMap map; 
 	
 	/**
 	 * This is the function called by editor to make verifications.
@@ -21,10 +21,13 @@ public class Verification implements IVerification {
 	 * @return The success of failure.
 	 */
 	@Override
-	public boolean verifyMap(ILoadedMap map) {
+	public boolean verifyMap(ILoadedMap map, String path) {
 		boolean result = false;
 		this.map = map;
 		result = checkEmptyContinents();
+		if(result == false) return result;
+		
+		result = checkContinentExistence();
 		if(result == false) return result;
 		
 		result = checkTerritoryAdjacencyRelation();
@@ -34,7 +37,7 @@ public class Verification implements IVerification {
 		if(result == false) return result;
 		
 		try {
-			this.map.saveMapToFile("D:\\New folder\\temp.map");
+			this.map.saveMapToFile(path);
 		} catch (FileNotFoundException | UnsupportedEncodingException e) {
 			
 			e.printStackTrace();
@@ -43,9 +46,27 @@ public class Verification implements IVerification {
 		return true;
 	}
 
+	public boolean checkContinentExistence() {
+		ArrayList<String> territories = this.map.getListOfTerritories();
+		for(int i = 0; i < territories.size(); i++) {
+			ITerritory territory = this.map.getTerritory(territories.get(i));
+			if(territory == null) {
+				System.out.println("Map cannot be saved, as territory with a name " + territories.get(i) + " was not found");
+				return false;
+			}
+			String continent = territory.getContinent();
+			if(this.map.getListOfContinents().contains(continent) == false) {
+				System.out.println("Map cannot be saved, as continent " + continent + " does not exist, but territory " + 
+			territory.getTerritoryName() + " is supposed to be in that continent");
+				return false;
+			}
+		}
+		return true;
+	}
+	
 	/**
 	 * The function to check for whether there are any continents
-	 * taht have no territories.
+	 * that have no territories.
 	 * @return The success or failure.
 	 */
 	@Override
@@ -54,6 +75,7 @@ public class Verification implements IVerification {
 		for(int i = 0; i < continents.size(); i++) {
 			IContinent continent = this.map.getContinent(continents.get(i));
 			if(continent.numTerritories() == 0) {
+				System.out.println("Map cannot be saved, as " + continent.getContinentName() + " has no territories");
 				return false;
 			}
 		}
@@ -73,7 +95,14 @@ public class Verification implements IVerification {
 			ArrayList<String> adjacents = territory.getAdjacents();
 			for(int j = 0; j < adjacents.size(); j++) {
 				ITerritory adjacentTerritory = this.map.getTerritory(adjacents.get(j));
+				if(adjacentTerritory == null) {
+					System.out.println("Cannot save the map, as the adjacent territory " + adjacents.get(j) + " was not added as territory.");
+					return false;
+				}
 				if(adjacentTerritory.checkIfAdjacent(territory.getTerritoryName()) == false) {
+					System.out.println("Map cannot be saved, as " + adjacentTerritory.getTerritoryName() + " is not adjacent to " +
+							territory.getTerritoryName() + " while " + territory.getTerritoryName() + " says, that " + 
+							adjacentTerritory.getTerritoryName() + " is adjacent to it.");
 					return false;
 				}
 			}
@@ -103,6 +132,7 @@ public class Verification implements IVerification {
 		
 		for(int i = 0; i < territories.size(); i++) {
 			if(visited.get(territories.get(i)) == false) {
+				System.out.println("Cannot save map, as all the territories are not connected to each other");
 				return false;
 			}
 		}
@@ -131,6 +161,9 @@ public class Verification implements IVerification {
 		ArrayList<String> adjacents = territory.getAdjacents();
 		for(int i = 0; i < adjacents.size(); i++) {
 			ITerritory adjacentTerritory = this.map.getTerritory(adjacents.get(i));
+			if(adjacentTerritory == null) {
+				return;
+			}
 			if(visited.get(adjacentTerritory.getTerritoryName()) == true)
 			{
 				continue;

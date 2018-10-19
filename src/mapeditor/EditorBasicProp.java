@@ -1,4 +1,4 @@
-package map_editor;
+package mapeditor;
 
 import java.util.Scanner;
 
@@ -30,9 +30,9 @@ public class EditorBasicProp implements IEditorBasicProp {
 		Integer choice = 0;
 		while(choice != 2)
 		{
-			display_basic_prop_options();
+			displaybasicpropoptions();
 			choice = in.nextInt();
-			process_and_edit_basic_options(choice);
+			processandeditbasicoptions(choice);
 		}
 	}
 	
@@ -40,7 +40,7 @@ public class EditorBasicProp implements IEditorBasicProp {
 	 * The function to display basic properties that user can opt for.
 	 */
 	@Override
-	public void display_basic_prop_options() {
+	public void displaybasicpropoptions() {
 		System.out.println("Please select the basic property you wish to modify");
 		System.out.println("1) Author");
 		System.out.println("2) Go Back to Prev Menu");
@@ -52,7 +52,7 @@ public class EditorBasicProp implements IEditorBasicProp {
 	 * @param choice the user choice
 	 */
 	@Override
-	public void process_and_edit_basic_options(Integer choice) {
+	public void processandeditbasicoptions(Integer choice) {
 		switch(choice) {
 		case 1:
 			processChangeInAuthor();

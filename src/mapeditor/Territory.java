@@ -1,14 +1,14 @@
-package map_editor;
+package mapeditor;
 
 import java.util.ArrayList;
 
 /**
  * The class to load territory in data structures.
- * @author Dinesh Pattapu
+ * @author Nikitha Papani & Dinesh Pattapu
  *
  */
 public class Territory implements ITerritory {
-	private String territory_name;
+	private String territoryname;
 	private Integer X;
 	private Integer Y;
 	private String continent;
@@ -16,15 +16,15 @@ public class Territory implements ITerritory {
 	
 	/**
 	 * The constructor to initialize the class variables.
-	 * @param territory_name The territory name
+	 * @param territoryname The territory name
 	 * @param X The territory X cords.
 	 * @param Y The territory Y cords.
 	 * @param continent The continent in which territory belongs.
 	 * @param adjacents The adjacent countries to this territory.
 	 */
-	public Territory(String territory_name, Integer X, Integer Y, 
+	public Territory(String territoryname, Integer X, Integer Y, 
 			String continent, ArrayList<String> adjacents) {
-		this.territory_name = territory_name;
+		this.territoryname = territoryname;
 		this.X = X;
 		this.Y = Y;
 		this.continent = continent;
@@ -36,7 +36,7 @@ public class Territory implements ITerritory {
 	 * @return The name of territory
 	 */
 	public String getTerritoryName() {
-		return territory_name;
+		return territoryname;
 	}
 	
 	/**
@@ -44,7 +44,7 @@ public class Territory implements ITerritory {
 	 * @param territory_name The new territory name
 	 */
 	public void setTerritoryName(String territory_name) {
-		this.territory_name = territory_name;
+		this.territoryname = territory_name;
 	}
 	
 	/**

@@ -1,4 +1,4 @@
-package map_editor;
+package mapeditor;
 
 import java.util.Scanner;
 
@@ -9,6 +9,6 @@ import java.util.Scanner;
  */
 public interface IEditorBasicProp {
 	public void init(Scanner in, ILoadedMap loadedMapObj);
-	public void display_basic_prop_options();
-	public void process_and_edit_basic_options(Integer choice);
+	public void displaybasicpropoptions();
+	public void processandeditbasicoptions(Integer choice);
 }

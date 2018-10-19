@@ -1,4 +1,4 @@
-package map_editor;
+package mapeditor;
 
 import java.io.*;
 import java.util.ArrayList;
@@ -7,18 +7,28 @@ import java.util.ArrayList;
  * This class loads the map into data structures. This loaded information
  * is passed to the editor, and is used to accept user modifications
  * And later save the data from data structures to file as map.
- * @author Dinesh Pattapu
+ * @author Nikitha Papani &  Dinesh Pattapu
  *
  */
 public class MapLoader implements IMapLoader {
 	ILoadedMap loadedMapObj;
-	
 	/**
 	 * Constructor accepts filepath and laods it into memory.
 	 * @param filePath The path of map file.
 	 */
-	public MapLoader(String filePath) {
-		loadmap(filePath);
+	public MapLoader(String filePath, Integer createEditFlag) {
+		if(createEditFlag == 1)
+		{
+			loadmap(filePath);
+		}
+		else 
+		{
+			createMap(filePath);
+		}
+	}
+	
+	public void createMap(String filePath) {
+		init_data_structures();
 	}
 	
 	/**
@@ -27,7 +37,7 @@ public class MapLoader implements IMapLoader {
 	 */
 	public void loadmap(String filePath) {
 		init_data_structures();
-		read_map(filePath);
+		readmap(filePath);
 	}
 	
 	/**
@@ -50,7 +60,7 @@ public class MapLoader implements IMapLoader {
 	 * Function to parse map file, and call appropriate functions.
 	 * @param filePath The path of map file.
 	 */
-	private void read_map(String filePath) {
+	private void readmap(String filePath) {
 		// 0 - parse_map_line, 1 - parse_continent_line, 2 - parse_territory_line
 		Integer currentParserMethod = 0;
 		
@@ -82,7 +92,7 @@ public class MapLoader implements IMapLoader {
 			}
 
 		} catch (IOException e) {
-			e.printStackTrace();
+			System.out.println("File could not be loaded. Please check path");
 		}
 	}
 	

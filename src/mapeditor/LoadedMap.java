@@ -1,4 +1,4 @@
-package map_editor;
+package mapeditor;
 
 import java.io.FileNotFoundException;
 import java.io.PrintWriter;
@@ -10,7 +10,7 @@ import java.util.Map;
 
 /**
  * This class contains data structures into which the map is loaded.
- * @author Dinesh Pattapu
+ * @author Nikitha Papani & Dinesh Pattapu
  *
  */
 public class LoadedMap implements ILoadedMap {
@@ -208,7 +208,7 @@ public class LoadedMap implements ILoadedMap {
 	 * @param continent The continent object to be modified.
 	 * 
 	 */
-	public void handle_continent_name_change(String oldName, String newName, IContinent continent) {
+	public void handlecontinentnamechange(String oldName, String newName, IContinent continent) {
 		this.listOfContinents.remove(oldName);
 		this.listOfContinents.put(newName, continent);
 	}
@@ -219,7 +219,7 @@ public class LoadedMap implements ILoadedMap {
 	 * @param newName New name of territory.
 	 * @param territory object to be modified.
 	 */
-	public void handle_territory_name_change(String oldName, String newName, ITerritory territory) {
+	public void handleterritorynamechange(String oldName, String newName, ITerritory territory) {
 		this.listOfTerritories.remove(oldName);
 		this.listOfTerritories.put(newName, territory);
 	}
