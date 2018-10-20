@@ -42,8 +42,8 @@ public class TestMapEditor {
 	 */
 	@BeforeClass
 	public static void startup() {
-		path = "D:\\app_test\\";
-		mapName = "abbbb.map";
+		path = "test/resources/";
+		mapName = "testMap.map";
 	}
 	
 	/**
