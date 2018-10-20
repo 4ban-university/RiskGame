@@ -106,29 +106,65 @@ public class Country {
 
     public void select(boolean enemies) {
         isSelected = true;
-        for (Country country : neighbours) {
-            if (enemies) {
-                if (country.getPlayer() != this.player) {
-                    country.setHighlited(true);
-                }
-            } else {
-                if (country.getPlayer() == this.player) {
-                    country.setHighlited(true);
+        highlite(enemies);
+//        for (Country country : neighbours) {
+//            if (enemies) {
+//                if (country.getPlayer() != this.player) {
+//                    country.setHighlited(true);
+//                }
+//            } else {
+//                if (country.getPlayer() == this.player) {
+//                    country.setHighlited(true);
+//                }
+//            }
+//        }
+    }
+
+    public void unSelect(boolean enemies) {
+        isSelected = false;
+        unHighlite(enemies);
+//        for (Country country : neighbours) {
+//            if (enemies) {
+//                if (country.getPlayer() != this.player) {
+//                    country.setHighlited(false);
+//                }
+//            } else {
+//                if (country.getPlayer() == this.player) {
+//                    country.setHighlited(false);
+//                }
+//            }
+//        }
+    }
+
+    public void highlite(boolean enemies) {
+        if (!isHighlited) {
+            isHighlited = true;
+            for (Country country : neighbours) {
+                if (enemies) {
+                    if (country.getPlayer() != this.player) {
+                        country.highlite(enemies);
+                    }
+                } else {
+                    if (country.getPlayer() == this.player) {
+                        country.highlite(enemies);
+                    }
                 }
             }
         }
     }
 
-    public void unSelect(boolean enemies) {
-        isSelected = false;
-        for (Country country : neighbours) {
-            if (enemies) {
-                if (country.getPlayer() != this.player) {
-                    country.setHighlited(false);
-                }
-            } else {
-                if (country.getPlayer() == this.player) {
-                    country.setHighlited(false);
+    public void unHighlite(boolean enemies) {
+        if (isHighlited) {
+            isHighlited = false;
+            for (Country country : neighbours) {
+                if (enemies) {
+                    if (country.getPlayer() != this.player) {
+                        country.unHighlite(enemies);
+                    }
+                } else {
+                    if (country.getPlayer() == this.player) {
+                        country.unHighlite(enemies);
+                    }
                 }
             }
         }
@@ -158,6 +194,7 @@ public class Country {
         Graphics2D g2d = (Graphics2D) g;
 
         if (isSelected) {
+//            Ellipse2D.Double selection = new Ellipse2D.Double(x - radius - HIGHLIGHT_BORDER_WITHT, y - radius - HIGHLIGHT_BORDER_WITHT, radius * 2 + HIGHLIGHT_BORDER_WITHT * 2, radius * 2 + HIGHLIGHT_BORDER_WITHT * 2);
             Ellipse2D.Double selection = new Ellipse2D.Double(x - radius - HIGHLIGHT_BORDER_WITHT / 2, y - radius - HIGHLIGHT_BORDER_WITHT / 2, radius * 2 + HIGHLIGHT_BORDER_WITHT, radius * 2 + HIGHLIGHT_BORDER_WITHT);
             g2d.setColor(Color.GREEN);
             g2d.fill(selection);
