@@ -7,7 +7,6 @@ import java.util.ArrayList;
 /**
  * This class contains data structures into which the map is loaded.
  * @author Nikitha Papani & Dinesh Pattapu & Rodolfo Miranda
- *
  */
 public interface ILoadedMap {
 	public void setAuthor(String author);

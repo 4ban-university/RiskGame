@@ -25,7 +25,9 @@ import mapeditor.Territory;
 import mapeditor.Verification;
 
 /**
- * The map editor tests
+ * This class tests the functionality of map editor.
+ * @author Nikitha Papani
+ *
  */
 public class TestMapEditor {
 	static String path;
@@ -33,20 +35,20 @@ public class TestMapEditor {
 	
 	IMapLoader mapLoaderObj;
 	ILoadedMap loadedMapObj;
-
+	
 	/**
-	 * Specify the path to the map and map file name
+	 * This function is called before test cases start getting executed.
+	 * It initializes paths and test map name.
 	 */
 	@BeforeClass
 	public static void startup() {
 		path = "test/resources/";
-		mapName = "testEditor.map";
+		mapName = "testMap.map";
 	}
-
+	
 	/**
-	 * Initialization of the map for further testing
+	 * This function initializes the dummy map for testing.
 	 */
-	@Before
 	public void initDummyMap() {
 		String authorName = "test";
 		
@@ -73,7 +75,7 @@ public class TestMapEditor {
 		Integer X2 = 900;
 		Integer Y2 = 900;
 		ArrayList<String> adjacents2 = new ArrayList<String>();
-		adjacents2.add("usa1");
+		adjacents2.add("usa1,usa3");
 		String continent2 = "usa";
 		
 		String territoryName3 = "usa3";
@@ -107,13 +109,20 @@ public class TestMapEditor {
 			e.printStackTrace();
 		}
 	}
-
+	
 	/**
-	 * Test if the map is created
+	 * This function calls the dymmy map creator before each test case.
+	 */
+	@Before
+	public void setup() {
+		initDummyMap();
+	}
+	
+	/**
+	 * This function checks whether a map can be created using map editor.
 	 */
 	@Test
 	public void testCreateMap() {
-		System.out.println("Test 1: create map");
 		String authorName = "test";
 		
 		String continentName = "usa";
@@ -161,13 +170,14 @@ public class TestMapEditor {
 		File file = new File(path + mapName);
 		assertTrue(file.exists());
 	}
-
+	
 	/**
-	 * Test if the map is read properly
+	 * This function checks whether a map can be read by map editor and loaded into
+	 * data structrues.
 	 */
 	@Test
 	public void testReadMap() {
-		System.out.println("Test 2: Read map");
+		
 		this.mapLoaderObj = new MapLoader(path + mapName, 1);
 		this.loadedMapObj = mapLoaderObj.getLoadedMap();
 		
@@ -181,29 +191,27 @@ public class TestMapEditor {
 		assertTrue(listOfContinents.size() > 0);
 		assertTrue(listOfTerritories.size() > 1);
 	}
-
+	
 	/**
-	 * Test for checking if the changing of the author works properly
+	 * This function checks whether it is possible to change author via map editor.
 	 */
 	@Test
 	public void testChangeAuthor() {
-		System.out.println("Test 3: Change author");
 		mapLoaderObj = new MapLoader(path + mapName, 0);
 		loadedMapObj = mapLoaderObj.getLoadedMap();
 		String authorName = "testAuthor";
 		loadedMapObj.setAuthor(authorName);
 		assertTrue(loadedMapObj.getAuthor().equals(authorName));
 	}
-
+	
 	/**
-	 * Test for adding the continent in the map
+	 * This function checks whether it is possible to add continent via map editor.
 	 */
 	@Test
 	public void testAddContinent() {
-		System.out.println("Test 4: Add continent");
 		mapLoaderObj = new MapLoader(path + mapName, 0);
 		loadedMapObj = mapLoaderObj.getLoadedMap();
-		String continentName = "canada";
+		String continentName = "asia";
 		Integer continentControlValue = 4;
 		IContinent continent = new Continent();
 		continent.setContinentName(continentName);
@@ -212,13 +220,12 @@ public class TestMapEditor {
 		assertNotNull(loadedMapObj.getContinent(continentName));
 		assertTrue(loadedMapObj.getContinent(continentName).getControlValue() == continentControlValue);
 	}
-
+	
 	/**
-	 * Test for adding the territory to the map
+	 * This function checks whether it is possible to add territory via map editor.
 	 */
 	@Test
 	public void testAddTerritory() {
-		System.out.println("Test 5: Add territory");
 		mapLoaderObj = new MapLoader(path + mapName, 1);
 		loadedMapObj = mapLoaderObj.getLoadedMap();
 		String territoryName = "terr1";
@@ -244,13 +251,13 @@ public class TestMapEditor {
 		assertNotNull(loadedMapObj.getTerritory(territoryName));
 		assertNotNull(loadedMapObj.getTerritory(territoryName2));
 	}
-
+	
 	/**
-	 * Is the saving the map works properly
+	 * This function checks whether the map editor can save the edited or 
+	 * newly created map onto the disk.
 	 */
 	@Test
 	public void testSaveMapToFile() {
-		System.out.println("Test 6: Save map");
 		String authorForTestSave = "TestSaveMap";
 		mapLoaderObj = new MapLoader(path + mapName, 1);
 		loadedMapObj = mapLoaderObj.getLoadedMap();
@@ -270,75 +277,73 @@ public class TestMapEditor {
 		loadedMapObj = mapLoaderObj.getLoadedMap();
 		assertTrue(loadedMapObj.getAuthor().equals(authorForTestSave.toLowerCase()) == true);
 	}
-
+	
 
 	/**
-	 * Is the remving the continent works properly
+	 * This function checks whether it is possible to remove a continent via map editor.
 	 */
 	@Test
 	public void testRemoveContinent() {
-		System.out.println("Test 7: Remove continent");
 		IContinent continent = loadedMapObj.getContinent("canada");
 		loadedMapObj.deleteContinent(continent);
 		assertTrue(loadedMapObj.getListOfContinents().contains("canada") == false);
 	}
-
+	
 	/**
-	 * Is the removing the teritory works properly
+	 * This function checks whether it is possible to remove a territoty via map editor.
 	 */
 	@Test
 	public void testRemoveTerritory() {
-		System.out.println("Test 8: Remove territory");
 		ITerritory territory = loadedMapObj.getTerritory("usa3");
 		loadedMapObj.deleteTerritory(territory);
 		assertTrue(loadedMapObj.getListOfTerritories().contains("usa3") == false);
 	}
-
+	
 	/**
-	 * Test false map no continent
+	 * This function check whether the map editor displays proper error when the map
+	 * has no continent.
 	 */
 	@Test
 	public void testFalseMapNoContinent() {
-		System.out.println("Test 9: False map no continent");
 		IContinent continent = loadedMapObj.getContinent("canada");
 		loadedMapObj.deleteContinent(continent);
 		Verification verificationObj = new Verification();
 		verificationObj.map = loadedMapObj;
 		assertTrue(verificationObj.checkContinentExistence() == false);
 	}
-
+	
 	/**
-	 * Test false map empty continent
+	 * This function checks whether the map editor displays error when the continent
+	 * has no territor inside it.
 	 */
 	@Test
 	public void testFalseMapEmptyContinent() {
-		System.out.println("Test 10: False map empty continent");
 		ITerritory territory = loadedMapObj.getTerritory("usa3");
 		loadedMapObj.deleteTerritory(territory);
 		Verification verificationObj = new Verification();
 		verificationObj.map = loadedMapObj;
 		assertTrue(verificationObj.checkEmptyContinents() == false);
 	}
-
+	
 	/**
-	 * Test false map adjacency
+	 * This function displays errors for improper adjacency between territories.
+	 * Ex: A has B as its adjacent. But B does not have A as its adjacent.
 	 */
 	@Test
 	public void testFalseMapAdjacency() {
-		System.out.println("Test 11: False map adjacency");
 		ITerritory territory = loadedMapObj.getTerritory("usa2");
 		territory.removeAdjacent("usa1");
 		Verification verificationObj = new Verification();
 		verificationObj.map = loadedMapObj;
 		assertTrue(verificationObj.checkTerritoryAdjacencyRelation() == false);
 	}
-
+	
 	/**
-	 * Test false map connectivity
+	 * This function checks whether all territories in a map are a connected graph or not.
+	 * Displays proper errors.
 	 */
 	@Test
 	public void testFalseMapConnectivity() {
-		System.out.println("Test 12: False map connectivity");
 		ITerritory territory = loadedMapObj.getTerritory("usa2");
 		loadedMapObj.deleteTerritory(territory);
 		Verification verificationObj = new Verification();
