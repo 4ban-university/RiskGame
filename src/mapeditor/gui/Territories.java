@@ -11,8 +11,10 @@ import mapeditor.ITerritory;
 import mapeditor.Territory;
 
 /**
+ * This class is responsible to create the Territories Editor Interface.
  *
  * @author Rodolfo Miranda
+ *
  */
 public class Territories extends javax.swing.JFrame {
 
@@ -57,6 +59,12 @@ public class Territories extends javax.swing.JFrame {
         selectAdjacent(0);
     }
     
+    
+    /**
+     * This method to refresh the JTable with the territories adjacents.
+     *
+     * @param Interger pos position select in the JTable for territories.
+     */
     public void selectAdjacent(Integer pos){
         this.model2.setRowCount(0);
         ArrayList<ITerritory> terList = Territory.getTerritories();
@@ -235,6 +243,11 @@ public class Territories extends javax.swing.JFrame {
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
+     /**
+     * This method to perform the button remove.
+     *
+     * @param java.awt.event.ActionEvent evt (The event).
+     */
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
         // TODO add your handling code here:
         preventionFlag = true;
@@ -251,6 +264,11 @@ public class Territories extends javax.swing.JFrame {
         
     }//GEN-LAST:event_jButton1ActionPerformed
 
+     /**
+     * This method to perform the button add territory.
+     *
+     * @param java.awt.event.ActionEvent evt (The event).
+     */
     private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
         // TODO add your handling code here:
         Vector newRow = new Vector();
@@ -264,6 +282,11 @@ public class Territories extends javax.swing.JFrame {
         this.updateTerritories();
     }//GEN-LAST:event_jButton2ActionPerformed
 
+     /**
+     * This method to refresh the JTable with the territories adjacents.
+     *
+     * @param java.awt.event.ActionEvent evt (The event).
+     */
     private void jButton3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton3ActionPerformed
         // TODO add your handling code here:
         Vector newRow = new Vector();
@@ -272,6 +295,10 @@ public class Territories extends javax.swing.JFrame {
         this.updateTerritories();
     }//GEN-LAST:event_jButton3ActionPerformed
 
+     /**
+     * This method to perform the action to add territories.
+     *
+     */
     private void updateTerritories(){
         ArrayList<ITerritory> territories = new ArrayList<ITerritory>();
         for (int count = 0; count < model.getRowCount(); count++){

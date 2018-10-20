@@ -1,8 +1,3 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package mapeditor.gui;
 
 import static javax.swing.LayoutStyle.ComponentPlacement.RELATED;
@@ -36,8 +31,10 @@ import mapeditor.IMapLoader;
 import mapeditor.MapLoader;
 
 /**
+ * This class is responsible to create the Continent Editor Interface.
  *
- * @author rodmm
+ * @author Rodolfo Miranda
+ *
  */
 public class Continents extends javax.swing.JFrame {
 
@@ -45,8 +42,10 @@ public class Continents extends javax.swing.JFrame {
     public ILoadedMap loadedMapObj;
     
     /**
-     * Creates new form Continents
-     */    
+     * This method Constructor add components to the Frame.
+     *
+     * @param ILoadedMap loadedMapObjCons object with the map information .
+     */ 
     public Continents(ILoadedMap loadedMapObjCons) {
         loadedMapObj = loadedMapObjCons;
         initComponents();
@@ -59,8 +58,6 @@ public class Continents extends javax.swing.JFrame {
         this.model.setColumnIdentifiers(header);
         this.model.setRowCount(0);
         ArrayList<IContinent> continents = Continent.getContinents();
-        //continents.add(new Continent("America", 1));
-        //continents.add(new Continent("Africa", 2));
         for(IContinent cont : continents){
              this.model.addRow(new Object[]{cont.getContinentName(), cont.getControlValue()});
         }
@@ -181,6 +178,11 @@ public class Continents extends javax.swing.JFrame {
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
+     /**
+     * This method to perform the action of the button delete.
+     *
+     * @param java.awt.event.ActionEvent evt (The event).
+     */ 
     private void jButton4ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton4ActionPerformed
         // TODO add your handling code here:
         loadedMapObj.deleteContinent(Continent.getContinents().get(jTable1.getSelectedRow()));
@@ -188,10 +190,20 @@ public class Continents extends javax.swing.JFrame {
         this.updateContinents();
     }//GEN-LAST:event_jButton4ActionPerformed
 
+     /**
+     * This method to perform the action of the button delete.
+     *
+     * @param java.awt.event.ActionEvent evt (The event).
+     */ 
     private void jTextField2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jTextField2ActionPerformed
         // TODO add your handling code here:
     }//GEN-LAST:event_jTextField2ActionPerformed
 
+     /**
+     * This method to perform the action of the button add continent.
+     *
+     * @param ILoadedMap loadedMapObjCons object with the map information .
+     */ 
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
         Vector newRow = new Vector();
         newRow.add(jTextField2.getText());
@@ -202,6 +214,10 @@ public class Continents extends javax.swing.JFrame {
         this.updateContinents();
     }//GEN-LAST:event_jButton1ActionPerformed
     
+     /**
+     * This method to perform the action of add new continent.
+     *
+     */ 
     private void updateContinents(){
         ArrayList<IContinent> continents = new ArrayList<IContinent>();
         for (int count = 0; count < model.getRowCount(); count++){

@@ -28,6 +28,12 @@ import mapeditor.IContinent;
 import mapeditor.ITerritory;
 import mapeditor.Territory;
 
+/**
+ * This class is responsible to create the CreateMap and EditMap Interface.
+ *
+ * @author Rodolfo Miranda
+ *
+ */
 public class CreateMapMenu extends JFrame {
 
     static ArrayList<Continent> continents;
@@ -39,7 +45,14 @@ public class CreateMapMenu extends JFrame {
     public ILoadedMap loadedMapObj;
     public String pathSelected;
     static String author = "";
-
+    
+    
+    /**
+     * This method Constructor add components to the Frame.
+     *
+     * @param String pathSelectedCons the path to save the file.
+     * @param ILoadedMap loadedMapObjCons map objects with continent and territories information
+     */ 
     public CreateMapMenu(String pathSelectedCons, ILoadedMap loadedMapObjCons) {
         pathSelected = pathSelectedCons;
         loadedMapObj = loadedMapObjCons;
@@ -48,6 +61,10 @@ public class CreateMapMenu extends JFrame {
         initUI();
     }
 
+     /**
+     * This method is to add the components to the frame also perform the actions of the buttons.
+     *
+     */ 
     private void initUI() {
 
         //ImageIcon saveIcon = new ImageIcon("src/main/resources/save.png");
@@ -59,6 +76,11 @@ public class CreateMapMenu extends JFrame {
         JButton quitBtn = new JButton("Quit");
         JLabel pathVerification = new JLabel("");
 
+     /**
+     * This method perform the operation of author button.
+     *
+     * @param ActionListener().
+     */ 
         basicBtn.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent arg0) {
@@ -70,6 +92,11 @@ public class CreateMapMenu extends JFrame {
             }
         });
 
+     /**
+     * This method perform the operation of continent button.
+     *
+     * @param ActionListener().
+     */ 
         contiBtn.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent arg0) {
@@ -81,6 +108,11 @@ public class CreateMapMenu extends JFrame {
             }
         });
 
+     /**
+     * This method perform the operation of territories button.
+     *
+     * @param ActionListener().
+     */ 
         terrBtn.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent arg0) {
@@ -92,6 +124,11 @@ public class CreateMapMenu extends JFrame {
             }
         });
 
+     /**
+     * This method perform the operation of quit button.
+     *
+     * @param ActionListener().
+     */ 
         quitBtn.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent arg0) {
@@ -100,6 +137,11 @@ public class CreateMapMenu extends JFrame {
             }
         });
 
+     /**
+     * This method perform the operation of verification and save button.
+     *
+     * @param ActionListener().
+     */ 
         veriBtn.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent arg0) {
@@ -136,6 +178,12 @@ public class CreateMapMenu extends JFrame {
         setDefaultCloseOperation(DISPOSE_ON_CLOSE);
     }
 
+    
+        /**
+     * This method organize the components in the frame
+     *
+     * @param JComponent... arg (list of components in the frame).
+     */ 
     private void createLayout(JComponent... arg) {
 
         Container pane = getContentPane();
