@@ -26,3 +26,4 @@ out/
 !lib/*.jar
 .idea/
 /bin/
+test/resources
