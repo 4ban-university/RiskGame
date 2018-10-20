@@ -12,9 +12,12 @@ import static org.junit.Assert.*;
  * @see MapLoader
  */
 public class MapLoaderTest {
-
-    @Before
-    public void setUp() throws Exception {
-
+    /**
+     * Test invalid map with map wrong continent
+     */
+    @Test
+    public void invalidMapWrongContinent() {
+        MapLoader loader = new MapLoader(2, "wrongContinentNoCountries.map", false);
+        assertTrue(loader.invalidMap);
     }
 }

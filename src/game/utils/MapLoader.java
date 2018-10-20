@@ -40,6 +40,7 @@ public class MapLoader {
     public static List<Player> players = new ArrayList<>();
     public static List<Continent> continents = new ArrayList<>();
     public String mapPath;
+    public boolean invalidMap;
 
     /**
      * Constructor of the class.
@@ -54,6 +55,7 @@ public class MapLoader {
         mapPath = filePath;
         String line;
         // FIXME oh my god.
+        invalidMap = false;
         String line2;
         Color[] playerColor = new Color[4];
 
@@ -208,6 +210,7 @@ public class MapLoader {
             }
 
         } catch (Exception e) {
+            invalidMap = true;
             new WarningWindow("Map is not valid. \n " + e.getMessage() + "\n Please, use another one.");
 //            System.exit(1);
         }
