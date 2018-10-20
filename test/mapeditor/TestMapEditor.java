@@ -24,18 +24,28 @@ import mapeditor.MapLoader;
 import mapeditor.Territory;
 import mapeditor.Verification;
 
+/**
+ * The map editor tests
+ */
 public class TestMapEditor {
 	static String path;
 	static String mapName;
 	
 	IMapLoader mapLoaderObj;
 	ILoadedMap loadedMapObj;
-	
+
+	/**
+	 * Specify the path to the map and map file name
+	 */
 	@BeforeClass
 	public static void startup() {
 		path = "test/resources/";
 		mapName = "testEditor.map";
 	}
+
+	/**
+	 * Initialization of the map for further testing
+	 */
 	@Before
 	public void initDummyMap() {
 		String authorName = "test";
@@ -97,7 +107,10 @@ public class TestMapEditor {
 			e.printStackTrace();
 		}
 	}
-	
+
+	/**
+	 * Test if the map is created
+	 */
 	@Test
 	public void testCreateMap() {
 		System.out.println("Test 1: create map");
@@ -148,7 +161,10 @@ public class TestMapEditor {
 		File file = new File(path + mapName);
 		assertTrue(file.exists());
 	}
-	
+
+	/**
+	 * Test if the map is read properly
+	 */
 	@Test
 	public void testReadMap() {
 		System.out.println("Test 2: Read map");
@@ -165,7 +181,10 @@ public class TestMapEditor {
 		assertTrue(listOfContinents.size() > 0);
 		assertTrue(listOfTerritories.size() > 1);
 	}
-	
+
+	/**
+	 * Test for checking if the changing of the author works properly
+	 */
 	@Test
 	public void testChangeAuthor() {
 		System.out.println("Test 3: Change author");
@@ -175,7 +194,10 @@ public class TestMapEditor {
 		loadedMapObj.setAuthor(authorName);
 		assertTrue(loadedMapObj.getAuthor().equals(authorName));
 	}
-	
+
+	/**
+	 * Test for adding the continent in the map
+	 */
 	@Test
 	public void testAddContinent() {
 		System.out.println("Test 4: Add continent");
@@ -190,7 +212,10 @@ public class TestMapEditor {
 		assertNotNull(loadedMapObj.getContinent(continentName));
 		assertTrue(loadedMapObj.getContinent(continentName).getControlValue() == continentControlValue);
 	}
-	
+
+	/**
+	 * Test for adding the territory to the map
+	 */
 	@Test
 	public void testAddTerritory() {
 		System.out.println("Test 5: Add territory");
@@ -219,7 +244,10 @@ public class TestMapEditor {
 		assertNotNull(loadedMapObj.getTerritory(territoryName));
 		assertNotNull(loadedMapObj.getTerritory(territoryName2));
 	}
-	
+
+	/**
+	 * Is the saving the map works properly
+	 */
 	@Test
 	public void testSaveMapToFile() {
 		System.out.println("Test 6: Save map");
@@ -242,8 +270,11 @@ public class TestMapEditor {
 		loadedMapObj = mapLoaderObj.getLoadedMap();
 		assertTrue(loadedMapObj.getAuthor().equals(authorForTestSave.toLowerCase()) == true);
 	}
-	
 
+
+	/**
+	 * Is the remving the continent works properly
+	 */
 	@Test
 	public void testRemoveContinent() {
 		System.out.println("Test 7: Remove continent");
@@ -251,7 +282,10 @@ public class TestMapEditor {
 		loadedMapObj.deleteContinent(continent);
 		assertTrue(loadedMapObj.getListOfContinents().contains("canada") == false);
 	}
-	
+
+	/**
+	 * Is the removing the teritory works properly
+	 */
 	@Test
 	public void testRemoveTerritory() {
 		System.out.println("Test 8: Remove territory");
@@ -259,7 +293,10 @@ public class TestMapEditor {
 		loadedMapObj.deleteTerritory(territory);
 		assertTrue(loadedMapObj.getListOfTerritories().contains("usa3") == false);
 	}
-	
+
+	/**
+	 * Test false map no continent
+	 */
 	@Test
 	public void testFalseMapNoContinent() {
 		System.out.println("Test 9: False map no continent");
@@ -269,7 +306,10 @@ public class TestMapEditor {
 		verificationObj.map = loadedMapObj;
 		assertTrue(verificationObj.checkContinentExistence() == false);
 	}
-	
+
+	/**
+	 * Test false map empty continent
+	 */
 	@Test
 	public void testFalseMapEmptyContinent() {
 		System.out.println("Test 10: False map empty continent");
@@ -279,7 +319,10 @@ public class TestMapEditor {
 		verificationObj.map = loadedMapObj;
 		assertTrue(verificationObj.checkEmptyContinents() == false);
 	}
-	
+
+	/**
+	 * Test false map adjacency
+	 */
 	@Test
 	public void testFalseMapAdjacency() {
 		System.out.println("Test 11: False map adjacency");
@@ -289,7 +332,10 @@ public class TestMapEditor {
 		verificationObj.map = loadedMapObj;
 		assertTrue(verificationObj.checkTerritoryAdjacencyRelation() == false);
 	}
-	
+
+	/**
+	 * Test false map connectivity
+	 */
 	@Test
 	public void testFalseMapConnectivity() {
 		System.out.println("Test 12: False map connectivity");

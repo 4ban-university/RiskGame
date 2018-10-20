@@ -8,11 +8,23 @@ import java.awt.event.*;
 import java.io.File;
 
 
+/**
+ * The main menu class, needed for displaying the menu window.
+ * @author Dmitry Kryukov, Ksenia Popova
+ * @see MapLoader
+ */
 public class MainMenu extends JFrame {
 
     private static final long serialVersionUID = 1L;
     private int width, height;
 
+    /**
+     * The constructor of the class.
+     * Creates the window and put the buttons on there.
+     * @param title of the window
+     * @param width of the window
+     * @param height of the window
+     */
     public MainMenu(String title, int width, int height) {
         super(title);
         this.width = width;
@@ -35,6 +47,11 @@ public class MainMenu extends JFrame {
         setVisible(true);
     }
 
+    /**
+     * Method generate the button for menu bar with calling additional functionality
+     * Such: testing continent bonus with 4 players
+     * @return file object to attach to the menu bar panel
+     */
     private JMenu file() {
         JMenu file = new JMenu("File");
         JMenuItem continentBonus = new JMenuItem("test: Continent bonus with 4 players");
@@ -51,6 +68,11 @@ public class MainMenu extends JFrame {
         });
         return file;
     }
+
+    /**
+     * Method generates the button for menu bar with calling map editor
+     * @return mapEditor object to attach it to the menu bar panel
+     */
     private JMenu mapEditor() {
         JMenu mapEditor = new JMenu("Map Editor");
         JMenuItem editorCLI = new JMenuItem("Open map editor with CLI");
@@ -73,12 +95,22 @@ public class MainMenu extends JFrame {
         });
         return mapEditor;
     }
+
+    /**
+     * Method generates the button for menu bar with calling exit
+     * @return exit object to attach it to the menu bar panel
+     */
     private JMenu exit() {
         JMenu exit = new JMenu("Exit");
         JMenuItem quit = new JMenuItem(new ExitAction());
         exit.add(quit);
         return exit;
     }
+
+    /**
+     * Method generates the buttons for menu bar with calling start game with different number of players
+     * @return startButtons object to attach the buttons to the window
+     */
     private JPanel startButtons() {
         JPanel buttonPanel = new JPanel();
         JPanel startButtons = new JPanel();
@@ -126,6 +158,10 @@ public class MainMenu extends JFrame {
         });
         return startButtons;
     }
+
+    /**
+     * Exit functionality
+     */
     class ExitAction extends AbstractAction {
         private static final long serialVersionUID = 1L;
         ExitAction() {
@@ -135,6 +171,13 @@ public class MainMenu extends JFrame {
             System.exit(0);
         }
     }
+
+    /**
+     * The method which returns the filepath of the map
+     * @return filepath path to the map file
+     * or
+     * @return default.map default map file
+     */
     private String filePath() {
         JFileChooser fileChooser = new JFileChooser(FileSystemView.getFileSystemView().getHomeDirectory());
         int returnValue = fileChooser.showOpenDialog(null);

@@ -2,13 +2,25 @@ import static org.junit.Assert.*;
 import org.junit.Before;
 import org.junit.Test;
 
+/**
+ * The Launcher test.
+ * @author Dmitry Kryukov
+ * @see Launcher
+ */
 public class LauncherTest {
     private Launcher launcher;
 
+    /**
+     * Create object launcher
+     */
     @Before
     public void setUp(){
         launcher = new Launcher("Test", 100,100);
     }
+
+    /**
+     * True if object is exist
+     */
     @Test
     public void launcherExistence(){
         System.out.println("Test 13: Launcher is created an menu object");
