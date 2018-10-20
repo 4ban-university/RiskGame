@@ -11,7 +11,14 @@ public class Continent implements IContinent {
 	private String continentName;
 	private Integer controlValue;
 	private ArrayList<String> listOfTerritories;
-	
+        static ArrayList<IContinent> continents = new ArrayList<IContinent>();
+        
+        public static ArrayList<IContinent> getContinents(){
+            return continents;
+        }
+	public static void setContinents(ArrayList<IContinent> inputContinents){
+            continents = inputContinents;
+        }
 	/**
 	 * The default constructor.
 	 */
