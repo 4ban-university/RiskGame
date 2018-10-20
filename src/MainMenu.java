@@ -1,192 +1,223 @@
-import mapeditor.StartEditor;
 import game.utils.MapLoader;
+import mapeditor.StartEditor;
+import mapeditor.gui.CreateMapMenu;
 
 import javax.swing.*;
 import javax.swing.filechooser.FileSystemView;
 import java.awt.*;
 import java.awt.event.*;
 import java.io.File;
-
+import mapeditor.Continent;
+import mapeditor.ILoadedMap;
+import mapeditor.IMapLoader;
+import mapeditor.Territory;
 
 /**
- * The main menu class, needed for displaying the menu window.
- * @author Dmitry Kryukov, Ksenia Popova
- * @see MapLoader
+ * This class contains the main menu of the game
+ * @author Dmitry Kryukov & Rodolfo Miranda
+ *
  */
+
 public class MainMenu extends JFrame {
 
-    private static final long serialVersionUID = 1L;
-    private int width, height;
+	private static final long serialVersionUID = 1L;
+	private int width, height;
+        private ILoadedMap loadedMapObj;
 
-    /**
-     * The constructor of the class.
-     * Creates the window and put the buttons on there.
-     * @param title of the window
-     * @param width of the window
-     * @param height of the window
-     */
-    public MainMenu(String title, int width, int height) {
-        super(title);
-        this.width = width;
-        this.height = height;
+	public MainMenu(String title, int width, int height) {
+		super(title);
+		this.width = width;
+		this.height = height;
 
-        setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        setSize(this.width, this.height);
-        setResizable(false);
+		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		setSize(this.width, this.height);
+		setResizable(false);
 
-        JMenuBar menuBar = new JMenuBar();
-        menuBar.add(file());
-        menuBar.add(mapEditor());
-        menuBar.add(exit());
-        setJMenuBar(menuBar);
+		JMenuBar menuBar = new JMenuBar();
+		// menuBar.add(newGame());
+		menuBar.add(mapEditor());
+		menuBar.add(exit());
+		setJMenuBar(menuBar);
 
-        getContentPane().add(startButtons());
+		getContentPane().add(startButtons());
 
-        // pack(); // ignore sizing
-        setLocationRelativeTo(null);
-        setVisible(true);
-    }
+		// pack(); // ignore sizing
+		setLocationRelativeTo(null);
+		setVisible(true);
+	}
 
-    /**
-     * Method generate the button for menu bar with calling additional functionality
-     * Such: testing continent bonus with 4 players
-     * @return file object to attach to the menu bar panel
-     */
-    private JMenu file() {
-        JMenu file = new JMenu("File");
-        JMenuItem continentBonus = new JMenuItem("test: Continent bonus with 4 players");
-        file.add(continentBonus);
+//    private JMenu newGame() {
+//        JMenu newGame = new JMenu("New Game");
+//        JMenuItem player2 = new JMenuItem("2 Players");
+//        JMenuItem player3 = new JMenuItem("3 Players");
+//        JMenuItem player4 = new JMenuItem("4 Players");
+//        newGame.add(player2);
+//        newGame.add(player3);
+//        newGame.add(player4);
+//
+//        player2.addActionListener(new ActionListener() {
+//            @Override
+//            public void actionPerformed(ActionEvent arg0) {
+//                System.out.println ("DEBUG: Chosen 2 players\n ------------------------ \n");
+//                int players = 2;
+//                String filePath = filePath();
+//                MapLoader loader = new MapLoader(players, filePath);
+//            }
+//        });
+//        player3.addActionListener(new ActionListener() {
+//            @Override
+//            public void actionPerformed(ActionEvent arg0) {
+//                System.out.println ("DEBUG: Chosen 3 players\n ------------------------ \n");
+//                int players = 3;
+//                String filePath = filePath();
+//                MapLoader loader = new MapLoader(players, filePath);
+//            }
+//        });
+//        player4.addActionListener(new ActionListener() {
+//            @Override
+//            public void actionPerformed(ActionEvent arg0) {
+//                System.out.println ("DEBUG: Chosen 4 players\n ------------------------ \n");
+//                int players = 4;
+//                String filePath = filePath();
+//                MapLoader loader = new MapLoader(players, filePath);
+//            }
+//        });
+//        return newGame;
+//    }
+	private JMenu mapEditor() {
+		JMenu mapEditor = new JMenu("Map Editor");
+		JMenuItem createMAP = new JMenuItem("Create Map");
+		mapEditor.add(createMAP);
+		JMenuItem editMAP = new JMenuItem("Edit Map");
+		mapEditor.add(editMAP);
 
-        continentBonus.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent arg0) {
-                System.out.println ("DEBUG: Testing continent bonus with 4 players\n ------------------------ \n");
-                int players = 4;
-                String filePath = filePath();
-                new MapLoader(players, filePath, true);
-            }
-        });
-        return file;
-    }
+		createMAP.addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent arg0) {
+				EventQueue.invokeLater(() -> {
+                                    JFileChooser jfc = new JFileChooser(FileSystemView.getFileSystemView().getHomeDirectory());
 
-    /**
-     * Method generates the button for menu bar with calling map editor
-     * @return mapEditor object to attach it to the menu bar panel
-     */
-    private JMenu mapEditor() {
-        JMenu mapEditor = new JMenu("Map Editor");
-        JMenuItem editorCLI = new JMenuItem("Open map editor with CLI");
-        mapEditor.add(editorCLI);
-        JMenuItem editorGUI = new JMenuItem("Open map editor with GUI");
-        mapEditor.add(editorGUI);
+                                    int returnValue = jfc.showOpenDialog(null);
+                                    // int returnValue = jfc.showSaveDialog(null);
 
-        editorCLI.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent arg0) {
-                System.out.println ("DEBUG: Launch CLI Map Editor\n ------------------------ \n");
-                StartEditor editor = new StartEditor();
-            }
-        });
-        editorGUI.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent arg0) {
-                System.out.println ("DEBUG: Launch GUI Map Editor\n ------------------------ \n");
-            }
-        });
-        return mapEditor;
-    }
+                                    if (returnValue == JFileChooser.APPROVE_OPTION) {
+                                            File selectedFile = jfc.getSelectedFile();
+                                            IMapLoader mapLoaderObj = new mapeditor.MapLoader(selectedFile.getAbsolutePath(), 1);
+                                            loadedMapObj = mapLoaderObj.getLoadedMap();
+                                            Continent.setContinents(loadedMapObj.getContinents());
+                                            Territory.setTerritories(loadedMapObj.getTerritories());
+                                            CreateMapMenu ex = new CreateMapMenu(selectedFile.getAbsolutePath(), loadedMapObj);
+                                            ex.setVisible(true);
+                                    }else{
+                                        //ERROR
+                                    }
+				});
 
-    /**
-     * Method generates the button for menu bar with calling exit
-     * @return exit object to attach it to the menu bar panel
-     */
-    private JMenu exit() {
-        JMenu exit = new JMenu("Exit");
-        JMenuItem quit = new JMenuItem(new ExitAction());
-        exit.add(quit);
-        return exit;
-    }
+			}
+		});
+		editMAP.addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent arg0) {
+				EventQueue.invokeLater(() -> {
+                                    JFileChooser jfc = new JFileChooser(FileSystemView.getFileSystemView().getHomeDirectory());
 
-    /**
-     * Method generates the buttons for menu bar with calling start game with different number of players
-     * @return startButtons object to attach the buttons to the window
-     */
-    private JPanel startButtons() {
-        JPanel buttonPanel = new JPanel();
-        JPanel startButtons = new JPanel();
+                                    int returnValue = jfc.showOpenDialog(null);
+                                    // int returnValue = jfc.showSaveDialog(null);
 
-        buttonPanel.setPreferredSize(new Dimension(350, 200));
-        buttonPanel.setLayout(new GridBagLayout());
-        GridBagConstraints gbc = new GridBagConstraints();
-        gbc.insets = new Insets(0,5,0,0);
-        JButton player2 = new JButton(("2 Players"));
-        JButton player3 = new JButton(("3 Players"));
-        JButton player4 = new JButton(("4 Players"));
+                                    if (returnValue == JFileChooser.APPROVE_OPTION) {
+                                            File selectedFile = jfc.getSelectedFile();
+                                            IMapLoader mapLoaderObj = new mapeditor.MapLoader(selectedFile.getAbsolutePath(), 1);
+                                            loadedMapObj = mapLoaderObj.getLoadedMap();
+                                            Continent.setContinents(loadedMapObj.getContinents());
+                                            Territory.setTerritories(loadedMapObj.getTerritories());
+                                            CreateMapMenu ex = new CreateMapMenu(selectedFile.getAbsolutePath(), loadedMapObj);
+                                            ex.setVisible(true);
+                                    }else{
+                                        //Deu pau manda mensagem de erro ai tiosao
+                                    }
+					
+				});
+			}
+		});
+		return mapEditor;
+	}
 
-        buttonPanel.add(player2, gbc);
-        buttonPanel.add(player3, gbc);
-        buttonPanel.add(player4, gbc);
+	private JMenu exit() {
+		JMenu exit = new JMenu("Exit");
+		JMenuItem quit = new JMenuItem(new ExitAction());
+		exit.add(quit);
+		return exit;
+	}
 
-        startButtons.add(buttonPanel);
+	private JPanel startButtons() {
+		JPanel buttonPanel = new JPanel();
+		JPanel startButtons = new JPanel();
 
-        player2.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent arg0) {
-                System.out.println ("DEBUG: Chosen 2 players\n ------------------------ \n");
-                int players = 2;
-                String filePath = filePath();
-                MapLoader loader = new MapLoader(players, filePath, false);
-            }
-        });
-        player3.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent arg0) {
-                System.out.println ("DEBUG: Chosen 3 players\n ------------------------ \n");
-                int players = 3;
-                String filePath = filePath();
-                MapLoader loader = new MapLoader(players, filePath, false);
-            }
-        });
-        player4.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent arg0) {
-                System.out.println ("DEBUG: Chosen 4 players\n ------------------------ \n");
-                int players = 4;
-                String filePath = filePath();
-                MapLoader loader = new MapLoader(players, filePath,false);
-            }
-        });
-        return startButtons;
-    }
+		buttonPanel.setPreferredSize(new Dimension(350, 200));
+		buttonPanel.setLayout(new GridBagLayout());
+		GridBagConstraints gbc = new GridBagConstraints();
+		gbc.insets = new Insets(0, 5, 0, 0);
+		JButton player2 = new JButton(("2 Players"));
+		JButton player3 = new JButton(("3 Players"));
+		JButton player4 = new JButton(("4 Players"));
 
-    /**
-     * Exit functionality
-     */
-    class ExitAction extends AbstractAction {
-        private static final long serialVersionUID = 1L;
-        ExitAction() {
-            putValue(NAME, "Quit");
-        }
-        public void actionPerformed(ActionEvent e) {
-            System.exit(0);
-        }
-    }
+		buttonPanel.add(player2, gbc);
+		buttonPanel.add(player3, gbc);
+		buttonPanel.add(player4, gbc);
 
-    /**
-     * The method which returns the filepath of the map
-     * @return filepath path to the map file
-     * or
-     * @return default.map default map file
-     */
-    private String filePath() {
-        JFileChooser fileChooser = new JFileChooser(FileSystemView.getFileSystemView().getHomeDirectory());
-        int returnValue = fileChooser.showOpenDialog(null);
+		startButtons.add(buttonPanel);
 
-        if (returnValue == JFileChooser.APPROVE_OPTION) {
-            File selectedFile = fileChooser.getSelectedFile();
-            return selectedFile.getAbsolutePath();
-        }
-        System.out.println("DEBUG: Using the default map!\n---------------------------------------\n");
-        return "default.map";
-    }
+		player2.addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent arg0) {
+				System.out.println("DEBUG: Chosen 2 players\n ------------------------ \n");
+				int players = 2;
+				String filePath = filePath();
+				MapLoader loader = new MapLoader(players, filePath);
+			}
+		});
+		player3.addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent arg0) {
+				System.out.println("DEBUG: Chosen 3 players\n ------------------------ \n");
+				int players = 3;
+				String filePath = filePath();
+				MapLoader loader = new MapLoader(players, filePath);
+			}
+		});
+		player4.addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent arg0) {
+				System.out.println("DEBUG: Chosen 4 players\n ------------------------ \n");
+				int players = 4;
+				String filePath = filePath();
+				MapLoader loader = new MapLoader(players, filePath);
+			}
+		});
+		return startButtons;
+	}
+
+	class ExitAction extends AbstractAction {
+		private static final long serialVersionUID = 1L;
+
+		ExitAction() {
+			putValue(NAME, "Quit");
+		}
+
+		public void actionPerformed(ActionEvent e) {
+			System.exit(0);
+		}
+	}
+
+	private String filePath() {
+		JFileChooser fileChooser = new JFileChooser(FileSystemView.getFileSystemView().getHomeDirectory());
+		int returnValue = fileChooser.showOpenDialog(null);
+
+		if (returnValue == JFileChooser.APPROVE_OPTION) {
+			File selectedFile = fileChooser.getSelectedFile();
+			return selectedFile.getAbsolutePath();
+		}
+		System.out.println("DEBUG: Using the default map!\n---------------------------------------\n");
+		return "default.map";
+	}
 }
