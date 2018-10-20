@@ -158,8 +158,8 @@ public class Game {
             }
         }
         System.out.println("Player " + player.getName() + " owns " + countriesOwnedByPlayer + " countries and  gets " + countriesOwnedByPlayer / 3 + " armies.");
-
-        return player.getArmies() + countriesOwnedByPlayer / 3;
+        if ((player.getArmies() + countriesOwnedByPlayer /3 ) < 3 ) return 3;
+        else return player.getArmies() + countriesOwnedByPlayer / 3;
     }
 
     /**

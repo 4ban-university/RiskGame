@@ -34,6 +34,6 @@ public class GameTest {
         countryList.add(new Country("Country 4", 40, 40, 2, continent, player2));
 
 //        assertTrue(Game.getReinforcementArmies(player1, countryList) == 1);
-        assertEquals(1, Game.getReinforcementArmies(player1, countryList));
+        assertEquals(3, Game.getReinforcementArmies(player1, countryList));
     }
 }
