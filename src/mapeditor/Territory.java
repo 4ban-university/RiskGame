@@ -1,6 +1,7 @@
 package mapeditor;
 
 import java.util.ArrayList;
+import static mapeditor.Continent.continents;
 
 /**
  * The class to load territory in data structures.
@@ -13,6 +14,14 @@ public class Territory implements ITerritory {
 	private Integer Y;
 	private String continent;
 	private ArrayList<String> adjacents;
+        
+        static ArrayList<ITerritory> territories = new ArrayList<ITerritory>();
+        public static ArrayList<ITerritory> getTerritories(){
+            return territories;
+        }
+	public static void setTerritories(ArrayList<ITerritory> inputTerritories){
+            territories = inputTerritories;
+        }
 	
 	/**
 	 * The constructor to initialize the class variables.

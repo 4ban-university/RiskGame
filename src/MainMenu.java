@@ -1,31 +1,37 @@
-import mapeditor.StartEditor;
 import game.utils.MapLoader;
+import mapeditor.StartEditor;
+import mapeditor.gui.CreateMapMenu;
 
 import javax.swing.*;
 import javax.swing.filechooser.FileSystemView;
 import java.awt.*;
 import java.awt.event.*;
 import java.io.File;
-
+import mapeditor.Continent;
+import mapeditor.ILoadedMap;
+import mapeditor.IMapLoader;
+import mapeditor.Territory;
 
 /**
- * The main menu class, needed for displaying the menu window.
- * @author Dmitry Kryukov, Ksenia Popova
+ * This class contains the main menu of the game
+ * @author Dmitry Kryukov, Ksenia Popova, Rodolfo Miranda
  * @see MapLoader
  */
+
 public class MainMenu extends JFrame {
 
-    private static final long serialVersionUID = 1L;
-    private int width, height;
-
-    /**
-     * The constructor of the class.
-     * Creates the window and put the buttons on there.
-     * @param title of the window
-     * @param width of the window
-     * @param height of the window
-     */
-    public MainMenu(String title, int width, int height) {
+	private static final long serialVersionUID = 1L;
+	private int width, height;
+    private ILoadedMap loadedMapObj;
+	
+	/**
+	 * The constructor of the class.
+	 * Creates the window and put the buttons on there.
+	 * @param title of the window
+	 * @param width of the window
+	 * @param height of the window
+	 */
+	public MainMenu(String title, int width, int height) {
         super(title);
         this.width = width;
         this.height = height;
@@ -46,7 +52,7 @@ public class MainMenu extends JFrame {
         setLocationRelativeTo(null);
         setVisible(true);
     }
-
+	
     /**
      * Method generate the button for menu bar with calling additional functionality
      * Such: testing continent bonus with 4 players
@@ -68,35 +74,69 @@ public class MainMenu extends JFrame {
         });
         return file;
     }
-
-    /**
+	/**
      * Method generates the button for menu bar with calling map editor
      * @return mapEditor object to attach it to the menu bar panel
      */
-    private JMenu mapEditor() {
-        JMenu mapEditor = new JMenu("Map Editor");
-        JMenuItem editorCLI = new JMenuItem("Open map editor with CLI");
-        mapEditor.add(editorCLI);
-        JMenuItem editorGUI = new JMenuItem("Open map editor with GUI");
-        mapEditor.add(editorGUI);
+	private JMenu mapEditor() {
+		JMenu mapEditor = new JMenu("Map Editor");
+		JMenuItem createMAP = new JMenuItem("Create Map");
+		mapEditor.add(createMAP);
+		JMenuItem editMAP = new JMenuItem("Edit Map");
+		mapEditor.add(editMAP);
 
-        editorCLI.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent arg0) {
-                System.out.println ("DEBUG: Launch CLI Map Editor\n ------------------------ \n");
-                StartEditor editor = new StartEditor();
-            }
-        });
-        editorGUI.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent arg0) {
-                System.out.println ("DEBUG: Launch GUI Map Editor\n ------------------------ \n");
-            }
-        });
-        return mapEditor;
-    }
+		createMAP.addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent arg0) {
+				EventQueue.invokeLater(() -> {
+                                    JFileChooser jfc = new JFileChooser(FileSystemView.getFileSystemView().getHomeDirectory());
 
-    /**
+                                    int returnValue = jfc.showOpenDialog(null);
+                                    // int returnValue = jfc.showSaveDialog(null);
+
+                                    if (returnValue == JFileChooser.APPROVE_OPTION) {
+                                            File selectedFile = jfc.getSelectedFile();
+                                            IMapLoader mapLoaderObj = new mapeditor.MapLoader(selectedFile.getAbsolutePath(), 1);
+                                            loadedMapObj = mapLoaderObj.getLoadedMap();
+                                            Continent.setContinents(loadedMapObj.getContinents());
+                                            Territory.setTerritories(loadedMapObj.getTerritories());
+                                            CreateMapMenu ex = new CreateMapMenu(selectedFile.getAbsolutePath(), loadedMapObj);
+                                            ex.setVisible(true);
+                                    }else{
+                                        //ERROR
+                                    }
+				});
+
+			}
+		});
+		editMAP.addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent arg0) {
+				EventQueue.invokeLater(() -> {
+                                    JFileChooser jfc = new JFileChooser(FileSystemView.getFileSystemView().getHomeDirectory());
+
+                                    int returnValue = jfc.showOpenDialog(null);
+                                    // int returnValue = jfc.showSaveDialog(null);
+
+                                    if (returnValue == JFileChooser.APPROVE_OPTION) {
+                                            File selectedFile = jfc.getSelectedFile();
+                                            IMapLoader mapLoaderObj = new mapeditor.MapLoader(selectedFile.getAbsolutePath(), 1);
+                                            loadedMapObj = mapLoaderObj.getLoadedMap();
+                                            Continent.setContinents(loadedMapObj.getContinents());
+                                            Territory.setTerritories(loadedMapObj.getTerritories());
+                                            CreateMapMenu ex = new CreateMapMenu(selectedFile.getAbsolutePath(), loadedMapObj);
+                                            ex.setVisible(true);
+                                    }else{
+                                        //Deu pau manda mensagem de erro ai tiosao
+                                    }
+					
+				});
+			}
+		});
+		return mapEditor;
+	}
+
+	/**
      * Method generates the button for menu bar with calling exit
      * @return exit object to attach it to the menu bar panel
      */
@@ -107,7 +147,7 @@ public class MainMenu extends JFrame {
         return exit;
     }
 
-    /**
+	/**
      * Method generates the buttons for menu bar with calling start game with different number of players
      * @return startButtons object to attach the buttons to the window
      */
