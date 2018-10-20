@@ -5,6 +5,11 @@ import game.model.Player;
 import javax.swing.*;
 import java.awt.*;
 
+/**
+ * The top status panel. Displays the status of the player current state
+ * @author Dmitry Kryukov
+ * @see Player
+ */
 public class TopStatusPanel extends JPanel {
     private JLabel playerColor = new JLabel();
     private JLabel playerName = new JLabel();
@@ -12,6 +17,12 @@ public class TopStatusPanel extends JPanel {
     private JLabel gamePhase = new JLabel();
     private JLabel turnPhrase = new JLabel();
 
+    /**
+     * Constructor of the class.
+     * Draw the needed panels on the main game window.
+     * @param width
+     * @param height
+     */
     public TopStatusPanel(int width, int height) {
         this.setPreferredSize(new Dimension(width, height));
         this.setLayout(new BoxLayout(this, BoxLayout.LINE_AXIS));
@@ -41,6 +52,10 @@ public class TopStatusPanel extends JPanel {
         this.add(gamePhase);
     }
 
+    /**
+     * Set the player info on the pstatus panel
+     * @param player
+     */
     public void setPlayer(Player player) {
         playerName.setText(player.getName());
         String colorS = Integer.toString(player.getColor().getRGB());
@@ -51,14 +66,25 @@ public class TopStatusPanel extends JPanel {
 //        this.gameState.setText(gameState);
 //    }
 
+    /**
+     * Set the current game phase to displaying on the panel
+     * @param gamePhase
+     */
     public void setGamePhase(String gamePhase) {
         this.gamePhase.setText(gamePhase);
     }
 
+    /**
+     * Set the status for the phase to displaying on the panel
+     * @param turnPhrase
+     */
     public void setTurnPhrase(String turnPhrase) {
         this.turnPhrase.setText(turnPhrase);
     }
 
+    /**
+     * Reset the variables for other players
+     */
     public void reset() {
         playerName.setText("");
 //        gameState.setText("");

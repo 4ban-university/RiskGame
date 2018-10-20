@@ -23,6 +23,16 @@ import java.util.Queue;
 import java.util.Random;
 import java.util.Set;
 
+/**
+ * The map loader class. Responsible for loading and validation of the map.
+ * @author Ksenia Popova, Dmitry Kryukov
+ * @see Main
+ * @see Continent
+ * @see Country
+ * @see Neighbour
+ * @see Player
+ * @see Game
+ */
 public class MapLoader {
     public static int RADIUS = 20;
     public static List<Country> countries = new ArrayList<>();
@@ -31,6 +41,13 @@ public class MapLoader {
     public static List<Continent> continents = new ArrayList<>();
     public String mapPath;
 
+    /**
+     * Constructor of the class.
+     * Loading and validation of the map.
+     * @param numberOfPlayers
+     * @param filePath
+     * @param mode
+     */
     public MapLoader(int numberOfPlayers, String filePath, boolean mode) {
         // If true - the program in test mode.
         boolean testMode = mode;
@@ -200,6 +217,10 @@ public class MapLoader {
         new Main(game, this);
     }
 
+    /**
+     * File path getter.
+     * @return filePath
+     */
     public String getFilePath() {
         return mapPath;
     }

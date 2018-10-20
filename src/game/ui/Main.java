@@ -10,11 +10,26 @@ import game.utils.MapLoader;
 import javax.swing.*;
 import java.awt.*;
 
+/**
+ * The main window of the game. Graphics interface.
+ * @author Dmitry Kryukov, Ksenia Popova
+ * @see Game
+ * @see DicePanel
+ * @see MapPanel
+ * @see RightStatusPanel
+ * @see TopStatusPanel
+ * @see MapLoader
+ */
 public class Main {
 
     private int width = 1200;
     private int height = 700;
 
+    /**
+     * Constructor of the class. Runs the game
+     * @param game
+     * @param loader
+     */
     public Main(Game game, MapLoader loader) {
         SwingUtilities.invokeLater(new Runnable() {
             public void run() {
@@ -23,6 +38,11 @@ public class Main {
         });
     }
 
+    /**
+     * Method created the panels, windows and all gui, then runs the game.
+     * @param game instance of game controller
+     * @param loader map loader
+     */
     private void createAndShowGui(Game game, MapLoader loader) {
         final JFrame frame = new JFrame("Risk");
         frame.setPreferredSize(new Dimension(width,height));
@@ -80,6 +100,11 @@ public class Main {
         // centreWindow(frame);
         frame.setVisible(true);
     }
+
+    /**
+     * Additional method to center window if needed
+     * @param frame
+     */
     public static void centreWindow(Window frame) {
         Dimension dimension = Toolkit.getDefaultToolkit().getScreenSize();
         int x = (int) ((dimension.getWidth() - frame.getWidth()) / 2);
