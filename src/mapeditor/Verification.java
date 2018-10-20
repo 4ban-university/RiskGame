@@ -78,8 +78,8 @@ public class Verification implements IVerification {
 		ArrayList<String> continents = this.map.getListOfContinents();
 		for(int i = 0; i < continents.size(); i++) {
 			IContinent continent = this.map.getContinent(continents.get(i));
-			if(continent.numTerritories() == 0) {
-				System.out.println("Map cannot be saved, as " + continent.getContinentName() + " has no territories");
+			if(continent.numTerritories() < 2) {
+				System.out.println("Map cannot be saved, as " + continent.getContinentName() + " does not have enough territories");
 				return false;
 			}
 		}
