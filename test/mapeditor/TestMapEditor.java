@@ -75,7 +75,7 @@ public class TestMapEditor {
 		Integer X2 = 900;
 		Integer Y2 = 900;
 		ArrayList<String> adjacents2 = new ArrayList<String>();
-		adjacents2.add("usa1");
+		adjacents2.add("usa1,usa3");
 		String continent2 = "usa";
 		
 		String territoryName3 = "usa3";
@@ -211,7 +211,7 @@ public class TestMapEditor {
 	public void testAddContinent() {
 		mapLoaderObj = new MapLoader(path + mapName, 0);
 		loadedMapObj = mapLoaderObj.getLoadedMap();
-		String continentName = "canada";
+		String continentName = "asia";
 		Integer continentControlValue = 4;
 		IContinent continent = new Continent();
 		continent.setContinentName(continentName);
