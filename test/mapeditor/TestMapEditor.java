@@ -1,4 +1,4 @@
-package soen6441;
+package mapeditor;
 
 import static org.junit.Assert.*;
 

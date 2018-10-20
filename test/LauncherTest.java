@@ -23,7 +23,6 @@ public class LauncherTest {
      */
     @Test
     public void launcherExistence(){
-        System.out.println("Test 13: Launcher is created an menu object");
         assertTrue(launcher != null);
     }
 }
