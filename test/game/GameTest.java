@@ -11,8 +11,15 @@ import java.util.List;
 
 import static org.junit.Assert.assertEquals;
 
+/**
+ * Tests for game class i.e. controller of the game.
+ * @author Ksenia Popova
+ * @see Game
+ */
 public class GameTest {
-
+    /**
+     * Test for calculation of number of reinforcment armies
+     */
     @Test
     public void reinforcementCount() {
         Player player1 = new Player("test Player 1", Color.BLACK);
