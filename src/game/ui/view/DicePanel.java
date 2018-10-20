@@ -22,8 +22,8 @@ public class DicePanel extends JPanel {
 
     /**
      * Constructor of the class
-     * @param width
-     * @param height
+     * @param width of the panel
+     * @param height of the panel
      */
     public DicePanel(int width, int height) {
         this.width = width;
@@ -46,8 +46,8 @@ public class DicePanel extends JPanel {
 
     /**
      * Set the dices with parameters
-     * @param redDice
-     * @param whiteDice
+     * @param redDice Dices of player
+     * @param whiteDice Dices of enemie
      */
     public void setDices(DiceEnum[] redDice, DiceEnum[] whiteDice) {
         this.redDice = redDice;

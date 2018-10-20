@@ -78,7 +78,7 @@ public class Country {
 
     /**
      * Set the number of armies to country
-     * @param army
+     * @param army Armies to country
      */
     public void setArmy(int army) {
         this.army = army;
@@ -94,7 +94,7 @@ public class Country {
 
     /**
      * Set the x coordinate
-     * @param x
+     * @param x horizontal coordinate
      */
     public void setX(int x) {
         this.x = x;
@@ -110,7 +110,7 @@ public class Country {
 
     /**
      * Set the y coordinate
-     * @param y
+     * @param y vertical coordinate
      */
     public void setY(int y) {
         this.y = y;
@@ -126,7 +126,7 @@ public class Country {
 
     /**
      * Set the radius for the country
-     * @param radius
+     * @param radius radius of the node
      */
     public void setRadius(int radius) {
         this.radius = radius;
@@ -142,7 +142,7 @@ public class Country {
 
     /**
      * Set the connections for country
-     * @param neighbours
+     * @param neighbours connections for country
      */
     public void setNeighbours(List<Country> neighbours) {
         this.neighbours = neighbours;
@@ -158,7 +158,7 @@ public class Country {
 
     /**
      * Set the player for country
-     * @param player
+     * @param player Player object
      */
     public void setPlayer(Player player) {
         this.player = player;
@@ -174,7 +174,7 @@ public class Country {
 
     /**
      * Set the country selected state
-     * @param selected
+     * @param selected Is country selected
      */
     public void setSelected(boolean selected) {
         isSelected = selected;
@@ -190,7 +190,7 @@ public class Country {
 
     /**
      * Selection of enemies
-     * @param enemies
+     * @param enemies Players enemies
      */
     public void select(boolean enemies) {
         isSelected = true;
@@ -210,7 +210,7 @@ public class Country {
 
     /**
      * Unselection of enemies
-     * @param enemies
+     * @param enemies Players enemies
      */
     public void unSelect(boolean enemies) {
         isSelected = false;
@@ -230,7 +230,7 @@ public class Country {
 
     /**
      * Highlight the country enemies
-     * @param enemies
+     * @param enemies Players enemies
      */
     public void highlite(boolean enemies) {
         if (!isHighlited) {
@@ -251,7 +251,7 @@ public class Country {
 
     /**
      * Unhighlight the enemies fir country
-     * @param enemies
+     * @param enemies Player enemies
      */
     public void unHighlite(boolean enemies) {
         if (isHighlited) {
@@ -280,7 +280,7 @@ public class Country {
 
     /**
      * Set highlight
-     * @param highlited
+     * @param highlited Is highlighted
      */
     public void setHighlited(boolean highlited) {
         isHighlited = highlited;
@@ -288,8 +288,8 @@ public class Country {
 
     /**
      * Check if the country in border
-     * @param x
-     * @param y
+     * @param x coordinate
+     * @param y coordinate
      * @return boolean
      */
     public boolean isInBorder(int x, int y) {
@@ -306,7 +306,7 @@ public class Country {
 
     /**
      * Set the continent for country
-     * @param continent
+     * @param continent Continent to country
      */
     public void setContinent(Continent continent) {
         this.continent = continent;
@@ -314,7 +314,7 @@ public class Country {
 
     /**
      * Drawer. Display the game in window. GUI
-     * @param g
+     * @param g instance og graphics object
      */
     public void draw(Graphics g) {
         Graphics2D g2d = (Graphics2D) g;

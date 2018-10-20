@@ -20,8 +20,8 @@ public class TopStatusPanel extends JPanel {
     /**
      * Constructor of the class.
      * Draw the needed panels on the main game window.
-     * @param width
-     * @param height
+     * @param width of the panel
+     * @param height of the panel
      */
     public TopStatusPanel(int width, int height) {
         this.setPreferredSize(new Dimension(width, height));
@@ -54,7 +54,7 @@ public class TopStatusPanel extends JPanel {
 
     /**
      * Set the player info on the pstatus panel
-     * @param player
+     * @param player Player
      */
     public void setPlayer(Player player) {
         playerName.setText(player.getName());
@@ -68,7 +68,7 @@ public class TopStatusPanel extends JPanel {
 
     /**
      * Set the current game phase to displaying on the panel
-     * @param gamePhase
+     * @param gamePhase phase
      */
     public void setGamePhase(String gamePhase) {
         this.gamePhase.setText(gamePhase);
@@ -76,7 +76,7 @@ public class TopStatusPanel extends JPanel {
 
     /**
      * Set the status for the phase to displaying on the panel
-     * @param turnPhrase
+     * @param turnPhrase Phrase
      */
     public void setTurnPhrase(String turnPhrase) {
         this.turnPhrase.setText(turnPhrase);

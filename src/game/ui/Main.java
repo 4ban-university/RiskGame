@@ -27,8 +27,8 @@ public class Main {
 
     /**
      * Constructor of the class. Runs the game
-     * @param game
-     * @param loader
+     * @param game instance of the game class
+     * @param loader instance of map loader
      */
     public Main(Game game, MapLoader loader) {
         SwingUtilities.invokeLater(new Runnable() {
@@ -103,7 +103,7 @@ public class Main {
 
     /**
      * Additional method to center window if needed
-     * @param frame
+     * @param frame object with window
      */
     public static void centreWindow(Window frame) {
         Dimension dimension = Toolkit.getDefaultToolkit().getScreenSize();

@@ -42,9 +42,9 @@ public class RightStatusPanel extends JPanel {
     /**
      * Constructor of the class.
      * Create the panel and draw it in game main window
-     * @param width
-     * @param height
-     * @param game
+     * @param width of the panel
+     * @param height of the panel
+     * @param game instance of game controller
      */
     public RightStatusPanel(int width, int height, Game game) {
         // setup overall setup
@@ -113,7 +113,7 @@ public class RightStatusPanel extends JPanel {
 
     /**
      * Setter for cards for player displaying
-     * @param player
+     * @param player Player
      */
     public void setPlayer(Player player) {
         playerInfantry.setText(Integer.toString(player.getCardsEnumIntegerMap().get(INFANTRY)));
@@ -125,7 +125,7 @@ public class RightStatusPanel extends JPanel {
 
     /**
      * Setter for country and army number displaying
-     * @param country
+     * @param country Country
      */
     public void setCountry(Country country) {
         countryName.setText(country.getName());

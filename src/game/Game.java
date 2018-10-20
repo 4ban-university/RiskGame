@@ -39,10 +39,10 @@ import static game.enums.GamePhase.PLACING_ARMIES;
  * @see Country
  * @see Player
  * @see Neighbour
- * @see DicePanel;
- * @see MapPanel;
- * @see RightStatusPanel;
- * @see TopStatusPanel;
+ * @see DicePanel
+ * @see MapPanel
+ * @see RightStatusPanel
+ * @see TopStatusPanel
  *
  */
 public class Game {
@@ -77,7 +77,7 @@ public class Game {
     /**
      * The constructor of the class.
      * Genrates the instance of the main object (game) with the game flow.
-     * @param RADIUS
+     * @param RADIUS radius of the default nodes
      * @param countries List of countries
      * @param neighbours List of connections
      * @param players List of players
@@ -146,7 +146,7 @@ public class Game {
 
     /**
      * Get the number of reinforcements armies
-     * @param player
+     * @param player current player
      * @param countries countries of player
      * @return int number of reinforcement armies
      */
@@ -445,7 +445,7 @@ public class Game {
 
     /**
      * Method get the radius for nodes on graph
-     * @return RADIUS
+     * @return RADIUS of the nodes
      */
     public int getRADIUS() {
         return RADIUS;

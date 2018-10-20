@@ -45,9 +45,9 @@ public class MapLoader {
     /**
      * Constructor of the class.
      * Loading and validation of the map.
-     * @param numberOfPlayers
-     * @param filePath
-     * @param mode
+     * @param numberOfPlayers number of players
+     * @param filePath path to the map
+     * @param mode boolean mode that can be used to start the program in special mode to test features
      */
     public MapLoader(int numberOfPlayers, String filePath, boolean mode) {
         // If true - the program in test mode.
@@ -222,7 +222,7 @@ public class MapLoader {
 
     /**
      * File path getter.
-     * @return filePath
+     * @return filePath to the map
      */
     public String getFilePath() {
         return mapPath;

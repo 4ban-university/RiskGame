@@ -15,8 +15,8 @@ public enum  GamePhase {
 
     /**
      * Constructor of the class.
-     * @param number
-     * @param name
+     * @param number of phase
+     * @param name of phase
      */
     GamePhase(int number, String name) {
         this.name = name;
@@ -33,7 +33,7 @@ public enum  GamePhase {
 
     /**
      * setter for the name. Set the name
-     * @param name
+     * @param name name of phase
      */
     public void setName(String name) {
         this.name = name;
@@ -49,7 +49,7 @@ public enum  GamePhase {
 
     /**
      * setter for the number
-     * @param number
+     * @param number number of phase
      */
     public void setNumber(int number) {
         this.number = number;

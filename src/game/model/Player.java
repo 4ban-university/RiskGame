@@ -27,8 +27,8 @@ public class Player {
 
     /**
      * Constructor of the class
-     * @param name
-     * @param color
+     * @param name name of player
+     * @param color color of player
      */
     public Player(String name, Color color) {
         this.name = name;
@@ -51,7 +51,7 @@ public class Player {
 
     /**
      * Set the player's name
-     * @param name
+     * @param name name of the player
      */
     public void setName(String name) {
         this.name = name;
@@ -67,7 +67,7 @@ public class Player {
 
     /**
      * Set the bonus cards for player
-     * @param cardsEnumIntegerMap
+     * @param cardsEnumIntegerMap Bonus cards for the player
      */
     public void setCardsEnumIntegerMap(Map<CardsEnum, Integer> cardsEnumIntegerMap) {
         this.cardsEnumIntegerMap = cardsEnumIntegerMap;
@@ -83,7 +83,7 @@ public class Player {
 
     /**
      * Set the player color
-     * @param color
+     * @param color Color of the player
      */
     public void setColor(Color color) {
         this.color = color;
@@ -99,7 +99,7 @@ public class Player {
 
     /**
      * Set the armies for player
-     * @param armies
+     * @param armies Armies of the player
      */
     public void setArmies(int armies) {
         this.armies = armies;

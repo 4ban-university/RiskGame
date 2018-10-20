@@ -72,7 +72,7 @@ public class Continent {
 
     /**
      * Method for setting the bonus for the continent
-     * @param bonus
+     * @param bonus continent bonus
      */
     public void setBonus(int bonus) {
         this.bonus = bonus;

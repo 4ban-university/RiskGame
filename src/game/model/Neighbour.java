@@ -40,7 +40,7 @@ public class Neighbour {
 
     /**
      * Drawer. Displays the connection as a line
-     * @param g
+     * @param g Graphics object instance
      */
     public void draw (Graphics g){
         Graphics2D g2d = (Graphics2D) g;
