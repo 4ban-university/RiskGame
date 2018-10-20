@@ -7,7 +7,7 @@ import java.util.HashMap;
 
 /**
  * This class verifies map data in data structures.
- * @author Nikitha Papani & Dinesh Pattapu
+ * @author Nikitha Papani, Dinesh Pattapu
  *
  */
 public class Verification implements IVerification {
@@ -46,6 +46,10 @@ public class Verification implements IVerification {
 		return true;
 	}
 
+	/**
+	 * This function checks for whether the continent exists, which is seen as
+	 * continent of the territory
+	 */
 	public boolean checkContinentExistence() {
 		ArrayList<String> territories = this.map.getListOfTerritories();
 		for(int i = 0; i < territories.size(); i++) {
@@ -141,20 +145,13 @@ public class Verification implements IVerification {
 	}
 	
 	/**
-	 * TBD
-	 */
-	public void checkContinentConnectivity() {
-		
-	}
-	
-	/**
 	 * The recursive function to check for a connected graph among territories.
 	 * First make a hashmap of all territories in map, with a boolean value as false.
 	 * The function traverses adjacent territories of each territory in hashmap.
 	 * The visited territories are then made to have their value as true.
 	 * In the end, we check the hashmap. If any false value found, means not connected.
-	 * @param territory
-	 * @param visited
+	 * @param territory The territory to be visited
+	 * @param visited The hashmap containing info about visited territories.
 	 */
 	public void startVisiting(ITerritory territory, HashMap<String, Boolean> visited) {
 		visited.put(territory.getTerritoryName(), true);
