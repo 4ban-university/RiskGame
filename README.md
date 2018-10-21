@@ -14,8 +14,10 @@ Steps to contribute:
 * Clone the project to your PC
 * Create new branch with adequate name following the convention 
     Bad names: new-branch, branch1, sucker
-    Good names: [issue number]-[description] or [verb-description] i.e. 3-save-game or 2-load-map or add-map-editor
+    Good names: [issue number]-[description] or [verb-description] i.g. 3-save-game or 2-load-map or add-map-editor
+    Perfect names: [grouping token]/[well-defined token] i.g. mapeditor/tests or mapeditor/patch-1 or mapeditor/feature-gui
 * Do some work
 * Commit your changes
-* Push your changes to the remote repository (i.e. Github)
-* Create a pull request from your branch to master branch and assign others as reviewers
+* Push your changes to the remote repository (i.e. Github) into **your branch**
+* Create a pull request **from your branch** **to master branch** and assign others as reviewers
+
