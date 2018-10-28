@@ -27,3 +27,5 @@ out/
 .idea/
 /bin/
 test/resources
+
+.DS_Store
