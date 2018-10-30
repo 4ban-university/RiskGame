@@ -5,9 +5,11 @@ import game.enums.DiceEnum;
 import game.enums.GamePhase;
 import game.model.Continent;
 import game.model.Country;
+import game.model.IModelObservable;
 import game.model.Neighbour;
 import game.model.Player;
 import game.ui.view.DicePanel;
+import game.ui.view.IPanelObserver;
 import game.ui.view.MapPanel;
 import game.ui.view.RightStatusPanel;
 import game.ui.view.TopStatusPanel;
@@ -46,7 +48,7 @@ import static game.enums.GamePhase.PLACING_ARMIES;
  * @see TopStatusPanel
  *
  */
-public class Game {
+public class Game implements IModelObservable {
     private static Game gameInstance;
     private final int DICE_ROW_TO_SHOW = 3;
     private int RADIUS;
@@ -54,17 +56,21 @@ public class Game {
     private List<Neighbour> neighbours;
     private List<Player> players;
 
-    public TopStatusPanel topStatusPanel;
+    //    public TopStatusPanel topStatusPanel;
     public MapPanel mapPanel;
-    public RightStatusPanel rightStatusPanel;
+    //    public RightStatusPanel rightStatusPanel;
     public JButton nextTurnButton;
     public JButton exchangeButton;
     public DicePanel dicePanel;
 
     private int ARMIES_TO_EXCHANGE_INCREASE = 5;
+
     private Random RANDOM = new Random();
     private GamePhase currentGamePhase;
     private Player currentPlayer;
+    private String currentTurnPhraseText;
+    private Country currentCountry;
+
     private Map<Integer, DiceEnum> diceEnumMap = new HashMap<>();
     private DiceEnum[] redDice = new DiceEnum[DICE_ROW_TO_SHOW];
     private DiceEnum[] whiteDice = new DiceEnum[DICE_ROW_TO_SHOW];
@@ -76,7 +82,7 @@ public class Game {
     private Country countryFrom;
     private Country countryTo;
     private List<Continent> continents;
-//    private List<IPanelObserver> iPanelObservers = new ArrayList<>();
+    private List<IPanelObserver> iPanelObservers = new ArrayList<>();
 
     private Game() {
         // Setup dice
@@ -123,9 +129,9 @@ public class Game {
 
         highlightPayerCountries();
 
-        topStatusPanel.setPlayer(currentPlayer);
-        topStatusPanel.setGamePhase(currentGamePhase.getName());
-        topStatusPanel.setTurnPhrase("Select a country to place your army. Armies to place  " + currentPlayer.getArmies());
+//        topStatusPanel.setPlayer(currentPlayer);
+//        topStatusPanel.setGamePhase(currentGamePhase.getName());
+//        topStatusPanel.setTurnPhrase("Select a country to place your army. Armies to place  " + currentPlayer.getArmies());
 
         nextTurnButton.setEnabled(false);
         exchangeButton.setEnabled(false);
@@ -133,6 +139,20 @@ public class Game {
         refresh();
     }
 
+    @Override
+    public void attachObserver(IPanelObserver iPanelObserver) {
+        iPanelObservers.add(iPanelObserver);
+    }
+
+    @Override
+    public void detachObserver(IPanelObserver iPanelObserver) {
+        iPanelObservers.remove(iPanelObserver);
+    }
+
+    @Override
+    public void notifyObservers() {
+        iPanelObservers.stream().forEach(iPanelObserver -> iPanelObserver.updateObserver(this));
+    }
 
     /**
      * Mouse adapter to handle the mouse events
@@ -142,12 +162,15 @@ public class Game {
             public void mousePressed(MouseEvent e) {
                 Point mouse = e.getPoint();
 //                System.out.println(" x = " + mouse.x + " y = " + mouse.y);
+                currentCountry = null;
                 for (Country country : countries) {
                     if (country.isInBorder(mouse.x, mouse.y)) {
+                        currentCountry = country;
                         makeAction(country);
                         System.out.println("Selected " + country.getName());
                     }
                 }
+                notifyObservers();
             }
         };
     }
@@ -182,14 +205,16 @@ public class Game {
                     case INITIAL_PLACING_ARMIES:
 
                         currentGamePhase = ATACKING;
-                        topStatusPanel.setTurnPhrase("Attack phase is simulated. Press \"Next turn\" button.");
+                        currentTurnPhraseText = "Attack phase is simulated. Press \"Next turn\" button.";
+//                        topStatusPanel.setTurnPhrase("Attack phase is simulated. Press \"Next turn\" button.");
                         System.out.println("Next Turn Button Clicked. Next Player is " + currentGamePhase);
                         break;
 
                     case PLACING_ARMIES:
                         // Prepare to next turn
                         currentGamePhase = ATACKING;
-                        topStatusPanel.setTurnPhrase("Attack phase is simulated. Press \"Next turn\" button.");
+                        currentTurnPhraseText = "Attack phase is simulated. Press \"Next turn\" button.";
+//                        topStatusPanel.setTurnPhrase("Attack phase is simulated. Press \"Next turn\" button.");
                         System.out.println("Next Turn Button Clicked. Next Player is " + currentGamePhase);
                         unHighlightPlayreCountries();
                         exchangeButton.setEnabled(false);
@@ -215,7 +240,8 @@ public class Game {
 
                         // Prepare to next turn
                         currentGamePhase = FORTIFYING;
-                        topStatusPanel.setTurnPhrase("Select a country to move armies from. ");
+                        currentTurnPhraseText = "Select a country to move armies from. ";
+//                        topStatusPanel.setTurnPhrase("Select a country to move armies from. ");
                         System.out.println("Next Turn Button Clicked. Next Player is " + currentGamePhase);
                         highlightPayerCountries();
 
@@ -253,7 +279,8 @@ public class Game {
                         }
                         exchangeButton.setEnabled(true);
 
-                        topStatusPanel.setTurnPhrase("Select a country to place your army. Armies to place  " + currentPlayer.getArmies());
+                        currentTurnPhraseText = "Select a country to place your army. Armies to place  " + currentPlayer.getArmies();
+//                        topStatusPanel.setTurnPhrase("Select a country to place your army. Armies to place  " + currentPlayer.getArmies());
                         highlightPayerCountries();
                         break;
                 }
@@ -289,11 +316,13 @@ public class Game {
                         }
                     }
 
-                    topStatusPanel.setTurnPhrase("Select a country to place your army. Armies to place  " + currentPlayer.getArmies());
+                    currentTurnPhraseText = "Select a country to place your army. Armies to place  " + currentPlayer.getArmies();
+//                    topStatusPanel.setTurnPhrase("Select a country to place your army. Armies to place  " + currentPlayer.getArmies());
                 }
                 if (currentPlayer.getArmies() <= 0) {
                     nextTurnButton.setEnabled(true);
-                    topStatusPanel.setTurnPhrase("The turn is over. Press \"Next turn\" button.");
+                    currentTurnPhraseText = "The turn is over. Press \"Next turn\" button.";
+//                    topStatusPanel.setTurnPhrase("The turn is over. Press \"Next turn\" button.");
                     unHighlightPlayreCountries();
                 }
 
@@ -307,8 +336,10 @@ public class Game {
 
                         country.setArmy(country.getArmy() + 1);
                         currentPlayer.setArmies(currentPlayer.getArmies() - 1);
-                        topStatusPanel.setTurnPhrase("Armies to place " + currentPlayer.getArmies());
-                        rightStatusPanel.setCountry(country);
+
+                        currentTurnPhraseText = "Armies to place " + currentPlayer.getArmies();
+//                        topStatusPanel.setTurnPhrase("Armies to place " + currentPlayer.getArmies());
+//                        rightStatusPanel.setCountry(country);
 
                     } else {
                         unHighlightPlayreCountries();
@@ -327,14 +358,16 @@ public class Game {
                     if (countryFrom == null) {
                         unHighlightPlayreCountries();
                         countryFrom = country;
-                        topStatusPanel.setTurnPhrase("Select a country to move an army.");
+                        currentTurnPhraseText = "Select a country to move an army.";
+//                        topStatusPanel.setTurnPhrase("Select a country to move an army.");
                         country.select(false);
                     } else if (countryTo == null && country.isHighlited()) {
                         countryFrom.unSelect(false);
                         countryFrom.setSelected(true);
                         countryTo = country;
                         countryTo.setHighlited(true);
-                        topStatusPanel.setTurnPhrase("Click on country to move one army.");
+                        currentTurnPhraseText = "Click on country to move one army.";
+//                        topStatusPanel.setTurnPhrase("Click on country to move one army.");
                     }
                     if (countryFrom != null && countryFrom.getArmy() > 1 && countryTo != null) {
                         countryFrom.setArmy(countryFrom.getArmy() - 1);
@@ -360,7 +393,8 @@ public class Game {
                                 currentPlayer.getCardsEnumIntegerMap().put(cardsEnum, currentPlayer.getCardsEnumIntegerMap().get(cardsEnum) - 3);
                                 currentPlayer.setArmies(currentPlayer.getArmies() + armiesToCardExchange);
                                 armiesToCardExchange += ARMIES_TO_EXCHANGE_INCREASE;
-                                topStatusPanel.setTurnPhrase("Armies to place " + currentPlayer.getArmies());
+                                currentTurnPhraseText = "Armies to place " + currentPlayer.getArmies();
+//                                topStatusPanel.setTurnPhrase("Armies to place " + currentPlayer.getArmies());
                                 refresh();
                                 break;
                             }
@@ -382,7 +416,8 @@ public class Game {
                                 } else if (count == 0) {
                                     currentPlayer.setArmies(currentPlayer.getArmies() + armiesToCardExchange);
                                     armiesToCardExchange += ARMIES_TO_EXCHANGE_INCREASE;
-                                    topStatusPanel.setTurnPhrase("Armies to place " + currentPlayer.getArmies());
+                                    currentTurnPhraseText = "Armies to place " + currentPlayer.getArmies();
+//                                    topStatusPanel.setTurnPhrase("Armies to place " + currentPlayer.getArmies());
                                     refresh();
                                     break;
                                 }
@@ -411,22 +446,23 @@ public class Game {
      * Method for refresh the graphics
      */
     private void refresh() {
-        topStatusPanel.setPlayer(currentPlayer);
-        topStatusPanel.setGamePhase(currentGamePhase.getName());
-        rightStatusPanel.setPlayer(currentPlayer);
-        topStatusPanel.repaint();
-        rightStatusPanel.repaint();
+//        topStatusPanel.setPlayer(currentPlayer);
+//        topStatusPanel.setGamePhase(currentGamePhase.getName());
+//        topStatusPanel.repaint();
+//        rightStatusPanel.setPlayer(currentPlayer);
+//        rightStatusPanel.repaint();
         dicePanel.repaint();
         mapPanel.repaint();
+        notifyObservers();
     }
 
     /**
      * Method for resetting the panels
      */
     private void reset() {
-        topStatusPanel.reset();
+//        topStatusPanel.reset();
         mapPanel.repaint();
-        rightStatusPanel.reset();
+//        rightStatusPanel.reset();
     }
 
     /**
@@ -517,5 +553,17 @@ public class Game {
 
     public void setCurrentPlayer(Player currentPlayer) {
         this.currentPlayer = currentPlayer;
+    }
+
+    public String getCurrentTurnPhraseText() {
+        return currentTurnPhraseText;
+    }
+
+    public void setCurrentTurnPhraseText(String currentTurnPhraseText) {
+        this.currentTurnPhraseText = currentTurnPhraseText;
+    }
+
+    public Country getCurrentCountry() {
+        return currentCountry;
     }
 }
