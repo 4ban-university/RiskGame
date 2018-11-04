@@ -7,6 +7,8 @@ import game.model.Player;
 
 import javax.swing.*;
 import java.awt.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 
 import static game.enums.CardsEnum.ARTILLERY;
 import static game.enums.CardsEnum.BONUS;
@@ -24,7 +26,7 @@ import static game.enums.CardsEnum.WILDCARDS;
  * @see Game
  */
 public class RightStatusPanel extends JPanel implements IPanelObserver {
-    private JButton nextButton = new JButton("Next Turn");
+    private JButton nextTurnButton = new JButton("Next Turn");
 
     private JLabel countryName = new JLabel("", null, SwingConstants.TRAILING);
     private JLabel countryArmy = new JLabel("", null, SwingConstants.TRAILING);
@@ -56,10 +58,9 @@ public class RightStatusPanel extends JPanel implements IPanelObserver {
         gbc.insets = new Insets(4, 0, 4, 0);
         gbc.gridx = 0;
         gbc.gridy = 0;
-        nextButton.addActionListener(game.getNextTurnButtonListner());
-        game.nextTurnButton = nextButton;
-        nextButton.setMargin(new Insets(10, 0, 10, 0));
-        this.add(nextButton, gbc);
+        nextTurnButton.addActionListener(nextTurnButtonListner());
+        nextTurnButton.setMargin(new Insets(10, 0, 10, 0));
+        this.add(nextTurnButton, gbc);
         gbc.gridx = 0;
         gbc.gridy = 1;
         this.add(new JLabel("Country:", null, SwingConstants.CENTER), gbc);
@@ -82,8 +83,8 @@ public class RightStatusPanel extends JPanel implements IPanelObserver {
         gbc.gridy = 5;
         gbc.weightx = 0;
         gbc.weighty = 0;
-        exchangeButton.addActionListener(game.getExchangeListner());
-        game.exchangeButton = exchangeButton;
+        exchangeButton.addActionListener(exchangeButtonListner());
+//        game.exchangeButton = exchangeButton;
         exchangeButton.setMargin(new Insets(10, 0, 10, 0));
         this.add(exchangeButton, gbc);
 
@@ -126,7 +127,34 @@ public class RightStatusPanel extends JPanel implements IPanelObserver {
 
         countryName.setText(game.getCurrentCountry() != null ? game.getCurrentCountry().getName() : "");
         countryArmy.setText(game.getCurrentCountry() != null ? Integer.toString(game.getCurrentCountry().getArmy()) : "");
+
+        nextTurnButton.setEnabled(game.isNextTurnButton());
+        exchangeButton.setEnabled(game.isExchangeButton());
     }
+
+    /**
+     * Next button listener
+     */
+    public ActionListener nextTurnButtonListner() {
+        return new ActionListener() {
+            public void actionPerformed(ActionEvent e) {
+                Game.getInstance().nextTurn();
+            }
+        };
+    }
+
+
+    /**
+     * Action handler for exchange button.
+     */
+    public ActionListener exchangeButtonListner() {
+        return new ActionListener() {
+            public void actionPerformed(ActionEvent e) {
+                Game.getInstance().exchange();
+            }
+        };
+    }
+
 
     /**
      * Setter for cards for player displaying
