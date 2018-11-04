@@ -116,7 +116,7 @@ public class RightStatusPanel extends JPanel implements IPanelObserver {
     }
 
     /**
-     * Updater for Observer
+     * Updater for observer
      * @param iModelObservable
      */
     @Override

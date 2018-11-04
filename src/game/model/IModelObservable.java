@@ -3,18 +3,17 @@ package game.model;
 import game.ui.view.IPanelObserver;
 
 /**
- * Observable for game controller
- * @author Dmitry Kryukov, Ksenia Popova
+ * Observable interface
  */
 public interface IModelObservable {
     /**
-     * Attach Observer
+     * Attach observer
      * @param iPanelObserver
      */
     public void attachObserver(IPanelObserver iPanelObserver);
 
     /**
-     * Detach Observer
+     * Detach observer
      * @param iPanelObserver
      */
     public void detachObserver(IPanelObserver iPanelObserver);
@@ -22,7 +21,7 @@ public interface IModelObservable {
     // Observer suffix due to Java has builtin notify method, so to have unified unique name.
 
     /**
-     * Notify observers
+     * Notify method for observers
      */
     public void notifyObservers();
 }

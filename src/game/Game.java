@@ -74,6 +74,10 @@ public class Game implements IModelObservable {
     private List<Continent> continents;
     private List<IPanelObserver> iPanelObservers = new ArrayList<>();
 
+    /**
+     * get instance method for Controller
+     * @return gameInstance
+     */
     public static Game getInstance() {
         if (gameInstance == null) {
             gameInstance = new Game();
@@ -115,21 +119,35 @@ public class Game implements IModelObservable {
         notifyObservers();
     }
 
+    /**
+     * attach observer
+     * @param iPanelObserver
+     */
     @Override
     public void attachObserver(IPanelObserver iPanelObserver) {
         iPanelObservers.add(iPanelObserver);
     }
 
+    /**
+     * Detach observer
+     * @param iPanelObserver
+     */
     @Override
     public void detachObserver(IPanelObserver iPanelObserver) {
         iPanelObservers.remove(iPanelObserver);
     }
 
+    /**
+     * Notify observers
+     */
     @Override
     public void notifyObservers() {
         iPanelObservers.stream().forEach(iPanelObserver -> iPanelObserver.updateObserver(this));
     }
 
+    /**
+     * Next turn
+     */
     public void nextTurn() {
         switch (currentGamePhase) {
             case PLACING_ARMIES:
@@ -284,7 +302,7 @@ public class Game implements IModelObservable {
     }
 
     /**
-     * Exchange cards method
+     * Exchange
      */
     public void exchange() {
         switch (currentGamePhase) {
@@ -327,7 +345,7 @@ public class Game implements IModelObservable {
     }
 
     /**
-     * Attack method
+     * Attack
      */
     public void attack() {
         currentPlayer.attack();
@@ -363,10 +381,6 @@ public class Game implements IModelObservable {
         return RADIUS;
     }
 
-    /**
-     * Set radius
-     * @param RADIUS
-     */
     public void setRADIUS(int RADIUS) {
         this.RADIUS = RADIUS;
     }
@@ -408,7 +422,7 @@ public class Game implements IModelObservable {
     }
 
     /**
-     * Set the player
+     * Set players
      * @param players
      */
     public void setPlayers(List<Player> players) {
@@ -416,7 +430,7 @@ public class Game implements IModelObservable {
     }
 
     /**
-     * Set continent
+     * Set continents
      * @param continents
      */
     public void setContinents(List<Continent> continents) {
@@ -424,31 +438,39 @@ public class Game implements IModelObservable {
     }
 
     /**
-     * Get current phase
+     * get current phase of the game
      * @return currentGamePhase
      */
     public GamePhase getCurrentGamePhase() {
         return currentGamePhase;
     }
 
+    /**
+     * Set current game phase
+     * @param currentGamePhase
+     */
     public void setCurrentGamePhase(GamePhase currentGamePhase) {
         this.currentGamePhase = currentGamePhase;
     }
 
     /**
-     * Get current Player
+     * Get current player
      * @return currentPlayer
      */
     public Player getCurrentPlayer() {
         return currentPlayer;
     }
 
+    /**
+     * Set current Player
+     * @param currentPlayer
+     */
     public void setCurrentPlayer(Player currentPlayer) {
         this.currentPlayer = currentPlayer;
     }
 
     /**
-     * Get current phase status text
+     * Get current status phrase
      * @return currentTurnPhraseText
      */
     public String getCurrentTurnPhraseText() {
@@ -456,7 +478,7 @@ public class Game implements IModelObservable {
     }
 
     /**
-     * Set current phase status text
+     * Set current status phrase text
      * @param currentTurnPhraseText
      */
     public void setCurrentTurnPhraseText(String currentTurnPhraseText) {
@@ -472,7 +494,7 @@ public class Game implements IModelObservable {
     }
 
     /**
-     * Set current country
+     * set current country
      * @param currentCountry
      */
     public void setCurrentCountry(Country currentCountry) {
@@ -480,7 +502,7 @@ public class Game implements IModelObservable {
     }
 
     /**
-     * Get red dice
+     * get red dice
      * @return redDice
      */
     public DiceEnum[] getRedDice() {
@@ -488,7 +510,7 @@ public class Game implements IModelObservable {
     }
 
     /**
-     * Get white dice
+     * get white dice
      * @return whiteDice
      */
     public DiceEnum[] getWhiteDice() {
@@ -512,7 +534,7 @@ public class Game implements IModelObservable {
     }
 
     /**
-     * Get country from
+     * get country from
      * @return countryFrom
      */
     public Country getCountryFrom() {
@@ -536,7 +558,7 @@ public class Game implements IModelObservable {
     }
 
     /**
-     * Set country to
+     * set country to
      * @param countryTo
      */
     public void setCountryTo(Country countryTo) {
@@ -558,6 +580,7 @@ public class Game implements IModelObservable {
     public void setNumberOfRedDicesSelected(int numberOfRedDicesSelected) {
         this.numberOfRedDicesSelected = numberOfRedDicesSelected;
     }
+
     /**
      * Get number of white dices that were selected
      * @return numberOfWhiteDicesSelected

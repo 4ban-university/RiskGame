@@ -46,7 +46,7 @@ public class DicePanel extends JPanel implements IPanelObserver {
     }
 
     /**
-     * Creator of the panel
+     * Creator for panel
      */
     private void createPanel() {
         this.removeAll();

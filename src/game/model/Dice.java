@@ -10,7 +10,7 @@ import java.util.Random;
 
 /**
  * The dice model. Describes the dice parameters
- * @author Dmitry Kryukov, ksenia Popova
+ * @author Dmitry Kryukov, Ksenia Popova
  */
 public class Dice {
 
@@ -58,7 +58,7 @@ public class Dice {
     }
 
     /**
-     * Reset the dice to default
+     * Reset dice
      * @param redDice
      * @param whiteDice
      */

@@ -11,7 +11,7 @@ import java.awt.event.ActionListener;
 import java.util.Enumeration;
 
 /**
- * The panel for attac phase
+ * The panel for attack phase
  * @author Dmitry Kryukov, Ksenia Popova
  */
 public class AttackPanel extends JPanel implements IPanelObserver {
@@ -32,9 +32,9 @@ public class AttackPanel extends JPanel implements IPanelObserver {
     private JButton attackButton;
 
     /**
-     * Attack panel constructor
-     * @param width of the panel
-     * @param height height of the panel
+     * Constructor for Attack panel
+     * @param width
+     * @param height
      */
     public AttackPanel(int width, int height) {
         this.setPreferredSize(new Dimension(width, height));
@@ -91,7 +91,7 @@ public class AttackPanel extends JPanel implements IPanelObserver {
     }
 
     /**
-     * Updater for Observer
+     * Updater for observer
      * @param iModelObservable
      */
     @Override
@@ -102,13 +102,21 @@ public class AttackPanel extends JPanel implements IPanelObserver {
             if (game.getCountryTo() != null && game.getCountryFrom() != null) {
                 red1.setSelected(true);
                 white1.setSelected(true);
-                setAllEnabled(true);
+
+                red1.setEnabled(game.getCountryFrom().getArmy() >= 2);
+                red2.setEnabled(game.getCountryFrom().getArmy() >= 3);
+                red3.setEnabled(game.getCountryFrom().getArmy() >= 4);
+
+                white1.setEnabled(game.getCountryTo().getArmy() >= 1);
+                white2.setEnabled(game.getCountryTo().getArmy() >= 2);
+
+                attackButton.setEnabled(true);
             } else {
-                setAllEnabled(false);
+                setAllUnEnabled();
             }
         } else {
             this.setVisible(false);
-            setAllEnabled(false);
+            setAllUnEnabled();
         }
     }
 
@@ -141,21 +149,20 @@ public class AttackPanel extends JPanel implements IPanelObserver {
     }
 
     /**
-     * Set all buttons enabled
-     * @param isEnabled
+     * Set all checkbuttons enabled
      */
-    private void setAllEnabled(boolean isEnabled) {
+    private void setAllUnEnabled() {
         Enumeration<AbstractButton> redEnumeration = redDiceGroup.getElements();
         while (redEnumeration.hasMoreElements()) {
             JRadioButton jRadioButton = (JRadioButton) redEnumeration.nextElement();
-            jRadioButton.setEnabled(isEnabled);
+            jRadioButton.setEnabled(false);
         }
 
         Enumeration<AbstractButton> whiteEnumeration = whiteDiceGroup.getElements();
         while (whiteEnumeration.hasMoreElements()) {
             JRadioButton jRadioButton = (JRadioButton) whiteEnumeration.nextElement();
-            jRadioButton.setEnabled(isEnabled);
+            jRadioButton.setEnabled(false);
         }
-        attackButton.setEnabled(isEnabled);
+        attackButton.setEnabled(false);
     }
 }

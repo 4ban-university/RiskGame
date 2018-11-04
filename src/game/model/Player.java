@@ -45,7 +45,7 @@ public class Player {
     }
 
     /**
-     * Reinforcement
+     * Reinforcement for player
      */
     public void reinforcement() {
         Game game = Game.getInstance();
@@ -59,18 +59,18 @@ public class Player {
     }
 
     /**
-     * Preparing for attack phase
+     * Preparing for attach phase
      */
     public void prepareForAttack() {
         Game game = Game.getInstance();
 
         if (game.getCurrentCountry() != null) {
             if (game.getCurrentCountry().getPlayer() == this) {
-                if (game.getCountryFrom() == null) {
+                if (game.getCountryFrom() == null && game.getCurrentCountry().getArmy() > 1) {
                     game.unHighlightCountries();
                     game.setCountryFrom(game.getCurrentCountry());
                     game.setCurrentTurnPhraseText("Select a country to prepareForAttack.");
-                    game.getCurrentCountry().select(true);
+                    game.getCurrentCountry().select(true, 2);
                 }
             } else if (game.getCountryTo() == null && game.getCurrentCountry().isHighlighted()) {
                 game.getCountryFrom().unSelect(true);
@@ -108,7 +108,7 @@ public class Player {
     }
 
     /**
-     * Fortification
+     * Fortification for Player
      */
     public void fortification() {
         Game game = Game.getInstance();
@@ -116,7 +116,7 @@ public class Player {
             game.unHighlightCountries();
             game.setCountryFrom(game.getCurrentCountry());
             game.setCurrentTurnPhraseText("Select a country to move an army.");
-            game.getCurrentCountry().select(false);
+            game.getCurrentCountry().select(false, -1);
         } else if (game.getCountryTo() == null && game.getCurrentCountry().isHighlighted()) {
             game.getCountryFrom().unSelect(false);
             game.getCountryFrom().setSelected(true);
