@@ -10,6 +10,10 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.Enumeration;
 
+/**
+ * The panel for attac phase
+ * @author Dmitry Kryukov, Ksenia Popova
+ */
 public class AttackPanel extends JPanel implements IPanelObserver {
 
     private JPanel numbersPanel;
@@ -27,6 +31,11 @@ public class AttackPanel extends JPanel implements IPanelObserver {
 
     private JButton attackButton;
 
+    /**
+     * Attack panel constructor
+     * @param width of the panel
+     * @param height height of the panel
+     */
     public AttackPanel(int width, int height) {
         this.setPreferredSize(new Dimension(width, height));
 
@@ -81,6 +90,10 @@ public class AttackPanel extends JPanel implements IPanelObserver {
         this.setVisible(false);
     }
 
+    /**
+     * Updater for Observer
+     * @param iModelObservable
+     */
     @Override
     public void updateObserver(IModelObservable iModelObservable) {
         Game game = Game.getInstance();
@@ -127,6 +140,10 @@ public class AttackPanel extends JPanel implements IPanelObserver {
         };
     }
 
+    /**
+     * Set all buttons enabled
+     * @param isEnabled
+     */
     private void setAllEnabled(boolean isEnabled) {
         Enumeration<AbstractButton> redEnumeration = redDiceGroup.getElements();
         while (redEnumeration.hasMoreElements()) {
