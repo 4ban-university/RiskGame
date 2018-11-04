@@ -1,5 +1,7 @@
 package game.model;
 
+import game.Game;
+
 import java.awt.*;
 import java.awt.geom.Ellipse2D;
 import java.util.ArrayList;
@@ -23,7 +25,7 @@ public class Country {
     private int army = 1;
     private List<Country> neighbours = new ArrayList<>();
     private boolean isSelected = false;
-    private boolean isHighlited = false;
+    private boolean isHighlighted = false;
 
 //    /**
 //     * Country constructor.
@@ -180,13 +182,6 @@ public class Country {
         isSelected = selected;
     }
 
-    /**
-     * Reset the view
-     */
-    public void resetView() {
-        isSelected = false;
-        isHighlited = false;
-    }
 
     /**
      * Selection of enemies
@@ -194,18 +189,7 @@ public class Country {
      */
     public void select(boolean enemies) {
         isSelected = true;
-        highlite(enemies);
-//        for (Country country : neighbours) {
-//            if (enemies) {
-//                if (country.getPlayer() != this.player) {
-//                    country.setHighlited(true);
-//                }
-//            } else {
-//                if (country.getPlayer() == this.player) {
-//                    country.setHighlited(true);
-//                }
-//            }
-//        }
+        highlight(enemies);
     }
 
     /**
@@ -214,35 +198,25 @@ public class Country {
      */
     public void unSelect(boolean enemies) {
         isSelected = false;
-        unHighlite(enemies);
-//        for (Country country : neighbours) {
-//            if (enemies) {
-//                if (country.getPlayer() != this.player) {
-//                    country.setHighlited(false);
-//                }
-//            } else {
-//                if (country.getPlayer() == this.player) {
-//                    country.setHighlited(false);
-//                }
-//            }
-//        }
+        unHighlight(enemies);
     }
 
     /**
      * Highlight the country enemies
      * @param enemies Players enemies
      */
-    public void highlite(boolean enemies) {
-        if (!isHighlited) {
-            isHighlited = true;
+    private void highlight(boolean enemies) {
+        if (!isHighlighted) {
+            Game game = Game.getInstance();
+            isHighlighted = true;
             for (Country country : neighbours) {
                 if (enemies) {
-                    if (country.getPlayer() != this.player) {
-                        country.highlite(enemies);
+                    if (country.getPlayer() != game.getCurrentPlayer()) {
+                        country.highlight(enemies);
                     }
                 } else {
-                    if (country.getPlayer() == this.player) {
-                        country.highlite(enemies);
+                    if (country.getPlayer() == game.getCurrentPlayer()) {
+                        country.highlight(enemies);
                     }
                 }
             }
@@ -253,17 +227,17 @@ public class Country {
      * Unhighlight the enemies fir country
      * @param enemies Player enemies
      */
-    public void unHighlite(boolean enemies) {
-        if (isHighlited) {
-            isHighlited = false;
+    private void unHighlight(boolean enemies) {
+        if (isHighlighted) {
+            isHighlighted = false;
             for (Country country : neighbours) {
                 if (enemies) {
                     if (country.getPlayer() != this.player) {
-                        country.unHighlite(enemies);
+                        country.unHighlight(enemies);
                     }
                 } else {
                     if (country.getPlayer() == this.player) {
-                        country.unHighlite(enemies);
+                        country.unHighlight(enemies);
                     }
                 }
             }
@@ -274,16 +248,16 @@ public class Country {
      * Check if country is highlighted
      * @return boolean
      */
-    public boolean isHighlited() {
-        return isHighlited;
+    public boolean isHighlighted() {
+        return isHighlighted;
     }
 
     /**
      * Set highlight
-     * @param highlited Is highlighted
+     * @param highlighted Is highlighted
      */
-    public void setHighlited(boolean highlited) {
-        isHighlited = highlited;
+    public void setHighlighted(boolean highlighted) {
+        isHighlighted = highlighted;
     }
 
     /**
@@ -327,7 +301,7 @@ public class Country {
             g2d.setColor(Color.BLACK);
             g2d.draw(selection);
 
-        } else if (isHighlited) {
+        } else if (isHighlighted) {
             Ellipse2D.Double highlight = new Ellipse2D.Double(x - radius - HIGHLIGHT_BORDER_WITHT / 2, y - radius - HIGHLIGHT_BORDER_WITHT / 2, radius * 2 + HIGHLIGHT_BORDER_WITHT, radius * 2 + HIGHLIGHT_BORDER_WITHT);
             g2d.setColor(Color.RED);
             g2d.fill(highlight);
