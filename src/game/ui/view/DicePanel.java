@@ -33,10 +33,6 @@ public class DicePanel extends JPanel implements IPanelObserver {
         Game.getInstance().attachObserver(this);
     }
 
-    /**
-     * Updater for Observer
-     * @param iModelObservable
-     */
     @Override
     public void updateObserver(IModelObservable iModelObservable) {
         Game game = Game.getInstance();
@@ -45,9 +41,6 @@ public class DicePanel extends JPanel implements IPanelObserver {
         createPanel();
     }
 
-    /**
-     * Creator of the panel
-     */
     private void createPanel() {
         this.removeAll();
 

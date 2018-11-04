@@ -201,9 +201,6 @@ public class Game implements IModelObservable {
         notifyObservers();
     }
 
-    /**
-     * Reset highlights
-     */
     public void resetToFrom() {
         unHighlightCountries();
         if (countryFrom != null) {
@@ -283,9 +280,6 @@ public class Game implements IModelObservable {
         notifyObservers();
     }
 
-    /**
-     * Exchange cards method
-     */
     public void exchange() {
         switch (currentGamePhase) {
             case REINFORCEMENT:
@@ -326,9 +320,6 @@ public class Game implements IModelObservable {
         notifyObservers();
     }
 
-    /**
-     * Attack method
-     */
     public void attack() {
         currentPlayer.attack();
         notifyObservers();
@@ -363,10 +354,6 @@ public class Game implements IModelObservable {
         return RADIUS;
     }
 
-    /**
-     * Set radius
-     * @param RADIUS
-     */
     public void setRADIUS(int RADIUS) {
         this.RADIUS = RADIUS;
     }
@@ -407,26 +394,14 @@ public class Game implements IModelObservable {
         this.neighbours = neighbours;
     }
 
-    /**
-     * Set the player
-     * @param players
-     */
     public void setPlayers(List<Player> players) {
         this.players = players;
     }
 
-    /**
-     * Set continent
-     * @param continents
-     */
     public void setContinents(List<Continent> continents) {
         this.continents = continents;
     }
 
-    /**
-     * Get current phase
-     * @return currentGamePhase
-     */
     public GamePhase getCurrentGamePhase() {
         return currentGamePhase;
     }
@@ -435,10 +410,6 @@ public class Game implements IModelObservable {
         this.currentGamePhase = currentGamePhase;
     }
 
-    /**
-     * Get current Player
-     * @return currentPlayer
-     */
     public Player getCurrentPlayer() {
         return currentPlayer;
     }
@@ -447,129 +418,66 @@ public class Game implements IModelObservable {
         this.currentPlayer = currentPlayer;
     }
 
-    /**
-     * Get current phase status text
-     * @return currentTurnPhraseText
-     */
     public String getCurrentTurnPhraseText() {
         return currentTurnPhraseText;
     }
 
-    /**
-     * Set current phase status text
-     * @param currentTurnPhraseText
-     */
     public void setCurrentTurnPhraseText(String currentTurnPhraseText) {
         this.currentTurnPhraseText = currentTurnPhraseText;
     }
 
-    /**
-     * Get current country
-     * @return currentCountry
-     */
     public Country getCurrentCountry() {
         return currentCountry;
     }
 
-    /**
-     * Set current country
-     * @param currentCountry
-     */
     public void setCurrentCountry(Country currentCountry) {
         this.currentCountry = currentCountry;
     }
 
-    /**
-     * Get red dice
-     * @return redDice
-     */
     public DiceEnum[] getRedDice() {
         return redDice;
     }
 
-    /**
-     * Get white dice
-     * @return whiteDice
-     */
     public DiceEnum[] getWhiteDice() {
         return whiteDice;
     }
 
-    /**
-     * Next turn button
-     * @return nextTurnButton
-     */
     public boolean isNextTurnButton() {
         return nextTurnButton;
     }
 
-    /**
-     * Exchange button
-     * @return exchangeButton
-     */
     public boolean isExchangeButton() {
         return exchangeButton;
     }
 
-    /**
-     * Get country from
-     * @return countryFrom
-     */
     public Country getCountryFrom() {
         return countryFrom;
     }
 
-    /**
-     * Set country from
-     * @param countryFrom
-     */
     public void setCountryFrom(Country countryFrom) {
         this.countryFrom = countryFrom;
     }
 
-    /**
-     * Get country to
-     * @return countryTo
-     */
     public Country getCountryTo() {
         return countryTo;
     }
 
-    /**
-     * Set country to
-     * @param countryTo
-     */
     public void setCountryTo(Country countryTo) {
         this.countryTo = countryTo;
     }
 
-    /**
-     * Get number of red dices that were selected
-     * @return numberOfRedDicesSelected
-     */
     public int getNumberOfRedDicesSelected() {
         return numberOfRedDicesSelected;
     }
 
-    /**
-     * Set number of red dices that were selected
-     * @param numberOfRedDicesSelected
-     */
     public void setNumberOfRedDicesSelected(int numberOfRedDicesSelected) {
         this.numberOfRedDicesSelected = numberOfRedDicesSelected;
     }
-    /**
-     * Get number of white dices that were selected
-     * @return numberOfWhiteDicesSelected
-     */
+
     public int getNumberOfWhiteDicesSelected() {
         return numberOfWhiteDicesSelected;
     }
 
-    /**
-     * Set number of white dices that were selected
-     * @param numberOfWhiteDicesSelected
-     */
     public void setNumberOfWhiteDicesSelected(int numberOfWhiteDicesSelected) {
         this.numberOfWhiteDicesSelected = numberOfWhiteDicesSelected;
     }

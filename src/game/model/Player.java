@@ -44,9 +44,6 @@ public class Player {
         cardsEnumIntegerMap.put(BONUS, 0);
     }
 
-    /**
-     * Reinforcement
-     */
     public void reinforcement() {
         Game game = Game.getInstance();
         if (armies > 0) {
@@ -58,19 +55,16 @@ public class Player {
         }
     }
 
-    /**
-     * Preparing for attack phase
-     */
     public void prepareForAttack() {
         Game game = Game.getInstance();
 
         if (game.getCurrentCountry() != null) {
             if (game.getCurrentCountry().getPlayer() == this) {
-                if (game.getCountryFrom() == null) {
+                if (game.getCountryFrom() == null && game.getCurrentCountry().getArmy() > 1) {
                     game.unHighlightCountries();
                     game.setCountryFrom(game.getCurrentCountry());
                     game.setCurrentTurnPhraseText("Select a country to prepareForAttack.");
-                    game.getCurrentCountry().select(true);
+                    game.getCurrentCountry().select(true, 2);
                 }
             } else if (game.getCountryTo() == null && game.getCurrentCountry().isHighlighted()) {
                 game.getCountryFrom().unSelect(true);
@@ -85,9 +79,6 @@ public class Player {
         }
     }
 
-    /**
-     * Attack phase
-     */
     public void attack() {
         Game game = Game.getInstance();
         if (game.getCountryFrom() != null && game.getCountryFrom().getArmy() >= 2 && game.getCountryTo() != null) {
@@ -107,16 +98,13 @@ public class Player {
         }
     }
 
-    /**
-     * Fortification
-     */
     public void fortification() {
         Game game = Game.getInstance();
         if (game.getCountryFrom() == null) {
             game.unHighlightCountries();
             game.setCountryFrom(game.getCurrentCountry());
             game.setCurrentTurnPhraseText("Select a country to move an army.");
-            game.getCurrentCountry().select(false);
+            game.getCurrentCountry().select(false, -1);
         } else if (game.getCountryTo() == null && game.getCurrentCountry().isHighlighted()) {
             game.getCountryFrom().unSelect(false);
             game.getCountryFrom().setSelected(true);
