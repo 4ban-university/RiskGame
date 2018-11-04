@@ -2,15 +2,19 @@ package game.ui.view;
 
 import game.Game;
 import game.model.Country;
+import game.model.IModelObservable;
 import game.model.Neighbour;
 import game.utils.MapLoader;
 
 import javax.imageio.ImageIO;
 import javax.swing.*;
 import java.awt.*;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
+import java.util.List;
 
 /**
  * The map panel class. Draw the map panel on the main window.
@@ -21,9 +25,11 @@ import java.io.IOException;
  * @see Neighbour
  * @see MapLoader
  */
-public class MapPanel extends JPanel {
-    Game game;
-    BufferedImage image = null;
+public class MapPanel extends JPanel implements IPanelObserver {
+    private BufferedImage image = null;
+    private java.util.List<Country> countries;
+    private List<Neighbour> neighbours;
+
 
     /**
      * Constructor of the class
@@ -37,8 +43,29 @@ public class MapPanel extends JPanel {
         catch (IOException e) {
         }
         this.setPreferredSize(dimension);
-        this.game = Game.getInstance();
-        addMouseListener(game.getMouseAdapter());
+        addMouseListener(getMouseAdapter());
+
+        Game.getInstance().attachObserver(this);
+    }
+
+    /**
+     * Mouse adapter to handle the mouse events
+     */
+    public MouseAdapter getMouseAdapter() {
+        return new MouseAdapter() {
+            public void mousePressed(MouseEvent e) {
+                Point mouse = e.getPoint();
+                Game.getInstance().makeAction(mouse.x, mouse.y);
+            }
+        };
+    }
+
+    @Override
+    public void updateObserver(IModelObservable iModelObservable) {
+        Game game = Game.getInstance();
+        countries = game.getCountries();
+        neighbours = game.getNeighbours();
+        this.repaint();
     }
 
     /**
@@ -49,11 +76,11 @@ public class MapPanel extends JPanel {
     protected void paintComponent(Graphics g) {
         super.paintComponent(g);
         g.drawImage(image, 0, 0, null);
-        for (Neighbour neighbour : game.getNeighbours()) {
+        for (Neighbour neighbour : neighbours) {
             neighbour.draw(g);
         }
 
-        for (Country country : game.getCountries()) {
+        for (Country country : countries) {
             country.draw(g);
         }
     }

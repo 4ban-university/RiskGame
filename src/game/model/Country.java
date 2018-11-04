@@ -1,5 +1,7 @@
 package game.model;
 
+import game.Game;
+
 import java.awt.*;
 import java.awt.geom.Ellipse2D;
 import java.util.ArrayList;
@@ -7,6 +9,7 @@ import java.util.List;
 
 /**
  * The country model. Describes the country parameters.
+ *
  * @author Dmitry Kryukov, Ksenia Popova
  */
 public class Country {
@@ -23,7 +26,7 @@ public class Country {
     private int army = 1;
     private List<Country> neighbours = new ArrayList<>();
     private boolean isSelected = false;
-    private boolean isHighlited = false;
+    private boolean isHighlighted = false;
 
 //    /**
 //     * Country constructor.
@@ -44,12 +47,13 @@ public class Country {
 
     /**
      * Constructor of country class.
-     * @param name of the country
-     * @param x coordinate
-     * @param y coordinate
-     * @param radius radius of the node
+     *
+     * @param name      of the country
+     * @param x         coordinate
+     * @param y         coordinate
+     * @param radius    radius of the node
      * @param continent assigned continent
-     * @param player assigned player
+     * @param player    assigned player
      */
     public Country(String name, int x, int y, int radius, Continent continent, Player player) {
         this.name = name;
@@ -62,6 +66,7 @@ public class Country {
 
     /**
      * Get name of country
+     *
      * @return name
      */
     public String getName() {
@@ -70,6 +75,7 @@ public class Country {
 
     /**
      * Get army number for country
+     *
      * @return army
      */
     public int getArmy() {
@@ -78,6 +84,7 @@ public class Country {
 
     /**
      * Set the number of armies to country
+     *
      * @param army Armies to country
      */
     public void setArmy(int army) {
@@ -86,6 +93,7 @@ public class Country {
 
     /**
      * Get the x coodrinate
+     *
      * @return x
      */
     public int getX() {
@@ -94,6 +102,7 @@ public class Country {
 
     /**
      * Set the x coordinate
+     *
      * @param x horizontal coordinate
      */
     public void setX(int x) {
@@ -102,6 +111,7 @@ public class Country {
 
     /**
      * Get the y coordinate
+     *
      * @return y
      */
     public int getY() {
@@ -110,6 +120,7 @@ public class Country {
 
     /**
      * Set the y coordinate
+     *
      * @param y vertical coordinate
      */
     public void setY(int y) {
@@ -118,6 +129,7 @@ public class Country {
 
     /**
      * Get the radius of the country
+     *
      * @return radius
      */
     public int getRadius() {
@@ -126,6 +138,7 @@ public class Country {
 
     /**
      * Set the radius for the country
+     *
      * @param radius radius of the node
      */
     public void setRadius(int radius) {
@@ -134,6 +147,7 @@ public class Country {
 
     /**
      * Get the connections for country
+     *
      * @return neighbours
      */
     public List<Country> getNeighbours() {
@@ -142,6 +156,7 @@ public class Country {
 
     /**
      * Set the connections for country
+     *
      * @param neighbours connections for country
      */
     public void setNeighbours(List<Country> neighbours) {
@@ -150,6 +165,7 @@ public class Country {
 
     /**
      * Get the assigned player for country
+     *
      * @return player
      */
     public Player getPlayer() {
@@ -158,6 +174,7 @@ public class Country {
 
     /**
      * Set the player for country
+     *
      * @param player Player object
      */
     public void setPlayer(Player player) {
@@ -166,6 +183,7 @@ public class Country {
 
     /**
      * Is the country selected in the window
+     *
      * @return boolean
      */
     public boolean isSelected() {
@@ -174,75 +192,51 @@ public class Country {
 
     /**
      * Set the country selected state
+     *
      * @param selected Is country selected
      */
     public void setSelected(boolean selected) {
         isSelected = selected;
     }
 
-    /**
-     * Reset the view
-     */
-    public void resetView() {
-        isSelected = false;
-        isHighlited = false;
-    }
 
     /**
      * Selection of enemies
+     *
      * @param enemies Players enemies
      */
-    public void select(boolean enemies) {
+    public void select(boolean enemies, int depth) {
         isSelected = true;
-        highlite(enemies);
-//        for (Country country : neighbours) {
-//            if (enemies) {
-//                if (country.getPlayer() != this.player) {
-//                    country.setHighlited(true);
-//                }
-//            } else {
-//                if (country.getPlayer() == this.player) {
-//                    country.setHighlited(true);
-//                }
-//            }
-//        }
+        highlight(enemies, depth);
     }
 
     /**
      * Unselection of enemies
+     *
      * @param enemies Players enemies
      */
     public void unSelect(boolean enemies) {
         isSelected = false;
-        unHighlite(enemies);
-//        for (Country country : neighbours) {
-//            if (enemies) {
-//                if (country.getPlayer() != this.player) {
-//                    country.setHighlited(false);
-//                }
-//            } else {
-//                if (country.getPlayer() == this.player) {
-//                    country.setHighlited(false);
-//                }
-//            }
-//        }
+        unHighlight(enemies);
     }
 
     /**
      * Highlight the country enemies
+     *
      * @param enemies Players enemies
      */
-    public void highlite(boolean enemies) {
-        if (!isHighlited) {
-            isHighlited = true;
+    private void highlight(boolean enemies, int depth) {
+        if (depth != 0 && !isHighlighted) {
+            Game game = Game.getInstance();
+            isHighlighted = true;
             for (Country country : neighbours) {
                 if (enemies) {
-                    if (country.getPlayer() != this.player) {
-                        country.highlite(enemies);
+                    if (country.getPlayer() != game.getCurrentPlayer()) {
+                        country.highlight(enemies, depth == -1 ? -1 : depth - 1);
                     }
                 } else {
-                    if (country.getPlayer() == this.player) {
-                        country.highlite(enemies);
+                    if (country.getPlayer() == game.getCurrentPlayer()) {
+                        country.highlight(enemies, depth == -1 ? -1 : depth - 1);
                     }
                 }
             }
@@ -251,19 +245,20 @@ public class Country {
 
     /**
      * Unhighlight the enemies fir country
+     *
      * @param enemies Player enemies
      */
-    public void unHighlite(boolean enemies) {
-        if (isHighlited) {
-            isHighlited = false;
+    private void unHighlight(boolean enemies) {
+        if (isHighlighted) {
+            isHighlighted = false;
             for (Country country : neighbours) {
                 if (enemies) {
                     if (country.getPlayer() != this.player) {
-                        country.unHighlite(enemies);
+                        country.unHighlight(enemies);
                     }
                 } else {
                     if (country.getPlayer() == this.player) {
-                        country.unHighlite(enemies);
+                        country.unHighlight(enemies);
                     }
                 }
             }
@@ -272,22 +267,25 @@ public class Country {
 
     /**
      * Check if country is highlighted
+     *
      * @return boolean
      */
-    public boolean isHighlited() {
-        return isHighlited;
+    public boolean isHighlighted() {
+        return isHighlighted;
     }
 
     /**
      * Set highlight
-     * @param highlited Is highlighted
+     *
+     * @param highlighted Is highlighted
      */
-    public void setHighlited(boolean highlited) {
-        isHighlited = highlited;
+    public void setHighlighted(boolean highlighted) {
+        isHighlighted = highlighted;
     }
 
     /**
      * Check if the country in border
+     *
      * @param x coordinate
      * @param y coordinate
      * @return boolean
@@ -298,6 +296,7 @@ public class Country {
 
     /**
      * Get the continent for country
+     *
      * @return continent
      */
     public Continent getContinent() {
@@ -306,6 +305,7 @@ public class Country {
 
     /**
      * Set the continent for country
+     *
      * @param continent Continent to country
      */
     public void setContinent(Continent continent) {
@@ -314,6 +314,7 @@ public class Country {
 
     /**
      * Drawer. Display the game in window. GUI
+     *
      * @param g instance og graphics object
      */
     public void draw(Graphics g) {
@@ -327,7 +328,7 @@ public class Country {
             g2d.setColor(Color.BLACK);
             g2d.draw(selection);
 
-        } else if (isHighlited) {
+        } else if (isHighlighted) {
             Ellipse2D.Double highlight = new Ellipse2D.Double(x - radius - HIGHLIGHT_BORDER_WITHT / 2, y - radius - HIGHLIGHT_BORDER_WITHT / 2, radius * 2 + HIGHLIGHT_BORDER_WITHT, radius * 2 + HIGHLIGHT_BORDER_WITHT);
             g2d.setColor(Color.RED);
             g2d.fill(highlight);

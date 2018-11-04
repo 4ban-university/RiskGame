@@ -1,11 +1,9 @@
 package game.enums;
 
-import java.util.HashMap;
-import java.util.Map;
-
 /**
  * Class for storing the dices.
  * Stub for future development
+ *
  * @author Dmitry Kryukov
  */
 public enum DiceEnum {
@@ -19,10 +17,10 @@ public enum DiceEnum {
 
     private int number;
     private String fileSuffix;
-
     /**
      * Constructor of the class
-     * @param number of points on dice
+     *
+     * @param number     of points on dice
      * @param fileSuffix proper image with number
      */
     DiceEnum(int number, String fileSuffix) {
@@ -30,12 +28,9 @@ public enum DiceEnum {
         this.fileSuffix = fileSuffix;
     }
 
-    private static final String imageSourceDir = "src/game/resources/dice/";
-    public static final String RED_FILE_PREFIX= imageSourceDir + "red_";
-    public static final String WHITE_FILE_PREFIX= imageSourceDir + "white_";
-
     /**
      * Method that return the number on dice
+     *
      * @return number
      */
     public int getNumber() {
@@ -44,6 +39,7 @@ public enum DiceEnum {
 
     /**
      * Method return the appropriate image with number
+     *
      * @return fileSuffix i.e. image with dice
      */
     public String getFileSuffix() {
