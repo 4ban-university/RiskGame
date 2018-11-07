@@ -20,6 +20,10 @@ import static game.enums.CardsEnum.CAVALRY;
 import static game.enums.CardsEnum.INFANTRY;
 import static game.enums.CardsEnum.WILDCARDS;
 
+/**
+ * The cards panel. Display the cards functionality
+ * @author Dmitry Kryukov, Ksenia Popova
+ */
 public class CardPanel extends JPanel implements IPanelObserver {
 
     Map<String, CardsEnum> stringCardsEnumMap = new HashMap<>();
@@ -40,6 +44,11 @@ public class CardPanel extends JPanel implements IPanelObserver {
 
     private JButton exchangeButton = new JButton("Exchange");
 
+    /**
+     * The constructor of the card panel
+     * @param width
+     * @param height
+     */
     public CardPanel(int width, int height) {
         stringCardsEnumMap.put(INFANTRY.getName(), INFANTRY);
         stringCardsEnumMap.put(CAVALRY.getName(), CAVALRY);
@@ -90,6 +99,10 @@ public class CardPanel extends JPanel implements IPanelObserver {
         Game.getInstance().attachObserver(this);
     }
 
+    /**
+     * Updater for the observer
+     * @param iModelObservable
+     */
     @Override
     public void updateObserver(IModelObservable iModelObservable) {
         Game game = Game.getInstance();
@@ -132,6 +145,10 @@ public class CardPanel extends JPanel implements IPanelObserver {
         };
     }
 
+    /**
+     * Enable all cards for selecting
+     * @param value
+     */
     private void setAllEnabled(boolean value) {
         enabled = value;
         for (JCheckBox jCheckBox : jCheckBoxList) {
@@ -140,14 +157,4 @@ public class CardPanel extends JPanel implements IPanelObserver {
         }
         exchangeButton.setEnabled(value);
     }
-
-//    private void setDisabled() {
-//        Enumeration<AbstractButton> checkBoxEnumeration = checkBoxGroup.getElements();
-//        while (checkBoxEnumeration.hasMoreElements()) {
-//            JCheckBox jCheckBox = (JCheckBox) checkBoxEnumeration.nextElement();
-//            jCheckBox.setEnabled(false);
-//            jCheckBox.setSelected(false);
-//        }
-//        exchangeButton.setEnabled(false);
-//    }
 }
