@@ -57,7 +57,6 @@ public class CardPanel extends JPanel implements IPanelObserver {
         jCheckBoxList.add(playerBonusCheckBox);
 
         JPanel list = new JPanel(new GridLayout(5, 2));
-        list.setBackground(new Color(121, 180, 115));
         list.add(playerInfantryCheckBox);
 //        list.add(new JLabel(INFANTRY.getName() + ":", null, SwingConstants.TRAILING));
         list.add(playerInfantry);
@@ -83,7 +82,7 @@ public class CardPanel extends JPanel implements IPanelObserver {
         gbc.gridx = 0;
         gbc.gridy = 1;
         exchangeButton.addActionListener(exchangeButtonListner());
-        exchangeButton.setMargin(new Insets(10, 0, 10, 0));
+        exchangeButton.setMargin(new Insets(1, 0, 1, 0));
         this.add(exchangeButton, gbc);
 
 //        exchangeButton.setEnabled(false);

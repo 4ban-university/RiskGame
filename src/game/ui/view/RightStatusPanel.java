@@ -49,11 +49,11 @@ public class RightStatusPanel extends JPanel implements IPanelObserver {
         this.setLayout(new GridBagLayout());
         GridBagConstraints gbc = new GridBagConstraints();
         gbc.fill = GridBagConstraints.BOTH;
-        gbc.insets = new Insets(4, 0, 4, 0);
+        gbc.insets = new Insets(1, 0, 1, 0);
         gbc.gridx = 0;
         gbc.gridy = 0;
         nextTurnButton.addActionListener(nextTurnButtonListner());
-        nextTurnButton.setMargin(new Insets(10, 0, 10, 0));
+        nextTurnButton.setMargin(new Insets(5, 0, 5, 0));
         this.add(nextTurnButton, gbc);
         gbc.gridx = 0;
         gbc.gridy = 1;
@@ -77,6 +77,7 @@ public class RightStatusPanel extends JPanel implements IPanelObserver {
         gbc.gridy = 5;
         gbc.weightx = 0;
         gbc.weighty = 0;
+        this.add(new JLabel("Attack:", null, SwingConstants.CENTER), gbc);
 //        exchangeButton.addActionListener(exchangeButtonListner());
 //        exchangeButton.setMargin(new Insets(10, 0, 10, 0));
 //        this.add(exchangeButton, gbc);
