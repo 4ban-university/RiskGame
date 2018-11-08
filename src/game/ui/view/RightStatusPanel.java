@@ -13,6 +13,7 @@ import java.awt.event.ActionListener;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Random;
 import java.util.stream.Collectors;
 
 /**
@@ -32,6 +33,7 @@ public class RightStatusPanel extends JPanel implements IPanelObserver {
     private JLabel countryArmy = new JLabel("", null, SwingConstants.TRAILING);
 
     private JButton exchangeButton = new JButton("Exchange");
+    private JLabel invisibleLable = new JLabel("invisible", null, SwingConstants.CENTER);
 
     private JPanel worldDomination = new JPanel();
 
@@ -77,6 +79,8 @@ public class RightStatusPanel extends JPanel implements IPanelObserver {
         gbc.weightx = 0;
         gbc.weighty = 0;
         this.add(new JLabel("Attack:", null, SwingConstants.CENTER), gbc);
+        this.add(invisibleLable);
+        invisibleLable.setVisible(false);
 
         Game.getInstance().attachObserver(this);
     }
@@ -96,6 +100,8 @@ public class RightStatusPanel extends JPanel implements IPanelObserver {
         exchangeButton.setEnabled(game.isExchangeButton());
 
         createWoldDominationPanel(worldDomination);
+        Random r = new Random();
+        invisibleLable.setText(Integer.toString(r.nextInt()));
     }
 
     /**
