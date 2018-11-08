@@ -195,7 +195,7 @@ public class Game implements IObservable {
                 currentTurnPhraseText = "Select a country to move armies from. ";
                 System.out.println("Next Turn Button Clicked. Next Player is " + currentGamePhase);
 
-                Dice.resetDice(redDice, whiteDice);
+//                Dice.resetDice(redDice, whiteDice);
 
                 resetToAndFrom();
 
@@ -625,5 +625,13 @@ public class Game implements IObservable {
      */
     public void setGiveACard(boolean giveACard) {
         this.giveACard = giveACard;
+    }
+
+    public List<Player> getPlayers() {
+        return players;
+    }
+
+    public List<Continent> getContinents() {
+        return continents;
     }
 }
