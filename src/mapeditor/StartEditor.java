@@ -2,7 +2,7 @@ package mapeditor;
 
 /**
  * The main class to initialize everything.
- * @author Nikitha Papani, Dinesh Pattapu
+ * @author Nikitha Papani, Dinesh Pattapu, Rodolfo Mota Miranda
  *
  */
 public class StartEditor {
