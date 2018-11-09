@@ -91,18 +91,33 @@ public class PlayerTest {
     }
 
     /**
-     * Stub
+     * Attack phase if selected the correct country
      */
     @Test
-    public void beforeAndAfterAttack() {
+    public void attackSelectedCorrectCountry() {
+        game.initialise();
+        country3.setArmy(10);
+        while (game.getCurrentGamePhase() != GamePhase.ATTACK) {
+            game.nextTurn();
+        }
+        game.makeAction(30, 30);
+        assertTrue(country4.isHighlighted());
     }
 
     /**
-     * Stub
+     * Attack phase if selected inorrect country (enemie)
      */
     @Test
-    public void attack() {
+    public void attackNoSelectedPlayersCountries() {
+        game.initialise();
+        country3.setArmy(10);
+        while (game.getCurrentGamePhase() != GamePhase.ATTACK) {
+            game.nextTurn();
+        }
+        game.makeAction(30, 30);
+        assertFalse(country1.isHighlighted());
     }
+
 
     /**
      * Check fortification correct transition to next player
