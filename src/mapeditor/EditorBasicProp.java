@@ -12,7 +12,7 @@ public class EditorBasicProp implements IEditorBasicProp {
 	ILoadedMap loadedMapObj;
 	
 	/**
-	 * The function to initialiize the editor for basic properties.
+	 * The function to initialize the editor for basic properties.
 	 * @param in Scanner object
 	 * @param loadedMapObj The loaded map object.
 	 */
