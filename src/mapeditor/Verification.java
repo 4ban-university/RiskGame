@@ -7,7 +7,7 @@ import java.util.HashMap;
 
 /**
  * This class verifies map data in data structures.
- * @author Nikitha Papani, Dinesh Pattapu
+ * @author Nikitha Papani, Dinesh Pattapu, Rodolfo Mota Miranda
  *
  */
 public class Verification implements IVerification {
