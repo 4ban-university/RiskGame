@@ -172,7 +172,7 @@ public class EditorContinent implements IEditorContinent {
 
 	/**
 	 * The function to modify continent name.
-	 * @return Returns succeess of failure.
+	 * @return Returns success or failure.
 	 */
 	@Override
 	public boolean modifycontinentname() {
