@@ -8,7 +8,7 @@ package mapeditor;
 public class StartEditor {
 
 	/**
-	 * The main fucntion called by operating system
+	 * The main function called by operating system
 	 * @param args The command line arguments.
 	 */
 	public static void main(String[] args) {
