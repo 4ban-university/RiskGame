@@ -5,7 +5,7 @@ import static mapeditor.Continent.continents;
 
 /**
  * The class to load territory in data structures.
- * @author Nikitha Papani, Dinesh Pattapu
+ * @author Nikitha Papani, Dinesh Pattapu, Rodolfo Mota Miranda
  *
  */
 public class Territory implements ITerritory {
