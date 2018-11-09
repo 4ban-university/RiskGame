@@ -20,12 +20,12 @@ import java.util.Map;
 import java.util.Random;
 
 import static game.enums.CardsEnum.ARTILLERY;
-import static game.enums.CardsEnum.BONUS;
 import static game.enums.CardsEnum.CAVALRY;
 import static game.enums.CardsEnum.INFANTRY;
 import static game.enums.CardsEnum.WILDCARDS;
 import static game.enums.GamePhase.ATTACK;
 import static game.enums.GamePhase.FORTIFICATION;
+import static game.enums.GamePhase.GAME_OVER;
 import static game.enums.GamePhase.PLACING_ARMIES;
 import static game.enums.GamePhase.REINFORCEMENT;
 
@@ -52,7 +52,6 @@ public class Game implements IObservable {
     private static Game gameInstance;
     private final int DICE_ROW_TO_SHOW = 3;
     private boolean nextTurnButton;
-    private boolean exchangeButton;
     private int RADIUS;
     private List<Country> countries;
     private List<Neighbour> neighbours;
@@ -122,7 +121,6 @@ public class Game implements IObservable {
         currentGamePhase = PLACING_ARMIES;
         currentPlayer = players.get(0);
         nextTurnButton = false;
-        exchangeButton = false;
         Dice.resetDice(redDice, whiteDice);
         highlightPayerCountries();
 
@@ -170,12 +168,25 @@ public class Game implements IObservable {
                 break;
 
             case REINFORCEMENT:
+                int cards = 0;
+                for (Integer i : currentPlayer.getCardsEnumIntegerMap().values()) {
+                    cards += i;
+                }
+
+                if (cards >= 5) {
+                    currentTurnPhraseText = "The current player has more than 5 cards on hands. Players have to change them to armies.";
+
+                    break;
+                }
                 // Prepare to next turn
                 currentGamePhase = ATTACK;
                 currentTurnPhraseText = "Select a Country to attack from.";
                 System.out.println("Next Turn Button Clicked. Next Player is " + currentGamePhase);
                 unHighlightCountries();
-                exchangeButton = false;
+
+                if (!isMoreAttacks()) {
+                    nextTurn();
+                }
                 break;
 
             case ATTACK:
@@ -183,7 +194,8 @@ public class Game implements IObservable {
                 unHighlightCountries();
 
                 if (giveACard) {
-                    CardsEnum[] cardsEnums = new CardsEnum[]{INFANTRY, CAVALRY, ARTILLERY, WILDCARDS, BONUS};
+//                    CardsEnum[] cardsEnums = new CardsEnum[]{INFANTRY, CAVALRY, ARTILLERY, WILDCARDS, BONUS};
+                    CardsEnum[] cardsEnums = new CardsEnum[]{INFANTRY, CAVALRY, ARTILLERY, WILDCARDS};
                     Random r = new Random();
                     Map<CardsEnum, Integer> cardsEnumIntegerMap = currentPlayer.getCardsEnumIntegerMap();
                     CardsEnum randomCard = cardsEnums[r.nextInt(cardsEnums.length)];
@@ -223,7 +235,6 @@ public class Game implements IObservable {
                         }
                     }
                 }
-                exchangeButton = true;
                 currentTurnPhraseText = "Select a country to place your army. Armies to place  " + currentPlayer.getArmies();
                 highlightPayerCountries();
                 break;
@@ -315,6 +326,7 @@ public class Game implements IObservable {
 
     /**
      * Exchange methods for exchanging cards for player.
+     *
      * @param cardsEnumList
      */
     public void exchange(List<CardsEnum> cardsEnumList) {
@@ -348,6 +360,36 @@ public class Game implements IObservable {
         for (Country c : countries) {
             c.setHighlighted(false);
         }
+    }
+
+    public boolean isGameWonBy(Player player) {
+        for (Country country : countries) {
+            if (country.getPlayer() != player) {
+                return false;
+            }
+        }
+        return true;
+    }
+
+    public void gameOver() {
+        currentGamePhase = GAME_OVER;
+        currentTurnPhraseText = "Game over. The " + currentPlayer.getName() + " win.";
+        unHighlightCountries();
+        nextTurnButton = false;
+        notifyObservers();
+    }
+
+    public boolean isMoreAttacks() {
+        for (Country country : countries) {
+            if (country.getPlayer() == currentPlayer && country.getArmy() >= 2) {
+                for (Country neighbor : country.getNeighbours()) {
+                    if (neighbor.getPlayer() != currentPlayer) {
+                        return true;
+                    }
+                }
+            }
+        }
+        return false;
     }
 
     public void setRADIUS(int RADIUS) {
@@ -391,24 +433,6 @@ public class Game implements IObservable {
     }
 
     /**
-     * Set players
-     *
-     * @param players
-     */
-    public void setPlayers(List<Player> players) {
-        this.players = players;
-    }
-
-    /**
-     * Set continents
-     *
-     * @param continents
-     */
-    public void setContinents(List<Continent> continents) {
-        this.continents = continents;
-    }
-
-    /**
      * get current phase of the game
      *
      * @return currentGamePhase
@@ -425,7 +449,6 @@ public class Game implements IObservable {
     public Player getCurrentPlayer() {
         return currentPlayer;
     }
-
 
     /**
      * Get current status phrase
@@ -488,15 +511,6 @@ public class Game implements IObservable {
      */
     public boolean isNextTurnButton() {
         return nextTurnButton;
-    }
-
-    /**
-     * Exchange button
-     *
-     * @return exchangeButton
-     */
-    public boolean isExchangeButton() {
-        return exchangeButton;
     }
 
     /**
@@ -573,6 +587,7 @@ public class Game implements IObservable {
 
     /**
      * Winner of the battle
+     *
      * @return winBattle
      */
     public boolean isWinBattle() {
@@ -581,6 +596,7 @@ public class Game implements IObservable {
 
     /**
      * Set the winner of the battle
+     *
      * @param winBattle
      */
     public void setWinBattle(boolean winBattle) {
@@ -589,6 +605,7 @@ public class Game implements IObservable {
 
     /**
      * Get the minimum armies that player can move to the country after winning
+     *
      * @return minArmiesToMoveAfterWin
      */
     public int getMinArmiesToMoveAfterWin() {
@@ -597,6 +614,7 @@ public class Game implements IObservable {
 
     /**
      * Set the minimum number of armies that player can move to the country after winning
+     *
      * @param minArmiesToMoveAfterWin
      */
     public void setMinArmiesToMoveAfterWin(int minArmiesToMoveAfterWin) {
@@ -605,6 +623,7 @@ public class Game implements IObservable {
 
     /**
      * Get armies to card exchange
+     *
      * @return armiesToCardExchange
      */
     public int getArmiesToCardExchange() {
@@ -613,6 +632,7 @@ public class Game implements IObservable {
 
     /**
      * Set armies to card exchange
+     *
      * @param armiesToCardExchange
      */
     public void setArmiesToCardExchange(int armiesToCardExchange) {
@@ -621,6 +641,7 @@ public class Game implements IObservable {
 
     /**
      * Set give card
+     *
      * @param giveACard
      */
     public void setGiveACard(boolean giveACard) {
@@ -631,7 +652,25 @@ public class Game implements IObservable {
         return players;
     }
 
+    /**
+     * Set players
+     *
+     * @param players
+     */
+    public void setPlayers(List<Player> players) {
+        this.players = players;
+    }
+
     public List<Continent> getContinents() {
         return continents;
+    }
+
+    /**
+     * Set continents
+     *
+     * @param continents
+     */
+    public void setContinents(List<Continent> continents) {
+        this.continents = continents;
     }
 }
