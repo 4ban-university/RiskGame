@@ -13,7 +13,8 @@ import game.GameTest;
         mapeditor.TestMapEditor.class,
         game.utils.WarningWindowTest.class,
         game.utils.MapLoaderTest.class,
-        game.GameTest.class
+        game.GameTest.class,
+        game.model.PlayerTest.class
 })
 
 public class TestSuite {
