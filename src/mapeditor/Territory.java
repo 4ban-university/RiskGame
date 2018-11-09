@@ -139,7 +139,7 @@ public class Territory implements ITerritory {
 	/**
 	 * This function checks whether received territory is adjacent to this or not.
 	 * @param territoryName The name of territory to be checked for adjacency.
-	 * @return The sucess of failure results.
+	 * @return The success of failure results.
 	 */
 	public boolean checkIfAdjacent(String territoryName) {
 		if(this.adjacents.contains(territoryName)) {
