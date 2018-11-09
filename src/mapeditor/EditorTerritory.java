@@ -15,7 +15,7 @@ public class EditorTerritory implements IEditorTerritory {
 	/**
 	 * This function initializes the territory editor
 	 * @param in Scanner object
-	 * @param loadedMapObj The laoded map in memory
+	 * @param loadedMapObj The loaded map in memory
 	 */
 	public void init(Scanner in, ILoadedMap loadedMapObj) {
 		this.in = in;
