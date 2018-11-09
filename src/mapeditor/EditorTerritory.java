@@ -55,7 +55,7 @@ public class EditorTerritory implements IEditorTerritory {
 	}
 
 	/**
-	 * This functin dispalys the territory list and asks user to select one.
+	 * This function displays the territory list and asks user to select one.
 	 * @return The selected territory by user.
 	 */
 	@Override
@@ -231,7 +231,7 @@ public class EditorTerritory implements IEditorTerritory {
 	}
 
 	/**
-	 * The funtion to modify territory name.
+	 * The function to modify territory name.
 	 * @return Returns success of failure
 	 */
 	@Override
