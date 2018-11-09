@@ -13,7 +13,7 @@ import mapeditor.Territory;
 /**
  * This class is responsible to create the Territories Editor Interface.
  *
- * @author Rodolfo Miranda
+ * @author Rodolfo Mot(inh)a Miranda
  *
  */
 public class Territories extends javax.swing.JFrame {
