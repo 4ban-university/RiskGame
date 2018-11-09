@@ -5,7 +5,7 @@ import java.util.Scanner;
 
 /**
  * The class for editing the continent
- * @author Nikitha Papani
+ * @author Nikitha Papani, Rodolfo Mota Miranda
  *
  */
 public class EditorContinent implements IEditorContinent {
