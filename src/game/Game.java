@@ -3,31 +3,16 @@ package game;
 import game.enums.CardsEnum;
 import game.enums.DiceEnum;
 import game.enums.GamePhase;
-import game.model.Continent;
-import game.model.Country;
-import game.model.Dice;
-import game.model.Neighbour;
-import game.model.Player;
-import game.ui.view.DicePanel;
-import game.ui.view.IPanelObserver;
-import game.ui.view.MapPanel;
-import game.ui.view.RightStatusPanel;
-import game.ui.view.TopStatusPanel;
+import game.model.*;
+import game.ui.view.*;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.Random;
 
-import static game.enums.CardsEnum.ARTILLERY;
-import static game.enums.CardsEnum.CAVALRY;
-import static game.enums.CardsEnum.INFANTRY;
-import static game.enums.CardsEnum.WILDCARDS;
-import static game.enums.GamePhase.ATTACK;
-import static game.enums.GamePhase.FORTIFICATION;
-import static game.enums.GamePhase.GAME_OVER;
-import static game.enums.GamePhase.PLACING_ARMIES;
-import static game.enums.GamePhase.REINFORCEMENT;
+import static game.enums.CardsEnum.*;
+import static game.enums.GamePhase.*;
 
 /**
  * The game file which control all the game flow.
@@ -152,7 +137,10 @@ public class Game implements IObservable {
      */
     @Override
     public void notifyObservers() {
-        iPanelObservers.stream().forEach(iPanelObserver -> iPanelObserver.updateObserver(this));
+//        iPanelObservers.stream().forEach(iPanelObserver -> iPanelObserver.updateObserver(this));
+        for (IPanelObserver iPanelObserver : iPanelObservers) {
+            iPanelObserver.updateObserver(this);
+        }
     }
 
     /**
