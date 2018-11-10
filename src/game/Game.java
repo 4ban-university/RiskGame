@@ -138,8 +138,9 @@ public class Game implements IObservable {
     @Override
     public void notifyObservers() {
 //        iPanelObservers.stream().forEach(iPanelObserver -> iPanelObserver.updateObserver(this));
-        for (IPanelObserver iPanelObserver : iPanelObservers) {
-            iPanelObserver.updateObserver(this);
+        IPanelObserver[] iPanelObserversArray = iPanelObservers.toArray(new IPanelObserver[0]);
+        for (int i = 0; i < iPanelObserversArray.length; i++) {
+            iPanelObserversArray[i].updateObserver(this);
         }
     }
 
@@ -352,6 +353,7 @@ public class Game implements IObservable {
 
     /**
      * Check if game was won by player
+     *
      * @param player
      * @return boolean
      */
@@ -377,6 +379,7 @@ public class Game implements IObservable {
 
     /**
      * Check if player can attack anybody or go to next turn
+     *
      * @return
      */
     public boolean isMoreAttacks() {
@@ -394,6 +397,7 @@ public class Game implements IObservable {
 
     /**
      * Set radius method
+     *
      * @param RADIUS
      */
     public void setRADIUS(int RADIUS) {
