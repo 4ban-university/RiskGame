@@ -137,7 +137,6 @@ public class Game implements IObservable {
      */
     @Override
     public void notifyObservers() {
-//        iPanelObservers.stream().forEach(iPanelObserver -> iPanelObserver.updateObserver(this));
         IPanelObserver[] iPanelObserversArray = iPanelObservers.toArray(new IPanelObserver[0]);
         for (int i = 0; i < iPanelObserversArray.length; i++) {
             iPanelObserversArray[i].updateObserver(this);
@@ -205,12 +204,13 @@ public class Game implements IObservable {
 
             case FORTIFICATION:
                 currentGamePhase = REINFORCEMENT;
-                System.out.println("Next Turn Button Clicked. Next Player is " + currentGamePhase);
+                System.out.println("Next Turn Button Clicked. Next Phase is " + currentGamePhase);
 
                 resetToAndFrom();
 
                 // Change current player
                 currentPlayer = players.get((players.indexOf(currentPlayer) + 1) % players.size());
+                System.out.println("Select next Player. Next Player is " + currentPlayer.getName());
 
                 // Add base armies
                 currentPlayer.setArmies(getReinforcementArmies(currentPlayer, countries));
