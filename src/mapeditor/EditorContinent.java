@@ -5,7 +5,7 @@ import java.util.Scanner;
 
 /**
  * The class for editing the continent
- * @author Nikitha Papani, Rodolfo Mota Miranda
+ * @author Nikitha Papani
  *
  */
 public class EditorContinent implements IEditorContinent {
@@ -172,7 +172,7 @@ public class EditorContinent implements IEditorContinent {
 
 	/**
 	 * The function to modify continent name.
-	 * @return Returns success or failure.
+	 * @return Returns succeess of failure.
 	 */
 	@Override
 	public boolean modifycontinentname() {

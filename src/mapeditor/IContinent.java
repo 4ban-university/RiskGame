@@ -1,8 +1,10 @@
 package mapeditor;
 
+import java.util.ArrayList;
+
 /**
  * This class is responsible for managing the continents loaded from file.
- * @author Nikitha Papani, Dinesh Pattapu, Rodolfo Mota Miranda
+ * @author Nikitha Papani, Dinesh Pattapu
  *
  */
 public interface IContinent {
@@ -13,4 +15,5 @@ public interface IContinent {
 	public void addTerritory(String territoryName);
 	public void removeTerritory(String territoryName);
 	public Integer numTerritories();
+	public ArrayList<String> getTerritories();
 }

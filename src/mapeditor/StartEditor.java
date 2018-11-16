@@ -2,13 +2,13 @@ package mapeditor;
 
 /**
  * The main class to initialize everything.
- * @author Nikitha Papani, Dinesh Pattapu, Rodolfo Mota Miranda
+ * @author Nikitha Papani, Dinesh Pattapu
  *
  */
 public class StartEditor {
 
 	/**
-	 * The main function called by operating system
+	 * The main fucntion called by operating system
 	 * @param args The command line arguments.
 	 */
 	public static void main(String[] args) {

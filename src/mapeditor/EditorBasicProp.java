@@ -4,7 +4,7 @@ import java.util.Scanner;
 
 /**
  * The class lets the user modify the basic properties of map.
- * @author Nikitha Papani, Rodolfo Mota Miranda
+ * @author Nikitha Papani
  *
  */
 public class EditorBasicProp implements IEditorBasicProp {
@@ -12,7 +12,7 @@ public class EditorBasicProp implements IEditorBasicProp {
 	ILoadedMap loadedMapObj;
 	
 	/**
-	 * The function to initialize the editor for basic properties.
+	 * The function to initialiize the editor for basic properties.
 	 * @param in Scanner object
 	 * @param loadedMapObj The loaded map object.
 	 */

@@ -4,7 +4,7 @@ import java.util.Scanner;
 
 /**
  * The class for editing the continent
- * @author Nikitha Papani, Rodolfo Mota Miranda
+ * @author Nikitha Papani
  *
  */
 public interface IEditorContinent {

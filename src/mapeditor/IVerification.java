@@ -2,7 +2,7 @@ package mapeditor;
 
 /**
  * This class verifies map data in data structures.
- * @author Nikitha Papani, Dinesh Pattapu, Rodolfo Mota Miranda
+ * @author Nikitha Papani, Dinesh Pattapu
  *
  */
 public interface IVerification {
@@ -11,4 +11,5 @@ public interface IVerification {
 	public boolean checkTerritoryAdjacencyRelation();
 	public boolean checkTerritoryConnectivity();
 	public boolean checkContinentExistence();
+	public boolean runChecks(ILoadedMap map);
 }

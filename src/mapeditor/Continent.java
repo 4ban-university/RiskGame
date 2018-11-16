@@ -4,7 +4,7 @@ import java.util.ArrayList;
 
 /**
  * This class is responsible for managing the continents loaded from file.
- * @author Nikitha Papani, Dinesh Pattapu, Rodolfo Mota Miranda
+ * @author Nikitha Papani, Dinesh Pattapu
  *
  */
 public class Continent implements IContinent {
@@ -91,5 +91,13 @@ public class Continent implements IContinent {
 	 */
 	public Integer numTerritories() {
 		return this.listOfTerritories.size();
+	}
+	
+	/**
+	 * Returns the list of territories.
+	 * @return The list of territories.
+	 */
+	public ArrayList<String> getTerritories() {
+		return this.listOfTerritories;
 	}
 }
