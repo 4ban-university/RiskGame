@@ -154,7 +154,6 @@ public class MapLoader implements IMapLoader {
 	private void parseTerritoryLine(String lineText) {
 		String tokens[] = lineText.split(",");
 		if(tokens.length < 5) {
-			// System.out.println("MapLoader: parse_territory_line: The territory information is incomplete. Skipped");
 			return;
 		}
 		
@@ -169,7 +168,6 @@ public class MapLoader implements IMapLoader {
 			Y = Integer.parseInt(tokens[2]);
 		}
 		catch (NumberFormatException e) {
-			//System.out.println("MapLoader: parse_territory_line: The territory coordinates cannot be converted to integer. Defaulted to 0");
 		}
 		
 		// Arraylist to store the adjacent territories.
