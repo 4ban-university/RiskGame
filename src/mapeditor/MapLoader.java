@@ -43,6 +43,18 @@ public class MapLoader implements IMapLoader {
 	public void loadmap(String filePath) {
 		init_data_structures();
 		readmap(filePath);
+		if(verifyLoadedMap() == false) {
+			System.out.println("The map cannot be loaded");
+			this.loadedMapObj = null;
+		}
+	}
+	
+	/**
+	 * Function to verify the loaded map
+	 */
+	public boolean verifyLoadedMap() {
+		IVerification verificationObj = new Verification();
+		return verificationObj.runChecks(loadedMapObj);
 	}
 	
 	/**
@@ -142,7 +154,7 @@ public class MapLoader implements IMapLoader {
 	private void parse_territory_line(String lineText) {
 		String tokens[] = lineText.split(",");
 		if(tokens.length < 5) {
-			System.out.println("MapLoader: parse_territory_line: The territory information is incomplete. Skipped");
+			// System.out.println("MapLoader: parse_territory_line: The territory information is incomplete. Skipped");
 			return;
 		}
 		
@@ -157,7 +169,7 @@ public class MapLoader implements IMapLoader {
 			Y = Integer.parseInt(tokens[2]);
 		}
 		catch (NumberFormatException e) {
-			System.out.println("MapLoader: parse_territory_line: The territory coordinates cannot be converted to integer. Defaulted to 0");
+			//System.out.println("MapLoader: parse_territory_line: The territory coordinates cannot be converted to integer. Defaulted to 0");
 		}
 		
 		// Arraylist to store the adjacent territories.
