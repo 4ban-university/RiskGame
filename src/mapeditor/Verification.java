@@ -7,7 +7,7 @@ import java.util.HashMap;
 
 /**
  * This class verifies map data in data structures.
- * @author Nikitha Papani, Dinesh Pattapu
+ * @author Nikitha Papani, Dinesh Pattapu, Rodolfo Mota Miranda
  *
  */
 public class Verification implements IVerification {
@@ -49,11 +49,6 @@ public class Verification implements IVerification {
 		
 		result = checkContinentExistence();
 		if(result == false) return result;
-		
-		/*
-		result = checkTerritoryAdjacencyRelation();
-		if(result == false) return result;
-		*/
 		
 		result = checkTerritoryConnectivity();
 		if(result == false) return result;
@@ -105,7 +100,6 @@ public class Verification implements IVerification {
 		for(int i = 0; i < territories.size(); i++) {
 			ITerritory territory = this.map.getTerritory(territories.get(i));
 			if(territory == null) {
-				//System.out.println("Map cannot be saved, as territory with a name " + territories.get(i) + " was not found");
 				return false;
 			}
 			String continent = territory.getContinent();
