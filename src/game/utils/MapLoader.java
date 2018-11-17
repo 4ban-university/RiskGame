@@ -3,8 +3,11 @@ package game.utils;
 import game.Game;
 import game.model.Continent;
 import game.model.Country;
+import game.model.GameState;
 import game.model.Neighbour;
 import game.model.Player;
+import game.strategies.PlayerStrategies.PlayerStrategyFactory;
+import game.strategies.PlayerStrategies.StrategyEnum;
 import game.ui.Main;
 
 import java.awt.*;
@@ -43,6 +46,8 @@ public class MapLoader {
     public String mapPath;
     public boolean invalidMap;
 
+    PlayerStrategyFactory playerStrategyFactory = new PlayerStrategyFactory();
+
     /**
      * Constructor of the class.
      * Loading and validation of the map.
@@ -70,7 +75,7 @@ public class MapLoader {
 
         int[] countriesPerPlayer = new int[numberOfPlayers];
         for (int i = 0; i < numberOfPlayers; i++) {
-            players.add(new Player("Player " + (i + 1), playerColor[i]));
+            players.add(new Player("Player " + (i + 1), playerColor[i], playerStrategyFactory.getStrategy(StrategyEnum.HUMAN_STRATEGY)));
             countriesPerPlayer[i] = 0;
         }
 
@@ -225,12 +230,14 @@ public class MapLoader {
         }
 
         // Create the instance of the game class and send it to Main
+        GameState gameState = new GameState();
+        gameState.setCountries(countries);
+        gameState.setNeighbours(neighbours);
+        gameState.setPlayers(players);
+        gameState.setContinents(continents);
         Game game = Game.getInstance();
-        game.setRADIUS(RADIUS);
-        game.setCountries(countries);
-        game.setNeighbours(neighbours);
-        game.setPlayers(players);
-        game.setContinents(continents);
+        game.setGameState(gameState);
+
         new Main(game, this);
     }
 

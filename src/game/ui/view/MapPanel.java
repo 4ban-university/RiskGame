@@ -1,8 +1,8 @@
 package game.ui.view;
 
 import game.Game;
-import game.IObservable;
 import game.model.Country;
+import game.model.IObservable;
 import game.model.Neighbour;
 import game.utils.MapLoader;
 
@@ -39,14 +39,13 @@ public class MapPanel extends JPanel implements IPanelObserver {
     public MapPanel(Dimension dimension, MapLoader loader) {
         try {
             image = ImageIO.read(new File(loader.getFilePath().replace(".map", ".bmp")));
-//            image = ImageIO.read(new File(loader.getFilePath().split(".map")[0] + ".bmp" ));
         }
         catch (IOException e) {
         }
         this.setPreferredSize(dimension);
         addMouseListener(getMouseAdapter());
 
-        Game.getInstance().attachObserver(this);
+        Game.getInstance().getGameState().attachObserver(this);
     }
 
     /**
@@ -68,8 +67,8 @@ public class MapPanel extends JPanel implements IPanelObserver {
     @Override
     public void updateObserver(IObservable iObservable) {
         Game game = Game.getInstance();
-        countries = game.getCountries();
-        neighbours = game.getNeighbours();
+        countries = game.getGameState().getCountries();
+        neighbours = game.getGameState().getNeighbours();
         this.repaint();
     }
 
