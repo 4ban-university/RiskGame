@@ -1,16 +1,30 @@
 package game.utils;
 
 import game.Game;
-import game.model.*;
+import game.model.Continent;
+import game.model.Country;
+import game.model.GameState;
+import game.model.Neighbour;
+import game.model.Player;
 import game.strategies.PlayerStrategies.PlayerStrategyEnum;
 import game.strategies.PlayerStrategies.PlayerStrategyFactory;
 import game.ui.Main;
 
 import java.awt.*;
-import java.io.*;
-import java.util.*;
+import java.io.BufferedReader;
+import java.io.FileNotFoundException;
+import java.io.FileReader;
+import java.io.IOException;
+import java.io.InvalidObjectException;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.LinkedList;
 import java.util.List;
+import java.util.Map;
 import java.util.Queue;
+import java.util.Random;
+import java.util.Set;
 
 /**
  * The map loader class. Responsible for loading and validation of the map.
@@ -42,7 +56,7 @@ public class MapLoader {
      * @param filePath        path to the map
      * @param mode            boolean mode that can be used to start the program in special mode to test features
      */
-    public MapLoader(int numberOfPlayers, String filePath, boolean mode) {
+    public MapLoader(int numberOfPlayers, String filePath, boolean mode, String game_mode) {
         // If true - the program in test mode.
         boolean testMode = mode;
         mapPath = filePath;
@@ -58,13 +72,37 @@ public class MapLoader {
         playerColor[3] = Color.GRAY;
 
         //Player[] playerList = new Player[numberOfPlayers];
-
         int[] countriesPerPlayer = new int[numberOfPlayers];
-        for (int i = 0; i < numberOfPlayers; i++) {
-            players.add(new Player("Player " + (i + 1), playerColor[i], playerStrategyFactory.getStrategy(PlayerStrategyEnum.HUMAN_STRATEGY)));
-            countriesPerPlayer[i] = 0;
-        }
 
+        switch (game_mode) {
+            case "human":
+                for (int i = 0; i < numberOfPlayers; i++) {
+                    players.add(new Player("Human Player " + (i + 1), playerColor[i], playerStrategyFactory.getStrategy(PlayerStrategyEnum.HUMAN_STRATEGY), false));
+                    countriesPerPlayer[i] = 0;
+                }
+                break;
+            case "aggressive":
+                players.add(new Player("Human Player ", playerColor[0], playerStrategyFactory.getStrategy(PlayerStrategyEnum.HUMAN_STRATEGY), false));
+                players.add(new Player("Aggressive AI", playerColor[1], playerStrategyFactory.getStrategy(PlayerStrategyEnum.AI_AGGRESSIVE_STRATEGY), true));
+                break;
+            case "benevolent":
+                players.add(new Player("Human Player ", playerColor[0], playerStrategyFactory.getStrategy(PlayerStrategyEnum.HUMAN_STRATEGY), false));
+                players.add(new Player("Benevolent AI", playerColor[1], playerStrategyFactory.getStrategy(PlayerStrategyEnum.AI_BENEVOLENT_STRATEGY), true));
+                break;
+            case "random":
+                players.add(new Player("Human Player ", playerColor[0], playerStrategyFactory.getStrategy(PlayerStrategyEnum.HUMAN_STRATEGY), false));
+                players.add(new Player("Random AI", playerColor[1], playerStrategyFactory.getStrategy(PlayerStrategyEnum.AI_RANDOM_STRATEGY), true));
+                break;
+            case "cheater":
+                players.add(new Player("Human Player ", playerColor[0], playerStrategyFactory.getStrategy(PlayerStrategyEnum.HUMAN_STRATEGY), false));
+                players.add(new Player("Cheater AI", playerColor[1], playerStrategyFactory.getStrategy(PlayerStrategyEnum.AI_CHEATER_STRATEGY), true));
+                break;
+            case "tournament":
+                // TODO need to be implemented
+                break;
+            default:
+                break;
+        }
         List<String> neighboursList = new ArrayList<String>();
 
         // Stub continents

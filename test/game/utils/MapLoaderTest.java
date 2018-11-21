@@ -1,10 +1,8 @@
 package game.utils;
 
-import org.junit.Before;
 import org.junit.Test;
-import org.junit.BeforeClass;
 
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertTrue;
 
 /**
  * The map loader test
@@ -12,7 +10,7 @@ import static org.junit.Assert.*;
  * @see MapLoader
  */
 public class MapLoaderTest {
-    static MapLoader loader = new MapLoader(2, "wrongContinentNoCountries.map", false);
+    static MapLoader loader = new MapLoader(2, "wrongContinentNoCountries.map", false, "human");
     /**
      * Test invalid map with map wrong continent
      */

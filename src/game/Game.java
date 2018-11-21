@@ -93,32 +93,6 @@ public class Game {
         gameState.notifyObservers();
     }
 
-
-    /**
-     * Reset highlights
-     */
-    public void resetToAndFrom() {
-        unHighlightCountries();
-        if (gameState.getCountryFrom() != null) {
-            gameState.getCountryFrom().unSelect(false);
-        }
-        gameState.setCountryFrom(null);
-
-        if (gameState.getCountryTo() != null) {
-            gameState.getCountryTo().unSelect(false);
-        }
-        gameState.setCountryTo(null);
-    }
-
-    /**
-     * Method that unhighlight the players countries
-     */
-    public void unHighlightCountries() {
-        for (Country c : gameState.getCountries()) {
-            c.setHighlighted(false);
-        }
-    }
-
     /**
      * Check if player can attack anybody or go to next turn
      *
