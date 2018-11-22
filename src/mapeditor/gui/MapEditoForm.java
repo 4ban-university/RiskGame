@@ -5,11 +5,77 @@
  */
 package mapeditor.gui;
 
+import static javax.swing.LayoutStyle.ComponentPlacement.RELATED;
+import java.awt.Container;
+import java.awt.EventQueue;
+import java.awt.Font;
+import java.awt.GraphicsEnvironment;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Map;
+import java.util.Vector;
+
+import javax.swing.GroupLayout;
+import javax.swing.JButton;
+import javax.swing.JComponent;
+import javax.swing.JFrame;
+import javax.swing.JLabel;
+import javax.swing.JList;
+import javax.swing.JPanel;
+import javax.swing.JScrollPane;
+import javax.swing.JTable;
+import javax.swing.JTextField;
+import javax.swing.event.ListSelectionEvent;
+import javax.swing.event.ListSelectionListener;
+import javax.swing.table.DefaultTableModel;
+
+import mapeditor.ILoadedMap;
+import mapeditor.Continent;
+import mapeditor.IContinent;
+import mapeditor.IMapLoader;
+import mapeditor.MapLoader;
+
+import java.util.ArrayList;
+import java.util.Vector;
+import javax.swing.event.ListSelectionEvent;
+import javax.swing.event.ListSelectionListener;
+import javax.swing.table.DefaultTableModel;
+import mapeditor.Continent;
+import mapeditor.ILoadedMap;
+import mapeditor.ITerritory;
+import mapeditor.Territory;
+
 /**
  *
  * @author rodmm
  */
 public class MapEditoForm extends javax.swing.JFrame {
+
+    static DefaultTableModel model;
+    public ILoadedMap loadedMapObj;
+
+    /**
+     * This method Constructor add components to the Frame.
+     *
+     * @param ILoadedMap loadedMapObjCons object with the map information .
+     */
+    public MapEditoForm(ILoadedMap loadedMapObjCons) {
+        loadedMapObj = loadedMapObjCons;
+        initComponents();
+        setDefaultCloseOperation(DISPOSE_ON_CLOSE);
+        this.model = (DefaultTableModel) jTable3.getModel();
+        // add header of the table
+        String header[] = new String[]{"Continent", "Control Value"};
+
+        // add header in table model
+        this.model.setColumnIdentifiers(header);
+        this.model.setRowCount(0);
+        ArrayList<IContinent> continents = Continent.getContinents();
+        for (IContinent cont : continents) {
+            this.model.addRow(new Object[]{cont.getContinentName(), cont.getControlValue()});
+        }
+        jTable3.setModel(this.model);
+    }
 
     /**
      * Creates new form MapEditoForm
@@ -172,6 +238,11 @@ public class MapEditoForm extends javax.swing.JFrame {
         jLabel8.setText("Author");
 
         jButton7.setText("Add Author");
+        jButton7.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton7ActionPerformed(evt);
+            }
+        });
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
@@ -312,11 +383,21 @@ public class MapEditoForm extends javax.swing.JFrame {
     }// </editor-fold>
 
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {
-        // TODO add your handling code here:
+
+        loadedMapObj.deleteContinent(Continent.getContinents().get(jTable1.getSelectedRow()));
+        this.model.removeRow(jTable3.getSelectedRow());
+        this.updateContinents();
     }
 
     private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {
-        // TODO add your handling code here:
+
+        Vector newRow = new Vector();
+        newRow.add(jTextField5.getText());
+        newRow.add(jTextField6.getText());
+        this.model.addRow(newRow);
+        IContinent cont = new Continent(jTextField5.getText(), Integer.parseInt(jTextField6.getText()));
+        loadedMapObj.addContinent(cont);
+        this.updateContinents();
     }
 
     private void jButton3ActionPerformed(java.awt.event.ActionEvent evt) {
@@ -333,6 +414,18 @@ public class MapEditoForm extends javax.swing.JFrame {
 
     private void jButton5ActionPerformed(java.awt.event.ActionEvent evt) {
         // TODO add your handling code here:
+    }
+
+    private void jButton7ActionPerformed(java.awt.event.ActionEvent evt) {
+        CreateMapMenu.setAuthor(jTextField7.getText());
+    }
+
+    private void updateContinents() {
+        ArrayList<IContinent> continents = new ArrayList<IContinent>();
+        for (int count = 0; count < model.getRowCount(); count++) {
+            continents.add(new Continent(model.getValueAt(count, 0).toString(), Integer.parseInt(model.getValueAt(count, 1).toString())));
+        }
+        Continent.setContinents(continents);
     }
 
     /**
