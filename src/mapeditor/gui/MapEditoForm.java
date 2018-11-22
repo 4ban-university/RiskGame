@@ -35,6 +35,16 @@ import mapeditor.IContinent;
 import mapeditor.IMapLoader;
 import mapeditor.MapLoader;
 
+import java.util.ArrayList;
+import java.util.Vector;
+import javax.swing.event.ListSelectionEvent;
+import javax.swing.event.ListSelectionListener;
+import javax.swing.table.DefaultTableModel;
+import mapeditor.Continent;
+import mapeditor.ILoadedMap;
+import mapeditor.ITerritory;
+import mapeditor.Territory;
+
 /**
  *
  * @author rodmm
@@ -47,13 +57,13 @@ public class MapEditoForm extends javax.swing.JFrame {
     /**
      * This method Constructor add components to the Frame.
      *
-     * // @param ILoadedMap loadedMapObjCons object with the map information .
+     * @param ILoadedMap loadedMapObjCons object with the map information .
      */
     public MapEditoForm(ILoadedMap loadedMapObjCons) {
         loadedMapObj = loadedMapObjCons;
         initComponents();
         setDefaultCloseOperation(DISPOSE_ON_CLOSE);
-        this.model = (DefaultTableModel) jTable1.getModel();
+        this.model = (DefaultTableModel) jTable3.getModel();
         // add header of the table
         String header[] = new String[]{"Continent", "Control Value"};
 
@@ -64,7 +74,7 @@ public class MapEditoForm extends javax.swing.JFrame {
         for (IContinent cont : continents) {
             this.model.addRow(new Object[]{cont.getContinentName(), cont.getControlValue()});
         }
-        jTable1.setModel(this.model);
+        jTable3.setModel(this.model);
     }
 
     /**
@@ -373,11 +383,21 @@ public class MapEditoForm extends javax.swing.JFrame {
     }// </editor-fold>
 
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {
-        // TODO add your handling code here:
+
+        loadedMapObj.deleteContinent(Continent.getContinents().get(jTable1.getSelectedRow()));
+        this.model.removeRow(jTable3.getSelectedRow());
+        this.updateContinents();
     }
 
     private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {
-        // TODO add your handling code here:
+
+        Vector newRow = new Vector();
+        newRow.add(jTextField5.getText());
+        newRow.add(jTextField6.getText());
+        this.model.addRow(newRow);
+        IContinent cont = new Continent(jTextField5.getText(), Integer.parseInt(jTextField6.getText()));
+        loadedMapObj.addContinent(cont);
+        this.updateContinents();
     }
 
     private void jButton3ActionPerformed(java.awt.event.ActionEvent evt) {
@@ -398,6 +418,14 @@ public class MapEditoForm extends javax.swing.JFrame {
 
     private void jButton7ActionPerformed(java.awt.event.ActionEvent evt) {
         CreateMapMenu.setAuthor(jTextField7.getText());
+    }
+
+    private void updateContinents() {
+        ArrayList<IContinent> continents = new ArrayList<IContinent>();
+        for (int count = 0; count < model.getRowCount(); count++) {
+            continents.add(new Continent(model.getValueAt(count, 0).toString(), Integer.parseInt(model.getValueAt(count, 1).toString())));
+        }
+        Continent.setContinents(continents);
     }
 
     /**
