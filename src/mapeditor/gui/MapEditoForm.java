@@ -51,10 +51,20 @@ import mapeditor.Territory;
  */
 public class MapEditoForm extends javax.swing.JFrame {
 
+    static ArrayList<Continent> continents;
+
+    static void setAuthor(String authorParameter) {
+        author = authorParameter;
+    }
+
+    private String path;
+    public ILoadedMap loadedMapObj;
+    public String pathSelected;
+    static String author = "";
+
     static DefaultTableModel model;
     static DefaultTableModel model2;
     static DefaultTableModel model3;
-    public ILoadedMap loadedMapObj;
 
     private boolean preventionFlag = false;
 
@@ -63,11 +73,14 @@ public class MapEditoForm extends javax.swing.JFrame {
      *
      * @param ILoadedMap loadedMapObjCons object with the map information .
      */
-    public MapEditoForm(ILoadedMap loadedMapObjCons) {
+    public MapEditoForm(String pathSelectedCons, ILoadedMap loadedMapObjCons) {
+        pathSelected = pathSelectedCons;
         loadedMapObj = loadedMapObjCons;
         initComponents();
-        setDefaultCloseOperation(DISPOSE_ON_CLOSE);
+        continents = new ArrayList<Continent>();
+        path = pathSelected;
         this.model = (DefaultTableModel) jTable3.getModel();
+
         // add header of the table
         String header[] = new String[]{"Continent", "Control Value"};
 
@@ -81,7 +94,7 @@ public class MapEditoForm extends javax.swing.JFrame {
         jTable3.setModel(this.model);
 
         loadedMapObj = loadedMapObjCons;
-        initComponents();
+
         jTable1.getSelectionModel().addListSelectionListener(new ListSelectionListener() {
             public void valueChanged(ListSelectionEvent event) {
                 // do some actions here, for example
@@ -91,7 +104,6 @@ public class MapEditoForm extends javax.swing.JFrame {
                 }
             }
         });
-        setDefaultCloseOperation(DISPOSE_ON_CLOSE);
 
         this.model2 = (DefaultTableModel) jTable1.getModel();
         this.model3 = (DefaultTableModel) jTable2.getModel();
@@ -110,6 +122,7 @@ public class MapEditoForm extends javax.swing.JFrame {
         }
         jTable1.setModel(this.model2);
         selectAdjacent(0);
+        setDefaultCloseOperation(DISPOSE_ON_CLOSE);
 
     }
 
