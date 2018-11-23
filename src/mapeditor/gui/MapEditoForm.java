@@ -435,13 +435,48 @@ public class MapEditoForm extends javax.swing.JFrame {
 
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {
 
-        loadedMapObj.deleteContinent(Continent.getContinents().get(jTable1.getSelectedRow()));
-        this.model.removeRow(jTable3.getSelectedRow());
-        this.updateContinents();
+        preventionFlag = true;
+        Integer index = jTable1.getSelectedRow();
+        this.model.removeRow(index);
+        ITerritory ter = Territory.getTerritories().get(index);
+        loadedMapObj.deleteTerritory(ter);
+        ArrayList<ITerritory> ters = Territory.getTerritories();
+        ters.remove(ter);
+        Territory.setTerritories(ters);
+        this.updateTerritories();
+        selectAdjacent(0);
+        preventionFlag = false;
+
     }
 
     private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {
 
+        Vector newRow = new Vector();
+        newRow.add(jTextField1.getText());
+        newRow.add(jTextField2.getText());
+        newRow.add(jTextField3.getText());
+        newRow.add(jTextField4.getText());
+        ITerritory ter = new Territory(jTextField1.getText(), Integer.parseInt(jTextField2.getText()), Integer.parseInt(jTextField3.getText()), jTextField4.getText(), new ArrayList<String>());
+        loadedMapObj.addTerritory(ter);
+        this.model.addRow(newRow);
+        this.updateTerritories();
+
+    }
+
+    private void jButton3ActionPerformed(java.awt.event.ActionEvent evt) {
+
+        Vector newRow = new Vector();
+        newRow.add(jTextPane1.getText());
+        this.model2.addRow(newRow);
+        this.updateTerritories();
+    }
+
+    private void jTextField5ActionPerformed(java.awt.event.ActionEvent evt) {
+        // TODO add your handling code here:
+    }
+
+    private void jButton4ActionPerformed(java.awt.event.ActionEvent evt) {
+        // TODO add your handling code here:
         Vector newRow = new Vector();
         newRow.add(jTextField5.getText());
         newRow.add(jTextField6.getText());
@@ -451,20 +486,11 @@ public class MapEditoForm extends javax.swing.JFrame {
         this.updateContinents();
     }
 
-    private void jButton3ActionPerformed(java.awt.event.ActionEvent evt) {
-        // TODO add your handling code here:
-    }
-
-    private void jTextField5ActionPerformed(java.awt.event.ActionEvent evt) {
-        // TODO add your handling code here:
-    }
-
-    private void jButton4ActionPerformed(java.awt.event.ActionEvent evt) {
-        // TODO add your handling code here:
-    }
-
     private void jButton5ActionPerformed(java.awt.event.ActionEvent evt) {
         // TODO add your handling code here:
+        loadedMapObj.deleteContinent(Continent.getContinents().get(jTable1.getSelectedRow()));
+        this.model.removeRow(jTable3.getSelectedRow());
+        this.updateContinents();
     }
 
     private void jButton7ActionPerformed(java.awt.event.ActionEvent evt) {
@@ -477,6 +503,35 @@ public class MapEditoForm extends javax.swing.JFrame {
             continents.add(new Continent(model.getValueAt(count, 0).toString(), Integer.parseInt(model.getValueAt(count, 1).toString())));
         }
         Continent.setContinents(continents);
+    }
+
+    /**
+     * This method to perform the action to add territories.
+     *
+     */
+    private void updateTerritories() {
+        ArrayList<ITerritory> territories = new ArrayList<ITerritory>();
+        for (int count = 0; count < model.getRowCount(); count++) {
+            ArrayList<String> adjacentTerritories = new ArrayList<String>();
+            if (this.jTable1.getSelectedRow() == count) {
+                if (Territory.getTerritories().size() > count) {
+                    for (int iterator = 0; iterator < model2.getRowCount(); iterator++) {
+                        adjacentTerritories.add(model2.getValueAt(iterator, 0).toString());
+                    }
+                }
+            } else {
+                if (Territory.getTerritories().size() > count) {
+                    adjacentTerritories = Territory.getTerritories().get(count).getAdjacents();
+                }
+            }
+            territories.add(new Territory(model.getValueAt(count, 0).toString(),
+                    Integer.parseInt(model.getValueAt(count, 1).toString()),
+                    Integer.parseInt(model.getValueAt(count, 2).toString()),
+                    model.getValueAt(count, 3).toString(),
+                    adjacentTerritories
+            ));
+        }
+        Territory.setTerritories(territories);
     }
 
     /**
