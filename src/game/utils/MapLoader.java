@@ -266,7 +266,7 @@ public class MapLoader {
                     }
                 }
                 if (seenCountriesSubgraph.size() != countriesSubgraph.size()) {
-                    throw new InvalidObjectException("Map has disconnected continent.");
+                    throw new InvalidObjectException("Map has disconnected continent: "+ continent.getName()+".");
                 }
             }
 
