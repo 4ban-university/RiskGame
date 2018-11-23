@@ -51,19 +51,36 @@ import mapeditor.Territory;
  */
 public class MapEditoForm extends javax.swing.JFrame {
 
-    static DefaultTableModel model;
+    static ArrayList<Continent> continents;
+
+    static void setAuthor(String authorParameter) {
+        author = authorParameter;
+    }
+
+    private String path;
     public ILoadedMap loadedMapObj;
+    public String pathSelected;
+    static String author = "";
+
+    static DefaultTableModel model;
+    static DefaultTableModel model2;
+    static DefaultTableModel model3;
+
+    private boolean preventionFlag = false;
 
     /**
      * This method Constructor add components to the Frame.
      *
      * @param ILoadedMap loadedMapObjCons object with the map information .
      */
-    public MapEditoForm(ILoadedMap loadedMapObjCons) {
+    public MapEditoForm(String pathSelectedCons, ILoadedMap loadedMapObjCons) {
+        pathSelected = pathSelectedCons;
         loadedMapObj = loadedMapObjCons;
         initComponents();
-        setDefaultCloseOperation(DISPOSE_ON_CLOSE);
+        continents = new ArrayList<Continent>();
+        path = pathSelected;
         this.model = (DefaultTableModel) jTable3.getModel();
+
         // add header of the table
         String header[] = new String[]{"Continent", "Control Value"};
 
@@ -75,6 +92,58 @@ public class MapEditoForm extends javax.swing.JFrame {
             this.model.addRow(new Object[]{cont.getContinentName(), cont.getControlValue()});
         }
         jTable3.setModel(this.model);
+
+        loadedMapObj = loadedMapObjCons;
+
+        jTable1.getSelectionModel().addListSelectionListener(new ListSelectionListener() {
+            public void valueChanged(ListSelectionEvent event) {
+                // do some actions here, for example
+                // print first column value from selected row
+                if (!preventionFlag) {
+                    selectAdjacent(jTable1.getSelectedRow());
+                }
+            }
+        });
+
+        this.model2 = (DefaultTableModel) jTable1.getModel();
+        this.model3 = (DefaultTableModel) jTable2.getModel();
+        // add header of the table
+        String header2[] = new String[]{"Territory", "Territory X", "Territory Y", "Continent"};
+        String header3[] = new String[]{"Name"};
+
+        // add header in table model
+        this.model2.setColumnIdentifiers(header2);
+        this.model2.setRowCount(0);
+        this.model3.setColumnIdentifiers(header3);
+        this.model3.setRowCount(0);
+        ArrayList<ITerritory> territories = Territory.getTerritories();
+        for (ITerritory ter : territories) {
+            this.model2.addRow(new Object[]{ter.getTerritoryName(), ter.getX(), ter.getY(), ter.getContinent()});
+        }
+        jTable1.setModel(this.model2);
+        selectAdjacent(0);
+        setDefaultCloseOperation(DISPOSE_ON_CLOSE);
+
+    }
+
+    /**
+     * This method to refresh the JTable with the territories adjacents.
+     *
+     * @param Interger pos position select in the JTable for territories.
+     */
+    public void selectAdjacent(Integer pos) {
+        this.model2.setRowCount(0);
+        ArrayList<ITerritory> terList = Territory.getTerritories();
+        System.out.println(pos);
+        System.out.println(terList.size());
+        if (terList.size() > pos) {
+            ITerritory ter = terList.get(pos);
+            ArrayList<String> adjacents = ter.getAdjacents();
+            System.out.println(adjacents);
+            for (String str : adjacents) {
+                this.model2.addRow(new Object[]{str});
+            }
+        }
     }
 
     /**
@@ -319,29 +388,23 @@ public class MapEditoForm extends javax.swing.JFrame {
                                         .addComponent(jLabel8)
                                         .addComponent(jTextField7, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                                         .addComponent(jButton7))
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 75, Short.MAX_VALUE)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 54, Short.MAX_VALUE)
                                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                                         .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                                                .addComponent(jScrollPane4, javax.swing.GroupLayout.PREFERRED_SIZE, 118, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                                .addGap(51, 51, 51))
+                                                .addComponent(jButton4)
+                                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                                .addComponent(jButton5))
                                         .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                                                        .addGroup(layout.createSequentialGroup()
-                                                                .addComponent(jButton4)
-                                                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                                                .addComponent(jButton5))
-                                                        .addGroup(layout.createSequentialGroup()
-                                                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                                                                        .addComponent(jTextField5, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                                                        .addComponent(jLabel6))
-                                                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                                                                        .addComponent(jTextField6, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                                                        .addComponent(jLabel7))))
-                                                .addGap(79, 79, 79)))
-                                .addGap(11, 11, 11)
+                                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                                                        .addComponent(jTextField5, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                                        .addComponent(jLabel6))
+                                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                                                        .addComponent(jTextField6, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                                        .addComponent(jLabel7)))
+                                        .addComponent(jScrollPane4, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 111, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                .addGap(90, 90, 90)
                                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                        .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 114, javax.swing.GroupLayout.PREFERRED_SIZE)
                                         .addGroup(layout.createSequentialGroup()
                                                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                                                         .addComponent(jTextField1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -363,20 +426,21 @@ public class MapEditoForm extends javax.swing.JFrame {
                                                 .addGap(12, 12, 12)
                                                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                                                         .addComponent(jLabel4)
-                                                        .addComponent(jTextField4, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))))
+                                                        .addComponent(jTextField4, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                                        .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 117, javax.swing.GroupLayout.PREFERRED_SIZE))
                                 .addGap(76, 76, 76)
-                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                                        .addGroup(layout.createSequentialGroup()
-                                                .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 150, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                                .addContainerGap())
+                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                                         .addGroup(layout.createSequentialGroup()
                                                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                                                         .addComponent(jLabel5, javax.swing.GroupLayout.Alignment.TRAILING)
                                                         .addComponent(jScrollPane3, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                                                         .addComponent(jButton3, javax.swing.GroupLayout.Alignment.TRAILING))
-                                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                                                .addComponent(jButton6)
-                                                .addGap(42, 42, 42))))
+                                                .addGap(73, 73, 73)
+                                                .addComponent(jButton6))
+                                        .addGroup(layout.createSequentialGroup()
+                                                .addGap(9, 9, 9)
+                                                .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 110, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                                .addGap(42, 42, 42))
         );
 
         pack();
@@ -384,13 +448,48 @@ public class MapEditoForm extends javax.swing.JFrame {
 
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {
 
-        loadedMapObj.deleteContinent(Continent.getContinents().get(jTable1.getSelectedRow()));
-        this.model.removeRow(jTable3.getSelectedRow());
-        this.updateContinents();
+        preventionFlag = true;
+        Integer index = jTable1.getSelectedRow();
+        this.model.removeRow(index);
+        ITerritory ter = Territory.getTerritories().get(index);
+        loadedMapObj.deleteTerritory(ter);
+        ArrayList<ITerritory> ters = Territory.getTerritories();
+        ters.remove(ter);
+        Territory.setTerritories(ters);
+        this.updateTerritories();
+        selectAdjacent(0);
+        preventionFlag = false;
+
     }
 
     private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {
 
+        Vector newRow = new Vector();
+        newRow.add(jTextField1.getText());
+        newRow.add(jTextField2.getText());
+        newRow.add(jTextField3.getText());
+        newRow.add(jTextField4.getText());
+        ITerritory ter = new Territory(jTextField1.getText(), Integer.parseInt(jTextField2.getText()), Integer.parseInt(jTextField3.getText()), jTextField4.getText(), new ArrayList<String>());
+        loadedMapObj.addTerritory(ter);
+        this.model.addRow(newRow);
+        this.updateTerritories();
+
+    }
+
+    private void jButton3ActionPerformed(java.awt.event.ActionEvent evt) {
+
+        Vector newRow = new Vector();
+        newRow.add(jTextPane1.getText());
+        this.model2.addRow(newRow);
+        this.updateTerritories();
+    }
+
+    private void jTextField5ActionPerformed(java.awt.event.ActionEvent evt) {
+        // TODO add your handling code here:
+    }
+
+    private void jButton4ActionPerformed(java.awt.event.ActionEvent evt) {
+        // TODO add your handling code here:
         Vector newRow = new Vector();
         newRow.add(jTextField5.getText());
         newRow.add(jTextField6.getText());
@@ -400,20 +499,11 @@ public class MapEditoForm extends javax.swing.JFrame {
         this.updateContinents();
     }
 
-    private void jButton3ActionPerformed(java.awt.event.ActionEvent evt) {
-        // TODO add your handling code here:
-    }
-
-    private void jTextField5ActionPerformed(java.awt.event.ActionEvent evt) {
-        // TODO add your handling code here:
-    }
-
-    private void jButton4ActionPerformed(java.awt.event.ActionEvent evt) {
-        // TODO add your handling code here:
-    }
-
     private void jButton5ActionPerformed(java.awt.event.ActionEvent evt) {
         // TODO add your handling code here:
+        loadedMapObj.deleteContinent(Continent.getContinents().get(jTable1.getSelectedRow()));
+        this.model.removeRow(jTable3.getSelectedRow());
+        this.updateContinents();
     }
 
     private void jButton7ActionPerformed(java.awt.event.ActionEvent evt) {
@@ -426,6 +516,35 @@ public class MapEditoForm extends javax.swing.JFrame {
             continents.add(new Continent(model.getValueAt(count, 0).toString(), Integer.parseInt(model.getValueAt(count, 1).toString())));
         }
         Continent.setContinents(continents);
+    }
+
+    /**
+     * This method to perform the action to add territories.
+     *
+     */
+    private void updateTerritories() {
+        ArrayList<ITerritory> territories = new ArrayList<ITerritory>();
+        for (int count = 0; count < model.getRowCount(); count++) {
+            ArrayList<String> adjacentTerritories = new ArrayList<String>();
+            if (this.jTable1.getSelectedRow() == count) {
+                if (Territory.getTerritories().size() > count) {
+                    for (int iterator = 0; iterator < model2.getRowCount(); iterator++) {
+                        adjacentTerritories.add(model2.getValueAt(iterator, 0).toString());
+                    }
+                }
+            } else {
+                if (Territory.getTerritories().size() > count) {
+                    adjacentTerritories = Territory.getTerritories().get(count).getAdjacents();
+                }
+            }
+            territories.add(new Territory(model.getValueAt(count, 0).toString(),
+                    Integer.parseInt(model.getValueAt(count, 1).toString()),
+                    Integer.parseInt(model.getValueAt(count, 2).toString()),
+                    model.getValueAt(count, 3).toString(),
+                    adjacentTerritories
+            ));
+        }
+        Territory.setTerritories(territories);
     }
 
     /**
