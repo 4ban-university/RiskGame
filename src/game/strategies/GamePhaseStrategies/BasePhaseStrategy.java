@@ -49,7 +49,7 @@ public class BasePhaseStrategy implements IGamePhaseStrategy {
     public void init(GameState gameState) {
         resetToAndFrom(gameState);
         unSelectCountries(gameState);
-        unHighlightCountries(gameState);;
+        unHighlightCountries(gameState);
     }
 
     /**

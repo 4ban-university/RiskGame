@@ -223,7 +223,7 @@ public class AiAggressivePlayerStrategy extends BasePlayerStrategy {
                     gameState.setNumberOfWhiteDicesSelected(Math.max(0, Math.min(gameState.getCountryTo().getArmy(), 2)));
 
                     rollDiceAndProcessResults(gameState);
-                    pauseAndRefresh(gameState, PAUSE);;
+                    pauseAndRefresh(gameState, PAUSE);
 
                     if (gameState.getMinArmiesToMoveAfterWin() > 0) {
                         gameState.getCountryTo().setArmy(gameState.getCountryFrom().getArmy() - 1);
