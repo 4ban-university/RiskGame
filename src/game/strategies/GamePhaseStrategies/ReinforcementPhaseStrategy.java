@@ -19,6 +19,7 @@ import static game.strategies.MapFunctionsUtil.selectCountry;
  * @author Dmitry Kryukov, Ksenia Popova
  * @see BasePhaseStrategy
  */
+// TODO реинфорсмент. выводит неправильное количество оставшихся армий, доходит до нуля и позволяет тыкнуть на страну когда всего 0 армий доступно для размещения.
 public class ReinforcementPhaseStrategy extends BasePhaseStrategy {
 
     /**
@@ -54,6 +55,7 @@ public class ReinforcementPhaseStrategy extends BasePhaseStrategy {
 
         // Change current player
         gameState.setCurrentPlayer(gameState.getPlayers().get((gameState.getPlayers().indexOf(gameState.getCurrentPlayer()) + 1) % gameState.getPlayers().size()));
+        System.out.println("\n----------------------------------------------------------------------------\n");
         System.out.println("Select next Player. Next Player is " + gameState.getCurrentPlayer().getName());
 
         // Add base armies
@@ -101,7 +103,6 @@ public class ReinforcementPhaseStrategy extends BasePhaseStrategy {
      */
     @Override
     public void nextTurnButton(GameState gameState) {
-
         int cards = 0;
         for (Integer i : gameState.getCurrentPlayer().getCardsEnumIntegerMap().values()) {
             cards += i;

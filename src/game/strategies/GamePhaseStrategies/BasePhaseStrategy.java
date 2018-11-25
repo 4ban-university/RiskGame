@@ -21,7 +21,7 @@ public class BasePhaseStrategy implements IGamePhaseStrategy {
      * @param player
      * @return boolean
      */
-    static boolean isGameWonBy(GameState gameState, Player player) {
+    public static boolean isGameWonBy(GameState gameState, Player player) {
         for (Country country : gameState.getCountries()) {
             if (country.getPlayer() != player) {
                 return false;
@@ -50,6 +50,11 @@ public class BasePhaseStrategy implements IGamePhaseStrategy {
         resetToAndFrom(gameState);
         unSelectCountries(gameState);
         unHighlightCountries(gameState);
+        if (gameState.getCurrentPlayer() != null && gameState.getCurrentPlayer().isComputerPlayer()) {
+            gameState.setNextTurnButton(false);
+        } else {
+            gameState.setNextTurnButton(true);
+        }
     }
 
     /**
@@ -60,6 +65,7 @@ public class BasePhaseStrategy implements IGamePhaseStrategy {
      */
     @Override
     public void mapClick(GameState gameState, int x, int y) {
+        // TODO What are these methods? will they implemented?
         System.out.println("The mapClick method is not implemented in " + this.getClass().getName() + " strategy.");
     }
 
