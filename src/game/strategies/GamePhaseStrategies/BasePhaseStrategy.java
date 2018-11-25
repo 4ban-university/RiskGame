@@ -6,6 +6,12 @@ import game.model.Player;
 
 import java.util.List;
 
+/**
+ * Base phase strategy class. Required to prepare game state for base phase.
+ *
+ * @author Dmitry Kryukov, Ksenia Popova
+ * @see IGamePhaseStrategy
+ */
 public class BasePhaseStrategy implements IGamePhaseStrategy {
 
     /**
@@ -53,7 +59,13 @@ public class BasePhaseStrategy implements IGamePhaseStrategy {
         gameState.setCountryTo(null);
     }
 
-
+    /**
+     * Selection of country. Force required states.
+     * @param gameState
+     * @param x
+     * @param y
+     * @return boolean
+     */
     boolean selectCountry(GameState gameState, int x, int y) {
         gameState.setCurrentCountry(null);
 
@@ -82,6 +94,10 @@ public class BasePhaseStrategy implements IGamePhaseStrategy {
         return true;
     }
 
+    /**
+     * Debug messages.
+     * @param gameState
+     */
     static void debugMessage(GameState gameState) {
         System.out.println("-----");
         System.out.println("Current phase " + gameState.getCurrentGamePhase().toString());
@@ -89,31 +105,57 @@ public class BasePhaseStrategy implements IGamePhaseStrategy {
         System.out.println("-----");
     }
 
+    /**
+     * Initialization of base phase strategy.
+     * @param gameState
+     */
     @Override
     public void init(GameState gameState) {
         System.out.println("The init method is not implemented in " + this.getClass().getName() + " strategy.");
     }
 
+    /**
+     * Map click for base strategy
+     * @param gameState
+     * @param x
+     * @param y
+     */
     @Override
     public void mapClick(GameState gameState, int x, int y) {
         System.out.println("The mapClick method is not implemented in " + this.getClass().getName() + " strategy.");
     }
 
+    /**
+     * Next turn button behavior
+     * @param gameState
+     */
     @Override
     public void nextTurnButton(GameState gameState) {
         System.out.println("The nextTurnButton method is not implemented in " + this.getClass().getName() + " strategy.");
     }
 
+    /**
+     * Exchange behavoir
+     * @param gameState
+     */
     @Override
     public void exchangeButton(GameState gameState) {
         System.out.println("The exchangeButton method is not implemented in " + this.getClass().getName() + " strategy.");
     }
 
+    /**
+     * Attack behavoir
+     * @param gameState
+     */
     @Override
     public void attackButton(GameState gameState) {
         System.out.println("The attackButton method is not implemented in " + this.getClass().getName() + " strategy.");
     }
 
+    /**
+     * cleaning
+     * @param gameState
+     */
     @Override
     public void cleanup(GameState gameState) {
         System.out.println("The cleanup method is not implemented in " + this.getClass().getName() + " strategy.");
