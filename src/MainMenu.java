@@ -1,4 +1,5 @@
 import game.utils.MapLoader;
+import game.utils.TournamentMenu;
 import mapeditor.Continent;
 import mapeditor.ILoadedMap;
 import mapeditor.IMapLoader;
@@ -9,12 +10,7 @@ import javax.swing.*;
 import javax.swing.border.TitledBorder;
 import javax.swing.filechooser.FileNameExtensionFilter;
 import javax.swing.filechooser.FileSystemView;
-import java.awt.Dimension;
-import java.awt.EventQueue;
-import java.awt.GridBagConstraints;
-import java.awt.GridBagLayout;
-import java.awt.Insets;
-//import java.awt.List;
+import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.File;
@@ -181,8 +177,10 @@ public class MainMenu extends JFrame {
         JPanel buttonPanel = new JPanel();
         JPanel startButtons = new JPanel();
 
+
         TitledBorder title = BorderFactory.createTitledBorder("Quick access");
         buttonPanel.setBorder(title);
+
 
         buttonPanel.setPreferredSize(new Dimension(600, 50));
         buttonPanel.setLayout(new GridBagLayout());
@@ -207,6 +205,7 @@ public class MainMenu extends JFrame {
                 playersModes.add("Human");
                 playersModes.add("Human");
                 String filePath = filePath();
+                MainMenu.this.setVisible(false);
                 MapLoader loader = new MapLoader(players, filePath, false, playersModes);
             }
         });
@@ -221,6 +220,7 @@ public class MainMenu extends JFrame {
                 playersModes.add("Human");
 
                 String filePath = filePath();
+                MainMenu.this.setVisible(false);
                 MapLoader loader = new MapLoader(players, filePath, false, playersModes);
             }
         });
@@ -236,6 +236,7 @@ public class MainMenu extends JFrame {
                 playersModes.add("Human");
 
                 String filePath = filePath();
+                MainMenu.this.setVisible(false);
                 MapLoader loader = new MapLoader(players, filePath,false, playersModes);
             }
         });
@@ -336,6 +337,7 @@ public class MainMenu extends JFrame {
                     System.out.println("You can't play alone or without any players at all.");
                 } else {
                     String filePath = filePath();
+                    MainMenu.this.setVisible(false);
                     MapLoader loader = new MapLoader(players, filePath, false, playersModes);
                 }
             }
@@ -353,14 +355,14 @@ public class MainMenu extends JFrame {
         JPanel tournamentPanel = new JPanel();
         JPanel tournamentButtons = new JPanel();
 
-        TitledBorder title = BorderFactory.createTitledBorder("Tournament");
+        TitledBorder title = BorderFactory.createTitledBorder("Tournament mode");
         tournamentPanel.setBorder(title);
 
         tournamentPanel.setPreferredSize(new Dimension(600, 50));
         tournamentPanel.setLayout(new GridBagLayout());
         GridBagConstraints gbc = new GridBagConstraints();
         gbc.insets = new Insets(5, 5, 0, 0);
-        JButton tournament = new JButton(("Tournament"));
+        JButton tournament = new JButton(("Tournament game"));
 
         gbc.gridx = 1;
         gbc.gridy = 1;
@@ -372,10 +374,8 @@ public class MainMenu extends JFrame {
             @Override
             public void actionPerformed(ActionEvent arg0) {
                 System.out.println("DEBUG: Chosen tournament\n ------------------------ \n");
-//                int players = 2;
-//                String game_mode = "tournament";
-//                String filePath = filePath();
-//                MapLoader loader = new MapLoader(players, filePath, false, game_mode);
+                MainMenu.this.setVisible(false);
+                new TournamentMenu();
             }
         });
         return tournamentButtons;
