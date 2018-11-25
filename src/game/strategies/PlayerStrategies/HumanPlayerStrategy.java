@@ -6,6 +6,7 @@ import game.model.GameState;
 import game.model.enums.CardsEnum;
 
 import java.util.stream.Collectors;
+
 import static game.strategies.MapFunctionsUtil.isMoreAttacks;
 import static game.strategies.MapFunctionsUtil.resetToAndFrom;
 import static game.strategies.MapFunctionsUtil.unHighlightCountries;
@@ -17,6 +18,18 @@ import static game.strategies.MapFunctionsUtil.unHighlightCountries;
  * @see BasePlayerStrategy
  */
 public class HumanPlayerStrategy extends BasePlayerStrategy {
+
+
+    @Override
+    public void placeArmies(GameState gameState) {
+        unHighlightCountries(gameState);
+        if (gameState.getCurrentPlayer().getArmies() > 0 && gameState.getCurrentCountry().getPlayer() == gameState.getCurrentPlayer()) {
+            gameState.getCurrentCountry().setSelected(true);
+            gameState.getCurrentCountry().setArmy(gameState.getCurrentCountry().getArmy() + 1);
+            gameState.getCurrentPlayer().setArmies(gameState.getCurrentPlayer().getArmies() - 1);
+            gameState.setCurrentTurnPhraseText("Select a country to place your army. Armies to place  " + gameState.getCurrentPlayer().getArmies());
+        }
+    }
 
     /**
      * Reinforcement for player.
@@ -31,6 +44,7 @@ public class HumanPlayerStrategy extends BasePlayerStrategy {
         } else {
             unHighlightCountries(gameState);
             // TODO automatic go to next turn if no more armies to place
+            // check if this line if fine and in the correct place.
             Game.getInstance().getGamePhaseStrategy().nextTurnButton(gameState);
         }
     }
@@ -134,6 +148,7 @@ public class HumanPlayerStrategy extends BasePlayerStrategy {
         }
         if (gameState.getCountryFrom().getArmy() == 1){
             // TODO automatic go to next turn if user can not move anything to another country
+            // check is this line if in correct place and works fine
             Game.getInstance().getGamePhaseStrategy().nextTurnButton(gameState);
         }
     }

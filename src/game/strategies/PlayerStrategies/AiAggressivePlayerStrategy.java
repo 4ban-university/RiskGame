@@ -3,12 +3,12 @@ package game.strategies.PlayerStrategies;
 import game.Game;
 import game.model.Country;
 import game.model.GameState;
-import game.model.enums.CardsEnum;
 
 import javax.swing.*;
 import java.util.List;
-import java.util.stream.Collectors;
 
+import static game.strategies.MapFunctionsUtil.getCountryWithMaxArmy;
+import static game.strategies.MapFunctionsUtil.getCountryWithMaxOpponentNeighbours;
 import static game.strategies.MapFunctionsUtil.resetToAndFrom;
 import static game.strategies.MapFunctionsUtil.unHighlightCountries;
 import static game.strategies.MapFunctionsUtil.unSelectCountries;
@@ -20,6 +20,8 @@ import static game.strategies.MapFunctionsUtil.unSelectCountries;
  * @author Dmitry Kryukov
  * @see BasePlayerStrategy
  */
+// TODO 1. аггрессивная стратегия, нет авто перехода когда не может атаковать. Он делает фортифай автоматически и висит, ждет.
+// TODO 2. аггрессивная стратегия, нет окончания игры, продолжает играть даже когда у первого игрока нет стран
 public class AiAggressivePlayerStrategy extends BasePlayerStrategy {
     /**
      * Place Armies.
@@ -27,7 +29,8 @@ public class AiAggressivePlayerStrategy extends BasePlayerStrategy {
      */
     @Override
     public void placeArmies(GameState gameState) {
-
+        System.out.println("AI Aggressive Place Armies!");
+        new PlaceArmiesWorker(gameState).execute();
     }
 
     /**
@@ -36,6 +39,8 @@ public class AiAggressivePlayerStrategy extends BasePlayerStrategy {
      */
     @Override
     public void reinforce(GameState gameState) {
+        exchangeCards(gameState);
+        pauseAndRefresh(gameState, PAUSE * 2);
         System.out.println("AI Aggressive Reinforce!");
         new ReinforceWorker(gameState).execute();
     }
@@ -54,34 +59,67 @@ public class AiAggressivePlayerStrategy extends BasePlayerStrategy {
      * Fortify phase for AI via worker
      * @param gameState
      */
-    // Copy from Human
     @Override
     public void fortify(GameState gameState) {
         System.out.println("AI Aggressive Fortify!");
         new FortifyWorker(gameState).execute();
     }
 
-    /**
-     * Exchange action for AI.
-     * Automatic exchange feature if there are 3 cards of equal type
-     * @param gameState
-     */
-    // Copy from Human
-    @Override
-    public void exchange(GameState gameState) {
-        String phrase = "";
-        if (gameState.getSelectedCardsToExchange().size() == 3) {
-            for (CardsEnum cardsEnum : gameState.getSelectedCardsToExchange()) {
-                gameState.getCurrentPlayer().getCardsEnumIntegerMap().put(cardsEnum, gameState.getCurrentPlayer().getCardsEnumIntegerMap().get(cardsEnum) - 1);
-            }
-            phrase = String.join(", ", gameState.getSelectedCardsToExchange().stream().map(CardsEnum::getName).collect(Collectors.toList())) + " cards";
-        } else if (gameState.getSelectedCardsToExchange().size() == 1) {
-            gameState.getCurrentPlayer().getCardsEnumIntegerMap().put(gameState.getSelectedCardsToExchange().get(0), gameState.getCurrentPlayer().getCardsEnumIntegerMap().get(gameState.getSelectedCardsToExchange().get(0)) - 3);
-            phrase = gameState.getSelectedCardsToExchange().get(0).getName() + " card";
+    private class PlaceArmiesWorker extends SwingWorker<Void, String> {
+
+        GameState gameState;
+
+        /**
+         * Constructor of the class.
+         *
+         * @param gameState
+         */
+        public PlaceArmiesWorker(GameState gameState) {
+            this.gameState = gameState;
         }
-        gameState.getCurrentPlayer().setArmies(gameState.getCurrentPlayer().getArmies() + gameState.getArmiesToCardExchange());
-        gameState.setArmiesToCardExchange(gameState.getArmiesToCardExchange() + gameState.getARMIES_TO_EXCHANGE_INCREASE());
-        gameState.setCurrentTurnPhraseText("Exchanged " + phrase + " for " + gameState.getARMIES_TO_EXCHANGE_INCREASE() + " armies. Armies to place " + gameState.getCurrentPlayer().getArmies());
+
+        /**
+         * Automatic reinforcement in backgrounds.
+         *
+         * @return
+         */
+        @Override
+        protected Void doInBackground() {
+            Country toPlaceArmy = getCountryWithMaxArmy(gameState, 1);
+            if (toPlaceArmy == null) {
+                toPlaceArmy = getCountryWithMaxOpponentNeighbours(gameState);
+            }
+            if (toPlaceArmy != null) {
+                toPlaceArmy.setSelected(true);
+                toPlaceArmy.setArmy(toPlaceArmy.getArmy() + 1);
+                gameState.getCurrentPlayer().setArmies(gameState.getCurrentPlayer().getArmies() - 1);
+                String message = gameState.getCurrentPlayer().getName() + " placed army to " + toPlaceArmy.getName() + " total armies " + gameState.getCurrentPlayer().getArmies();
+                gameState.setCurrentTurnPhraseText(message);
+                publish(message);
+            }
+            pauseAndRefresh(gameState, PAUSE);
+            return null;
+        }
+
+        /**
+         * Debug method
+         *
+         * @param chunks
+         */
+        @Override
+        protected void process(List<String> chunks) {
+            for (String c : chunks) {
+                System.out.println(c);
+            }
+        }
+
+        /**
+         * Automatic go to next turn when phase is done
+         */
+        @Override
+        protected void done() {
+            Game.getInstance().getGamePhaseStrategy().nextTurnButton(gameState);
+        }
     }
 
     /**
@@ -108,6 +146,7 @@ public class AiAggressivePlayerStrategy extends BasePlayerStrategy {
         protected Void doInBackground() {
             Country toReinforce = null;
             int maxArmies = 1;
+            //TODO: replace with util function
             for (Country country : gameState.getCountries()) {
                 if (country.getPlayer() == gameState.getCurrentPlayer() && country.getArmy() > maxArmies) {
                     toReinforce = country;
@@ -115,6 +154,7 @@ public class AiAggressivePlayerStrategy extends BasePlayerStrategy {
                 }
             }
             if (toReinforce == null) {
+                //TODO: replace with util function
                 int maxEnemyNeighbors = 0;
                 for (Country country : gameState.getCountries()) {
                     if (country.getPlayer() == gameState.getCurrentPlayer()) {
