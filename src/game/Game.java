@@ -94,24 +94,6 @@ public class Game {
     }
 
     /**
-     * Check if player can attack anybody or go to next turn
-     *
-     * @return
-     */
-    public boolean isMoreAttacks() {
-        for (Country country : gameState.getCountries()) {
-            if (country.getPlayer() == gameState.getCurrentPlayer() && country.getArmy() >= 2) {
-                for (Country neighbor : country.getNeighbours()) {
-                    if (neighbor.getPlayer() != gameState.getCurrentPlayer()) {
-                        return true;
-                    }
-                }
-            }
-        }
-        return false;
-    }
-
-    /**
      * Getter for the game state. Needs to get the game state from the controller
      * @return gameState
      */

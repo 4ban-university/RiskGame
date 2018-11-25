@@ -1,6 +1,5 @@
 package game.strategies.PlayerStrategies;
 
-import game.model.Country;
 import game.model.Dice;
 import game.model.GameState;
 
@@ -11,41 +10,7 @@ import game.model.GameState;
  * @see IPlayerStrategy
  */
 public class BasePlayerStrategy implements IPlayerStrategy {
-
-    /**
-     * Reset highlights
-     */
-    static void resetToAndFrom(GameState gameState) {
-        if (gameState.getCountryFrom() != null) {
-            gameState.getCountryFrom().unSelect(false);
-        }
-        gameState.setCountryFrom(null);
-
-        if (gameState.getCountryTo() != null) {
-            gameState.getCountryTo().unSelect(false);
-        }
-        gameState.setCountryTo(null);
-    }
-
-    /**
-     * Method that unhighlight the players countries
-     */
-    static void unHighlightCountries(GameState gameState) {
-        for (Country c : gameState.getCountries()) {
-            c.setHighlighted(false);
-        }
-    }
-
-    /**
-     * Method that unhighlight the players countries
-     */
-    //TODO: move to Util
-    static void unSelectCountries(GameState gameState) {
-        for (Country c : gameState.getCountries()) {
-            c.setSelected(false);
-        }
-    }
-
+    public final int PAUSE = 500;
     /**
      * Method describes the behavior of the game during rolling the dices. i.e. attacking phase.
      * Show status messages.
@@ -55,7 +20,7 @@ public class BasePlayerStrategy implements IPlayerStrategy {
     static void rollDiceAndProcessResults(GameState gameState) {
         Dice.rollDice(gameState.getNumberOfRedDicesSelected(), gameState.getNumberOfWhiteDicesSelected(), gameState.getRedDice(), gameState.getWhiteDice());
         // TODO add additional message to show which user whom attack with number of dices
-        gameState.setCurrentTurnPhraseText(gameState.getCurrentPlayer().getName()+" attack "+gameState.getCountryTo().getPlayer().getName()+" with "+gameState.getNumberOfRedDicesSelected()+" dices.");
+        gameState.setCurrentTurnPhraseText(gameState.getCurrentPlayer().getName() + " attack " + gameState.getCountryTo().getPlayer().getName() + " with " + gameState.getNumberOfRedDicesSelected() + " dices.");
         for (int i = 0; i < Math.min(gameState.getNumberOfRedDicesSelected(), gameState.getNumberOfWhiteDicesSelected()); i++) {
             if (gameState.getRedDice()[i].getNumber() > gameState.getWhiteDice()[i].getNumber()) {
                 gameState.getCountryTo().setArmy(gameState.getCountryTo().getArmy() - 1);
@@ -66,7 +31,7 @@ public class BasePlayerStrategy implements IPlayerStrategy {
         if (gameState.getCountryTo().getArmy() == 0) {
             gameState.setWinBattle(true);
             // TODO Add message that attacker win battle
-            gameState.setCurrentTurnPhraseText(gameState.getCurrentPlayer().getName()+" won the battle! Move at least "+gameState.getNumberOfRedDicesSelected()+" armies to the defeated country. And click on free space in the map.");
+            gameState.setCurrentTurnPhraseText(gameState.getCurrentPlayer().getName() + " won the battle! Move at least " + gameState.getNumberOfRedDicesSelected() + " armies to the defeated country.");
             gameState.getCountryTo().setPlayer(gameState.getCurrentPlayer());
             gameState.setMinArmiesToMoveAfterWin(gameState.getNumberOfRedDicesSelected());
             gameState.setGiveACard(true);
@@ -76,12 +41,12 @@ public class BasePlayerStrategy implements IPlayerStrategy {
     /**
      * Pause method for AI strategies.
      * @param gameState
-     * @param seconds
+     * @param milliseconds
      */
-    static void pauseAndRefresh(GameState gameState, int seconds) {
+    static void pauseAndRefresh(GameState gameState, int milliseconds) {
         gameState.notifyObservers();
         try {
-            Thread.sleep(seconds * 1000);
+            Thread.sleep(milliseconds);
         } catch (InterruptedException ex) {
             Thread.currentThread().interrupt();
         }

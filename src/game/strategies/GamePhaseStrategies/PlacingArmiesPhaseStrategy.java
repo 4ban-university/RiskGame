@@ -7,6 +7,9 @@ import game.model.Player;
 
 import static game.strategies.GamePhaseStrategies.GamePhaseEnum.ATTACK;
 import static game.strategies.GamePhaseStrategies.GamePhaseEnum.PLACING_ARMIES;
+import static game.strategies.MapFunctionsUtil.highlightPayerCountries;
+import static game.strategies.MapFunctionsUtil.selectCountry;
+import static game.strategies.MapFunctionsUtil.unHighlightCountries;
 
 /**
  * Startup phase strategy.
@@ -23,6 +26,8 @@ public class PlacingArmiesPhaseStrategy extends BasePhaseStrategy {
      */
     @Override
     public void init(GameState gameState) {
+        super.init(gameState);
+
         gameState.setCurrentGamePhase(PLACING_ARMIES);
         gameState.setCurrentPlayer(gameState.getPlayers().get(0));
         gameState.setNextTurnButton(false);

@@ -2,6 +2,7 @@
 game
 game.model
 game.model.enums
+game.strategies
 game.strategies.GamePhaseStrategies
 game.strategies.PlayerStrategies
 game.ui

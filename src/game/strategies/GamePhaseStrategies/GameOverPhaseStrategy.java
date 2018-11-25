@@ -17,9 +17,10 @@ public class GameOverPhaseStrategy extends BasePhaseStrategy {
      */
     @Override
     public void init(GameState gameState) {
+        super.init(gameState);
+
         gameState.setCurrentGamePhase(GAME_OVER);
         gameState.setCurrentTurnPhraseText("Game over. The " + gameState.getCurrentPlayer().getName() + " win.");
-        unHighlightCountries(gameState);
         gameState.setNextTurnButton(false);
     }
 }

@@ -5,6 +5,8 @@ import game.model.GameState;
 
 import static game.strategies.GamePhaseStrategies.GamePhaseEnum.FORTIFICATION;
 import static game.strategies.GamePhaseStrategies.GamePhaseEnum.REINFORCEMENT;
+import static game.strategies.MapFunctionsUtil.highlightPayerCountries;
+import static game.strategies.MapFunctionsUtil.selectCountry;
 
 /**
  * Fortification phase strategy class.
@@ -22,14 +24,12 @@ public class FortificationPhaseStrategy extends BasePhaseStrategy {
      */
     @Override
     public void init(GameState gameState) {
+        super.init(gameState);
+
         gameState.setCurrentGamePhase(FORTIFICATION);
         gameState.setCurrentTurnPhraseText("Select a country to move armies from. ");
 
         System.out.println("Next Turn Button Clicked. Next Player is " + gameState.getCurrentGamePhase());
-
-        unHighlightCountries(gameState);
-        unSelectCountries(gameState);
-        resetToAndFrom(gameState);
 
         highlightPayerCountries(gameState.getCountries(), gameState.getCurrentPlayer());
 

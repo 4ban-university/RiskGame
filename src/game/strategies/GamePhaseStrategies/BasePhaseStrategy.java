@@ -4,7 +4,9 @@ import game.model.Country;
 import game.model.GameState;
 import game.model.Player;
 
-import java.util.List;
+import static game.strategies.MapFunctionsUtil.resetToAndFrom;
+import static game.strategies.MapFunctionsUtil.unHighlightCountries;
+import static game.strategies.MapFunctionsUtil.unSelectCountries;
 
 /**
  * Base phase strategy class. Required to prepare game state for base phase.
@@ -13,72 +15,6 @@ import java.util.List;
  * @see IGamePhaseStrategy
  */
 public class BasePhaseStrategy implements IGamePhaseStrategy {
-
-    /**
-     * Method to highlight the player countries
-     */
-    static void highlightPayerCountries(List<Country> countries, Player player) {
-        for (Country c : countries) {
-            if (c.getPlayer() == player) {
-                c.setHighlighted(true);
-            }
-        }
-    }
-
-    /**
-     * Method that unhighlight the players countries
-     */
-    static void unHighlightCountries(GameState gameState) {
-        for (Country c : gameState.getCountries()) {
-            c.setHighlighted(false);
-        }
-    }
-
-    /**
-     * Method that unhighlight the players countries
-     */
-    static void unSelectCountries(GameState gameState) {
-        for (Country c : gameState.getCountries()) {
-            c.setSelected(false);
-        }
-    }
-
-    /**
-     * Reset highlights
-     */
-    static void resetToAndFrom(GameState gameState) {
-        unHighlightCountries(gameState);
-        if (gameState.getCountryFrom() != null) {
-            gameState.getCountryFrom().unSelect(false);
-        }
-        gameState.setCountryFrom(null);
-
-        if (gameState.getCountryTo() != null) {
-            gameState.getCountryTo().unSelect(false);
-        }
-        gameState.setCountryTo(null);
-    }
-
-    /**
-     * Selection of country. Force required states.
-     * @param gameState
-     * @param x
-     * @param y
-     * @return boolean
-     */
-    boolean selectCountry(GameState gameState, int x, int y) {
-        gameState.setCurrentCountry(null);
-
-        for (Country country : gameState.getCountries()) {
-            if (country.isInBorder(x, y)) {
-                gameState.setCurrentCountry(country);
-                System.out.println("Selected " + country.getName());
-                return true;
-            }
-        }
-        return false;
-    }
-
     /**
      * Check if game was won by player
      *
@@ -111,7 +47,9 @@ public class BasePhaseStrategy implements IGamePhaseStrategy {
      */
     @Override
     public void init(GameState gameState) {
-        System.out.println("The init method is not implemented in " + this.getClass().getName() + " strategy.");
+        resetToAndFrom(gameState);
+        unSelectCountries(gameState);
+        unHighlightCountries(gameState);;
     }
 
     /**
