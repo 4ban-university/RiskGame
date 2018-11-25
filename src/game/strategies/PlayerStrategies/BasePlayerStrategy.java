@@ -4,6 +4,12 @@ import game.model.Country;
 import game.model.Dice;
 import game.model.GameState;
 
+/**
+ * Base player strategy. Describes the basic player features.
+ *
+ * @author Dmitry Kryukov, Ksenia popova
+ * @see IPlayerStrategy
+ */
 public class BasePlayerStrategy implements IPlayerStrategy {
 
     /**
@@ -40,6 +46,12 @@ public class BasePlayerStrategy implements IPlayerStrategy {
         }
     }
 
+    /**
+     * Method describes the behavior of the game during rolling the dices. i.e. attacking phase.
+     * Show status messages.
+     * Setup required game states
+     * @param gameState
+     */
     static void rollDiceAndProcessResults(GameState gameState) {
         Dice.rollDice(gameState.getNumberOfRedDicesSelected(), gameState.getNumberOfWhiteDicesSelected(), gameState.getRedDice(), gameState.getWhiteDice());
         // TODO add additional message to show which user whom attack with number of dices
@@ -61,6 +73,11 @@ public class BasePlayerStrategy implements IPlayerStrategy {
         }
     }
 
+    /**
+     * Pause method for AI strategies.
+     * @param gameState
+     * @param seconds
+     */
     static void pauseAndRefresh(GameState gameState, int seconds) {
         gameState.notifyObservers();
         try {
@@ -70,31 +87,55 @@ public class BasePlayerStrategy implements IPlayerStrategy {
         }
     }
 
+    /**
+     * Method need to be implemented
+     * @param gameState
+     */
     @Override
     public void placeArmies(GameState gameState) {
         System.out.println("Place Armies is not implemented in " + this.getClass().getName() + " strategy.");
     }
 
+    /**
+     * method needs to be implemented
+     * @param gameState
+     */
     @Override
     public void exchange(GameState gameState) {
         System.out.println("Exchange is not implemented in " + this.getClass().getName() + " strategy.");
     }
 
+    /**
+     * method needs to be implemented
+     * @param gameState
+     */
     @Override
     public void reinforce(GameState gameState) {
         System.out.println("Reinforcement is not implemented in " + this.getClass().getName() + " strategy.");
     }
 
+    /**
+     * method needs to be implemented
+     * @param gameState
+     */
     @Override
     public void beforeAndAfterAttack(GameState gameState) {
         System.out.println("BeforeAndAfterAttack is not implemented in " + this.getClass().getName() + " strategy.");
     }
 
+    /**
+     * method needs to be implemented
+     * @param gameState
+     */
     @Override
     public void attack(GameState gameState) {
         System.out.println("Attacking is not implemented in " + this.getClass().getName() + " strategy.");
     }
 
+    /**
+     * method needs to be implemented
+     * @param gameState
+     */
     @Override
     public void fortify(GameState gameState) {
         System.out.println("Fortifying is not implemented in " + this.getClass().getName() + " strategy.");

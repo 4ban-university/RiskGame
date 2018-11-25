@@ -7,10 +7,17 @@ import game.model.enums.CardsEnum;
 
 import java.util.stream.Collectors;
 
+/**
+ * Human player strategy. Describes the actions for human player.
+ *
+ * @author Dmitry Kryukov, Ksenia Popova
+ * @see BasePlayerStrategy
+ */
 public class HumanPlayerStrategy extends BasePlayerStrategy {
 
     /**
-     * Reinforcement for player
+     * Reinforcement for player.
+     * Setup requiresd game states. Show status messages
      */
     @Override
     public void reinforce(GameState gameState) {
@@ -26,7 +33,11 @@ public class HumanPlayerStrategy extends BasePlayerStrategy {
     }
 
     /**
-     * Preparing for attach phase
+     * Preparing for attack phase
+     * Checks for winning or failing the battles.
+     * Setup required game states
+     * Force next turn if needed.
+     * Show status messages for attack phase
      */
     @Override
     public void beforeAndAfterAttack(GameState gameState) {
@@ -84,6 +95,7 @@ public class HumanPlayerStrategy extends BasePlayerStrategy {
 
     /**
      * Attack phase
+     * Force base player strategy method roll dice.
      */
     @Override
     public void attack(GameState gameState) {
@@ -112,6 +124,9 @@ public class HumanPlayerStrategy extends BasePlayerStrategy {
 
     /**
      * Fortification for Player
+     * Setup required game states.
+     * Show status messages
+     * Automatic go to next turn if user can't move anything to another counrty
      */
     @Override
     public void fortify(GameState gameState) {
