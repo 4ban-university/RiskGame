@@ -43,10 +43,10 @@ public class MapLoader implements IMapLoader {
 	public void loadmap(String filePath) {
 		initDataStructures();
 		readmap(filePath);
-		if(verifyLoadedMap() == false) {
+/*		if(verifyLoadedMap() == false) {
 			System.out.println("The map cannot be loaded");
 			this.loadedMapObj = null;
-		}
+		}*/
 	}
 	
 	/**
