@@ -4,7 +4,7 @@ import mapeditor.Continent;
 import mapeditor.ILoadedMap;
 import mapeditor.IMapLoader;
 import mapeditor.Territory;
-import mapeditor.gui.MapEditoForm;
+import mapeditor.gui.MapEditor;
 
 import javax.swing.*;
 import javax.swing.border.TitledBorder;
@@ -125,7 +125,7 @@ public class MainMenu extends JFrame {
                     loadedMapObj = mapLoaderObj.getLoadedMap();
                     //Continent.setContinents(loadedMapObj.getContinents());
                     //Territory.setTerritories(loadedMapObj.getTerritories());
-                    MapEditoForm ex = new MapEditoForm("", loadedMapObj);
+                    MapEditor ex = new MapEditor("", loadedMapObj);
                     ex.setVisible(true);
                 });
 
@@ -146,7 +146,7 @@ public class MainMenu extends JFrame {
                         loadedMapObj = mapLoaderObj.getLoadedMap();
                         Continent.setContinents(loadedMapObj.getContinents());
                         Territory.setTerritories(loadedMapObj.getTerritories());
-                        MapEditoForm ex = new MapEditoForm(selectedFile.getAbsolutePath(), loadedMapObj);
+                        MapEditor ex = new MapEditor(selectedFile.getAbsolutePath(), loadedMapObj);
                         ex.setVisible(true);
                     }else{
                         //Deu pau manda mensagem de erro ai tiosao
