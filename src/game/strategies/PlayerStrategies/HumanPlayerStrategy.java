@@ -10,7 +10,7 @@ import java.util.stream.Collectors;
 
 import static game.strategies.GamePhaseStrategies.BasePhaseStrategy.isGameWonBy;
 import static game.strategies.GamePhaseStrategies.GamePhaseEnum.GAME_OVER;
-import static game.strategies.MapFunctionsUtil.isMoreAttacks;
+import static game.strategies.MapFunctionsUtil.isCountyWithMoreThenOneArmy;
 import static game.strategies.MapFunctionsUtil.resetToAndFrom;
 import static game.strategies.MapFunctionsUtil.unHighlightCountries;
 
@@ -25,13 +25,12 @@ public class HumanPlayerStrategy extends BasePlayerStrategy {
 
     @Override
     public void placeArmies(GameState gameState) {
-        unHighlightCountries(gameState);
-        if (gameState.getCurrentPlayer().getArmies() > 0 && gameState.getCurrentCountry().getPlayer() == gameState.getCurrentPlayer()) {
-            gameState.getCurrentCountry().setSelected(true);
-            gameState.getCurrentCountry().setArmy(gameState.getCurrentCountry().getArmy() + 1);
-            gameState.getCurrentPlayer().setArmies(gameState.getCurrentPlayer().getArmies() - 1);
-            gameState.setCurrentTurnPhraseText("Select a country to place your army. Armies to place  " + gameState.getCurrentPlayer().getArmies());
-        }
+        gameState.getCurrentCountry().setSelected(true);
+        gameState.getCurrentCountry().setArmy(gameState.getCurrentCountry().getArmy() + 1);
+        gameState.getCurrentPlayer().setArmies(gameState.getCurrentPlayer().getArmies() - 1);
+        String message = gameState.getCurrentPlayer().getName() + " placed army to " + gameState.getCurrentCountry().getName() + " total armies " + gameState.getCurrentPlayer().getArmies();
+        gameState.setCurrentTurnPhraseText(message);
+        System.out.println(message);
     }
 
     /**
@@ -61,8 +60,6 @@ public class HumanPlayerStrategy extends BasePlayerStrategy {
      */
     @Override
     public void beforeAndAfterAttack(GameState gameState) {
-        Game game = Game.getInstance();
-
         if (gameState.isWinBattle()) {
             //TODO: If at the end of your attacking turn you've conquered at least one territory, then you have earned a Risk card. You cannot earn more than one Risk card for this.
             //TODO: If you manage to wipe out an opponent by destroying his or her last army, you gain possession of all the Risk cards he or she may have had in their hands.
@@ -83,10 +80,10 @@ public class HumanPlayerStrategy extends BasePlayerStrategy {
                     resetToAndFrom(gameState);
                     Dice.resetDice(gameState.getRedDice(), gameState.getWhiteDice());
                     gameState.setWinBattle(false);
-                    if (isMoreAttacks(gameState)) {
-                        game.nextTurn();
-                    }
                 }
+            }
+            if (gameState.getMinArmiesToMoveAfterWin() == 0 && !isCountyWithMoreThenOneArmy(gameState)) {
+                Game.getInstance().getGamePhaseStrategy().nextTurnButton(gameState);
             }
         } else {
             if (gameState.getCurrentCountry() != null) {
@@ -126,6 +123,9 @@ public class HumanPlayerStrategy extends BasePlayerStrategy {
                 Game.getInstance().setGamePhaseStrategy(GamePhaseStrategyFactory.getStrategy(GAME_OVER));
                 Game.getInstance().getGamePhaseStrategy().init(gameState);
             }
+            if (gameState.getMinArmiesToMoveAfterWin() == 0 && !isCountyWithMoreThenOneArmy(gameState)) {
+                Game.getInstance().getGamePhaseStrategy().nextTurnButton(gameState);
+            }
         }
     }
 
@@ -142,7 +142,7 @@ public class HumanPlayerStrategy extends BasePlayerStrategy {
             gameState.setCountryFrom(gameState.getCurrentCountry());
             gameState.setCurrentTurnPhraseText("Select a country to move an army.");
             gameState.getCurrentCountry().select(false, -1);
-        } else if (gameState.getCountryTo() == null && gameState.getCurrentCountry().isHighlighted()) {
+        } else if (gameState.getCountryTo() == null && gameState.getCurrentCountry().isHighlighted() && gameState.getCurrentCountry() != gameState.getCountryFrom()) {
             gameState.getCountryFrom().unSelect(false);
             gameState.getCountryFrom().setSelected(true);
             gameState.setCountryTo(gameState.getCurrentCountry());
