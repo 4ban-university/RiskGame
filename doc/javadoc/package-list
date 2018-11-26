@@ -1,7 +1,10 @@
 
 game
-game.enums
 game.model
+game.model.enums
+game.strategies
+game.strategies.GamePhaseStrategies
+game.strategies.PlayerStrategies
 game.ui
 game.ui.view
 game.utils

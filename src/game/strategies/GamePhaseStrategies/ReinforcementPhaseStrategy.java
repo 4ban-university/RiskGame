@@ -10,7 +10,16 @@ import java.util.List;
 
 import static game.strategies.GamePhaseStrategies.GamePhaseEnum.ATTACK;
 import static game.strategies.GamePhaseStrategies.GamePhaseEnum.REINFORCEMENT;
+import static game.strategies.MapFunctionsUtil.highlightPayerCountries;
+import static game.strategies.MapFunctionsUtil.selectCountry;
 
+/**
+ * Reinforcement phase strategy. Describes the reinforcement features.
+ *
+ * @author Dmitry Kryukov, Ksenia Popova
+ * @see BasePhaseStrategy
+ */
+// TODO реинфорсмент. выводит неправильное количество оставшихся армий, доходит до нуля и позволяет тыкнуть на страну когда всего 0 армий доступно для размещения.
 public class ReinforcementPhaseStrategy extends BasePhaseStrategy {
 
     /**
@@ -18,7 +27,7 @@ public class ReinforcementPhaseStrategy extends BasePhaseStrategy {
      *
      * @param player    current player
      * @param countries countries of player
-     * @return int number of reinforcement armies
+     * @return int number of reinforce armies
      */
     private static int getReinforcementArmies(Player player, List<Country> countries) {
         int countriesOwnedByPlayer = 0;
@@ -32,15 +41,21 @@ public class ReinforcementPhaseStrategy extends BasePhaseStrategy {
         else return player.getArmies() + countriesOwnedByPlayer / 3;
     }
 
+    /**
+     * Initialization of the phase.
+     * Setup required game states.
+     * Show status messages
+     * @param gameState
+     */
     @Override
     public void init(GameState gameState) {
-        gameState.setCurrentGamePhase(REINFORCEMENT);
-        System.out.println("Next Turn Button Clicked. Next Phase is " + gameState.getCurrentGamePhase());
+        super.init(gameState);
 
-        resetToAndFrom(gameState);
+        gameState.setCurrentGamePhase(REINFORCEMENT);
 
         // Change current player
         gameState.setCurrentPlayer(gameState.getPlayers().get((gameState.getPlayers().indexOf(gameState.getCurrentPlayer()) + 1) % gameState.getPlayers().size()));
+        System.out.println("\n----------------------------------------------------------------------------\n");
         System.out.println("Select next Player. Next Player is " + gameState.getCurrentPlayer().getName());
 
         // Add base armies
@@ -57,20 +72,37 @@ public class ReinforcementPhaseStrategy extends BasePhaseStrategy {
         }
         gameState.setCurrentTurnPhraseText("Select a country to place your army. Armies to place  " + gameState.getCurrentPlayer().getArmies());
         highlightPayerCountries(gameState.getCountries(), gameState.getCurrentPlayer());
+
+        debugMessage(gameState);
+
+        if (gameState.getCurrentPlayer().isComputerPlayer()) {
+            gameState.getCurrentPlayer().reinforce(gameState);
+        }
     }
 
+    /**
+     * Map click action behavoir.
+     * @param gameState
+     * @param x
+     * @param y
+     */
     @Override
     public void mapClick(GameState gameState, int x, int y) {
         if (selectCountry(gameState, x, y)) {
             if (gameState.getCurrentCountry().getPlayer() == gameState.getCurrentPlayer()) {
-                gameState.getCurrentPlayer().reinforcement(gameState);
+                gameState.getCurrentPlayer().reinforce(gameState);
             }
         }
     }
 
+    /**
+     * Next turn button action behavoir. Set requiresd game states.
+     * Force next phase attack.
+     * Doesn't allow to go to next turn if user has more than 5 cards to excnahge
+     * @param gameState
+     */
     @Override
     public void nextTurnButton(GameState gameState) {
-
         int cards = 0;
         for (Integer i : gameState.getCurrentPlayer().getCardsEnumIntegerMap().values()) {
             cards += i;
@@ -84,6 +116,10 @@ public class ReinforcementPhaseStrategy extends BasePhaseStrategy {
         }
     }
 
+    /**
+     * Exchange button behavoir. Call the required game state function for exchange.
+     * @param gameState
+     */
     @Override
     public void exchangeButton(GameState gameState) {
         gameState.getCurrentPlayer().exchange(gameState);

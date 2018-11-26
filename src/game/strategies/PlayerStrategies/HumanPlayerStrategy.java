@@ -8,27 +8,56 @@ import game.strategies.GamePhaseStrategies.GamePhaseStrategyFactory;
 
 import java.util.stream.Collectors;
 
+import static game.strategies.GamePhaseStrategies.BasePhaseStrategy.isGameWonBy;
 import static game.strategies.GamePhaseStrategies.GamePhaseEnum.GAME_OVER;
+import static game.strategies.MapFunctionsUtil.isMoreAttacks;
+import static game.strategies.MapFunctionsUtil.resetToAndFrom;
+import static game.strategies.MapFunctionsUtil.unHighlightCountries;
 
+/**
+ * Human player strategy. Describes the actions for human player.
+ *
+ * @author Dmitry Kryukov, Ksenia Popova
+ * @see BasePlayerStrategy
+ */
 public class HumanPlayerStrategy extends BasePlayerStrategy {
 
+
+    @Override
+    public void placeArmies(GameState gameState) {
+        unHighlightCountries(gameState);
+        if (gameState.getCurrentPlayer().getArmies() > 0 && gameState.getCurrentCountry().getPlayer() == gameState.getCurrentPlayer()) {
+            gameState.getCurrentCountry().setSelected(true);
+            gameState.getCurrentCountry().setArmy(gameState.getCurrentCountry().getArmy() + 1);
+            gameState.getCurrentPlayer().setArmies(gameState.getCurrentPlayer().getArmies() - 1);
+            gameState.setCurrentTurnPhraseText("Select a country to place your army. Armies to place  " + gameState.getCurrentPlayer().getArmies());
+        }
+    }
+
     /**
-     * Reinforcement for player
+     * Reinforcement for player.
+     * Setup requiresd game states. Show status messages
      */
     @Override
     public void reinforce(GameState gameState) {
-        Game game = Game.getInstance();
         if (gameState.getCurrentPlayer().getArmies() > 0) {
             gameState.getCurrentCountry().setArmy(gameState.getCurrentCountry().getArmy() + 1);
             gameState.getCurrentPlayer().setArmies(gameState.getCurrentPlayer().getArmies() - 1);
             gameState.setCurrentTurnPhraseText("Armies to place " + gameState.getCurrentPlayer().getArmies());
         } else {
-            game.unHighlightCountries();
+            unHighlightCountries(gameState);
+            // TODO automatic go to next turn if no more armies to place
+            // check if this line if fine and in the correct place.
+            Game.getInstance().getGamePhaseStrategy().nextTurnButton(gameState);
         }
     }
 
     /**
-     * Preparing for attach phase
+     * Preparing for attack phase
+     * Checks for winning or failing the battles.
+     * Setup required game states
+     * Force next turn if needed.
+     * Show status messages for attack phase
      */
     @Override
     public void beforeAndAfterAttack(GameState gameState) {
@@ -50,10 +79,11 @@ public class HumanPlayerStrategy extends BasePlayerStrategy {
                     gameState.getCountryFrom().setArmy(gameState.getCountryFrom().getArmy() - 1);
                     gameState.setMinArmiesToMoveAfterWin(gameState.getMinArmiesToMoveAfterWin() - 1);
                 } else {
-                    game.resetToAndFrom();
+                    unHighlightCountries(gameState);
+                    resetToAndFrom(gameState);
                     Dice.resetDice(gameState.getRedDice(), gameState.getWhiteDice());
                     gameState.setWinBattle(false);
-                    if (!game.isMoreAttacks()) {
+                    if (isMoreAttacks(gameState)) {
                         game.nextTurn();
                     }
                 }
@@ -62,7 +92,7 @@ public class HumanPlayerStrategy extends BasePlayerStrategy {
             if (gameState.getCurrentCountry() != null) {
                 if (gameState.getCurrentCountry().getPlayer() == gameState.getCurrentPlayer()) {
                     if (gameState.getCountryFrom() == null && gameState.getCurrentCountry().getArmy() > 1) {
-                        game.unHighlightCountries();
+                        unHighlightCountries(gameState);
                         gameState.setCountryFrom(gameState.getCurrentCountry());
                         gameState.setCurrentTurnPhraseText("Select a country to Attack.");
                         gameState.getCurrentCountry().select(true, 2);
@@ -72,11 +102,12 @@ public class HumanPlayerStrategy extends BasePlayerStrategy {
                     gameState.getCountryFrom().setSelected(true);
                     gameState.setCountryTo(gameState.getCurrentCountry());
                     gameState.getCountryTo().setHighlighted(true);
-                    gameState.setCurrentTurnPhraseText("Use Attack window to Attack.");
+                    gameState.setCurrentTurnPhraseText("Choose number of dices to attack.");
                 }
             } else {
                 gameState.setCurrentTurnPhraseText("Select a Country to attack from.");
-                game.resetToAndFrom();
+
+                resetToAndFrom(gameState);
                 Dice.resetDice(gameState.getRedDice(), gameState.getWhiteDice());
             }
         }
@@ -84,43 +115,30 @@ public class HumanPlayerStrategy extends BasePlayerStrategy {
 
     /**
      * Attack phase
+     * Force base player strategy method roll dice.
      */
     @Override
     public void attack(GameState gameState) {
-        Game game = Game.getInstance();
         if (gameState.getCountryFrom() != null && gameState.getCountryFrom().getArmy() >= 2 && gameState.getCountryTo() != null) {
-
-            Dice.rollDice(gameState.getNumberOfRedDicesSelected(), gameState.getNumberOfWhiteDicesSelected(), gameState.getRedDice(), gameState.getWhiteDice());
-
-            for (int i = 0; i < Math.min(gameState.getNumberOfRedDicesSelected(), gameState.getNumberOfWhiteDicesSelected()); i++) {
-                if (gameState.getRedDice()[i].getNumber() > gameState.getWhiteDice()[i].getNumber()) {
-                    gameState.getCountryTo().setArmy(gameState.getCountryTo().getArmy() - 1);
-                } else {
-                    gameState.getCountryFrom().setArmy(gameState.getCountryFrom().getArmy() - 1);
-                }
-            }
-
-            if (gameState.getCountryTo().getArmy() == 0) {
-                gameState.setWinBattle(true);
-                gameState.getCountryTo().setPlayer(gameState.getCurrentPlayer());
-                gameState.setMinArmiesToMoveAfterWin(gameState.getNumberOfRedDicesSelected());
-                gameState.setGiveACard(true);
-                if (isGameWonBy(gameState, gameState.getCurrentPlayer())) {
-                    Game.getInstance().setGamePhaseStrategy(GamePhaseStrategyFactory.getStrategy(GAME_OVER));
-                    Game.getInstance().getGamePhaseStrategy().init(gameState);
-                }
+            rollDiceAndProcessResults(gameState);
+            if (isGameWonBy(gameState, gameState.getCurrentPlayer())) {
+                // TODO Add message that attacker win battle
+                Game.getInstance().setGamePhaseStrategy(GamePhaseStrategyFactory.getStrategy(GAME_OVER));
+                Game.getInstance().getGamePhaseStrategy().init(gameState);
             }
         }
     }
 
     /**
      * Fortification for Player
+     * Setup required game states.
+     * Show status messages
+     * Automatic go to next turn if user can't move anything to another counrty
      */
     @Override
     public void fortify(GameState gameState) {
-        Game game = Game.getInstance();
         if (gameState.getCountryFrom() == null) {
-            game.unHighlightCountries();
+            unHighlightCountries(gameState);
             gameState.setCountryFrom(gameState.getCurrentCountry());
             gameState.setCurrentTurnPhraseText("Select a country to move an army.");
             gameState.getCurrentCountry().select(false, -1);
@@ -129,11 +147,17 @@ public class HumanPlayerStrategy extends BasePlayerStrategy {
             gameState.getCountryFrom().setSelected(true);
             gameState.setCountryTo(gameState.getCurrentCountry());
             gameState.getCountryTo().setHighlighted(true);
-            gameState.setCurrentTurnPhraseText("Click on country to move one army.");
+            gameState.setCurrentTurnPhraseText("Click on country to move an army.");
         }
         if (gameState.getCountryFrom() != null && gameState.getCountryFrom().getArmy() > 1 && gameState.getCountryTo() != null) {
             gameState.getCountryFrom().setArmy(gameState.getCountryFrom().getArmy() - 1);
             gameState.getCountryTo().setArmy(gameState.getCountryTo().getArmy() + 1);
+            gameState.setCurrentTurnPhraseText("Move army from " + gameState.getCountryFrom().getName() + " to " + gameState.getCountryTo().getName());
+        }
+        if (gameState.getCountryFrom().getArmy() == 1) {
+            // TODO automatic go to next turn if user can not move anything to another country
+            // check is this line if in correct place and works fine
+            Game.getInstance().getGamePhaseStrategy().nextTurnButton(gameState);
         }
     }
 

@@ -1,9 +1,10 @@
 import game.utils.MapLoader;
+import game.utils.TournamentMenu;
 import mapeditor.Continent;
 import mapeditor.ILoadedMap;
 import mapeditor.IMapLoader;
 import mapeditor.Territory;
-import mapeditor.gui.MapEditor;
+//import mapeditor.gui.MapEditor;
 
 import javax.swing.*;
 import javax.swing.border.TitledBorder;
@@ -13,6 +14,9 @@ import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.File;
+import java.util.ArrayList;
+import java.util.List;
+
 
 /**
  * This class contains the main menu of the game
@@ -73,7 +77,7 @@ public class MainMenu extends JFrame {
     private JMenu file() {
         JMenu file = new JMenu("Risk");
         JMenuItem loadGame = new JMenuItem("Load game");
-        JMenuItem continentBonus = new JMenuItem("test: Continent bonus with 4 players");
+        JMenuItem continentBonus = new JMenuItem("test: Feature for testing continent bonus with 4 players");
         file.add(loadGame);
         file.add(continentBonus);
 
@@ -81,9 +85,15 @@ public class MainMenu extends JFrame {
             @Override
             public void actionPerformed(ActionEvent arg0) {
                 System.out.println ("DEBUG: Testing continent bonus with 4 players\n ------------------------ \n");
+                List<String> playersModes = new ArrayList<>();
                 int players = 4;
+                playersModes.add("Human");
+                playersModes.add("Human");
+                playersModes.add("Human");
+                playersModes.add("Human");
+
                 String filePath = filePath();
-                new MapLoader(players, filePath, true);
+                new MapLoader(players, filePath, true, playersModes);
             }
         });
         loadGame.addActionListener(new ActionListener() {
@@ -115,8 +125,8 @@ public class MainMenu extends JFrame {
                     loadedMapObj = mapLoaderObj.getLoadedMap();
                     //Continent.setContinents(loadedMapObj.getContinents());
                     //Territory.setTerritories(loadedMapObj.getTerritories());
-                    MapEditor ex = new MapEditor("", loadedMapObj);
-                    ex.setVisible(true);
+//                    MapEditor ex = new MapEditor("", loadedMapObj);
+//                    ex.setVisible(true);
                 });
 
             }
@@ -136,8 +146,8 @@ public class MainMenu extends JFrame {
                         loadedMapObj = mapLoaderObj.getLoadedMap();
                         Continent.setContinents(loadedMapObj.getContinents());
                         Territory.setTerritories(loadedMapObj.getTerritories());
-                        MapEditor ex = new MapEditor(selectedFile.getAbsolutePath(), loadedMapObj);
-                        ex.setVisible(true);
+//                        MapEditor ex = new MapEditor(selectedFile.getAbsolutePath(), loadedMapObj);
+//                        ex.setVisible(true);
                     }else{
                         //Deu pau manda mensagem de erro ai tiosao
                     }
@@ -167,10 +177,12 @@ public class MainMenu extends JFrame {
         JPanel buttonPanel = new JPanel();
         JPanel startButtons = new JPanel();
 
-        TitledBorder title = BorderFactory.createTitledBorder("Human game");
+
+        TitledBorder title = BorderFactory.createTitledBorder("Quick access");
         buttonPanel.setBorder(title);
 
-        buttonPanel.setPreferredSize(new Dimension(380, 50));
+
+        buttonPanel.setPreferredSize(new Dimension(600, 50));
         buttonPanel.setLayout(new GridBagLayout());
         GridBagConstraints gbc = new GridBagConstraints();
         gbc.insets = new Insets(0,5,0,0);
@@ -188,27 +200,44 @@ public class MainMenu extends JFrame {
             @Override
             public void actionPerformed(ActionEvent arg0) {
                 System.out.println ("DEBUG: Chosen 2 players\n ------------------------ \n");
+                List<String> playersModes = new ArrayList<>();
                 int players = 2;
+                playersModes.add("Human");
+                playersModes.add("Human");
                 String filePath = filePath();
-                MapLoader loader = new MapLoader(players, filePath, false);
+                MainMenu.this.setVisible(false);
+                MapLoader loader = new MapLoader(players, filePath, false, playersModes);
             }
         });
         player3.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent arg0) {
                 System.out.println ("DEBUG: Chosen 3 players\n ------------------------ \n");
+                List<String> playersModes = new ArrayList<>();
                 int players = 3;
+                playersModes.add("Human");
+                playersModes.add("Human");
+                playersModes.add("Human");
+
                 String filePath = filePath();
-                MapLoader loader = new MapLoader(players, filePath, false);
+                MainMenu.this.setVisible(false);
+                MapLoader loader = new MapLoader(players, filePath, false, playersModes);
             }
         });
         player4.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent arg0) {
                 System.out.println ("DEBUG: Chosen 4 players\n ------------------------ \n");
+                List<String> playersModes = new ArrayList<>();
                 int players = 4;
+                playersModes.add("Human");
+                playersModes.add("Human");
+                playersModes.add("Human");
+                playersModes.add("Human");
+
                 String filePath = filePath();
-                MapLoader loader = new MapLoader(players, filePath,false);
+                MainMenu.this.setVisible(false);
+                MapLoader loader = new MapLoader(players, filePath,false, playersModes);
             }
         });
         return startButtons;
@@ -216,6 +245,7 @@ public class MainMenu extends JFrame {
 
     /**
      * Method generates the buttons for menu bar with calling start game with AI
+     * in Single game mode.
      *
      * @return aiButtons object to attach the buttons to the window
      */
@@ -223,71 +253,93 @@ public class MainMenu extends JFrame {
         JPanel aiPanel = new JPanel();
         JPanel aiButtons = new JPanel();
 
-        TitledBorder title = BorderFactory.createTitledBorder("AI game");
+        TitledBorder title = BorderFactory.createTitledBorder("Single game mode.");
         aiPanel.setBorder(title);
 
-        aiPanel.setPreferredSize(new Dimension(380, 100));
+        aiPanel.setPreferredSize(new Dimension(600, 100));
         aiPanel.setLayout(new GridBagLayout());
         GridBagConstraints gbc = new GridBagConstraints();
         gbc.insets = new Insets(5, 5, 0, 0);
-        JButton aiAggressive = new JButton(("Aggressive"));
-        JButton aiBenevolent = new JButton(("Benevolent"));
-        JButton aiRandom = new JButton(("Random"));
-        JButton aiCheater = new JButton(("Cheater"));
+
+        String[] PlayerMode1 = { "Nothing", "Human", "Aggressive", "Benevolent", "Random", "Cheater" };
+        String[] PlayerMode2 = { "Nothing", "Human", "Aggressive", "Benevolent", "Random", "Cheater" };
+        String[] PlayerMode3 = { "Nothing", "Human", "Aggressive", "Benevolent", "Random", "Cheater" };
+        String[] PlayerMode4 = { "Nothing", "Human", "Aggressive", "Benevolent", "Random", "Cheater" };
+        JComboBox PlayerModeList1 = new JComboBox(PlayerMode1);
+        JComboBox PlayerModeList2 = new JComboBox(PlayerMode2);
+        JComboBox PlayerModeList3 = new JComboBox(PlayerMode3);
+        JComboBox PlayerModeList4 = new JComboBox(PlayerMode4);
+        PlayerModeList1.setSelectedIndex(1);
+        PlayerModeList2.setSelectedIndex(2);
+        PlayerModeList3.setSelectedIndex(0);
+        PlayerModeList4.setSelectedIndex(0);
+
+        JButton startAIGame = new JButton(("Start game!"));
+
 
         gbc.gridx = 1;
         gbc.gridy = 1;
-        aiPanel.add(aiAggressive, gbc);
+        aiPanel.add(new JLabel("Player 1"), gbc);
         gbc.gridx = 1;
         gbc.gridy = 2;
-        aiPanel.add(aiBenevolent, gbc);
+        aiPanel.add(PlayerModeList1, gbc);
         gbc.gridx = 2;
         gbc.gridy = 1;
-        aiPanel.add(aiRandom, gbc);
+        aiPanel.add(new JLabel("Player 2"), gbc);
         gbc.gridx = 2;
         gbc.gridy = 2;
-        aiPanel.add(aiCheater, gbc);
+        aiPanel.add(PlayerModeList2, gbc);
+        gbc.gridx = 3;
+        gbc.gridy = 1;
+        aiPanel.add(new JLabel("Player 3"), gbc);
+        gbc.gridx = 3;
+        gbc.gridy = 2;
+        aiPanel.add(PlayerModeList3, gbc);
+        gbc.gridx = 4;
+        gbc.gridy = 1;
+        aiPanel.add(new JLabel("Player 4"), gbc);
+        gbc.gridx = 4;
+        gbc.gridy = 2;
+        aiPanel.add(PlayerModeList4, gbc);
+        gbc.gridx = 5;
+        gbc.gridy = 2;
+        aiPanel.add(startAIGame, gbc);
 
         aiButtons.add(aiPanel);
 
-        aiAggressive.addActionListener(new ActionListener() {
+        startAIGame.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent arg0) {
-                System.out.println("DEBUG: Chosen Aggressive\n ------------------------ \n");
-                int players = 1;
-                // TODO ai mode
-                String filePath = filePath();
-                MapLoader loader = new MapLoader(players, filePath, false);
-            }
-        });
-        aiBenevolent.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent arg0) {
-                System.out.println("DEBUG: Chosen Benevolent\n ------------------------ \n");
-                int players = 1;
-                // TODO ai mode
-                String filePath = filePath();
-                MapLoader loader = new MapLoader(players, filePath, false);
-            }
-        });
-        aiRandom.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent arg0) {
-                System.out.println("DEBUG: Chosen Random\n ------------------------ \n");
-                int players = 1;
-                // TODO ai mode
-                String filePath = filePath();
-                MapLoader loader = new MapLoader(players, filePath, false);
-            }
-        });
-        aiCheater.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent arg0) {
-                System.out.println("DEBUG: Chosen Cheater\n ------------------------ \n");
-                int players = 1;
-                // TODO ai mode
-                String filePath = filePath();
-                MapLoader loader = new MapLoader(players, filePath, false);
+                System.out.println("DEBUG: start Ai game\n ------------------------ \n");
+                List<String> playersModes = new ArrayList<>();
+                String selectedPlayerMode1 = (String) PlayerModeList1.getSelectedItem();
+                String selectedPlayerMode2 = (String) PlayerModeList2.getSelectedItem();
+                String selectedPlayerMode3 = (String) PlayerModeList3.getSelectedItem();
+                String selectedPlayerMode4 = (String) PlayerModeList4.getSelectedItem();
+                int players = 0;
+                if (selectedPlayerMode1 != "Nothing") {
+                    players+=1;
+                    playersModes.add(selectedPlayerMode1);
+                }
+                if (selectedPlayerMode2 != "Nothing") {
+                    players+=1;
+                    playersModes.add(selectedPlayerMode2);
+                }
+                if (selectedPlayerMode3 != "Nothing") {
+                    players+=1;
+                    playersModes.add(selectedPlayerMode3);
+                }
+                if (selectedPlayerMode4 != "Nothing") {
+                    players+=1;
+                    playersModes.add(selectedPlayerMode4);
+                }
+                if (players == 0 || players == 1){
+                    System.out.println("You can't play alone or without any players at all.");
+                } else {
+                    String filePath = filePath();
+                    MainMenu.this.setVisible(false);
+                    MapLoader loader = new MapLoader(players, filePath, false, playersModes);
+                }
             }
         });
         return aiButtons;
@@ -295,6 +347,7 @@ public class MainMenu extends JFrame {
 
     /**
      * Method generates the buttons for menu bar with calling AI game
+     * Tournament mode
      *
      * @return tournamentButtons object to attach the buttons to the window
      */
@@ -302,14 +355,14 @@ public class MainMenu extends JFrame {
         JPanel tournamentPanel = new JPanel();
         JPanel tournamentButtons = new JPanel();
 
-        TitledBorder title = BorderFactory.createTitledBorder("Tournament");
+        TitledBorder title = BorderFactory.createTitledBorder("Tournament mode");
         tournamentPanel.setBorder(title);
 
-        tournamentPanel.setPreferredSize(new Dimension(380, 50));
+        tournamentPanel.setPreferredSize(new Dimension(600, 50));
         tournamentPanel.setLayout(new GridBagLayout());
         GridBagConstraints gbc = new GridBagConstraints();
         gbc.insets = new Insets(5, 5, 0, 0);
-        JButton tournament = new JButton(("Tournament"));
+        JButton tournament = new JButton(("Tournament game"));
 
         gbc.gridx = 1;
         gbc.gridy = 1;
@@ -321,10 +374,8 @@ public class MainMenu extends JFrame {
             @Override
             public void actionPerformed(ActionEvent arg0) {
                 System.out.println("DEBUG: Chosen tournament\n ------------------------ \n");
-                int players = 1;
-                // TODO ai mode
-                String filePath = filePath();
-                MapLoader loader = new MapLoader(players, filePath, false);
+                MainMenu.this.setVisible(false);
+                new TournamentMenu();
             }
         });
         return tournamentButtons;
@@ -332,6 +383,7 @@ public class MainMenu extends JFrame {
 
     /**
      * Exit functionality
+     * Eventlistener that call exit function
      */
     class ExitAction extends AbstractAction {
         private static final long serialVersionUID = 1L;

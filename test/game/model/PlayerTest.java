@@ -15,8 +15,12 @@ import java.util.Collections;
 import java.util.LinkedList;
 import java.util.List;
 
-import static game.model.enums.CardsEnum.*;
-import static org.junit.Assert.*;
+import static game.model.enums.CardsEnum.ARTILLERY;
+import static game.model.enums.CardsEnum.CAVALRY;
+import static game.model.enums.CardsEnum.INFANTRY;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertTrue;
 
 /**
  * Test for model Player
@@ -41,9 +45,9 @@ public class PlayerTest {
      */
     @Before
     public void setUp() throws Exception {
-        Player player1 = new Player("test Player 1", Color.BLACK, playerStrategyFactory.getStrategy(PlayerStrategyEnum.HUMAN_STRATEGY));
+        Player player1 = new Player("test Player 1", Color.BLACK, playerStrategyFactory.getStrategy(PlayerStrategyEnum.HUMAN_STRATEGY), true);
         player1.setArmies(0);
-        Player player2 = new Player("test Player 2", Color.GREEN, playerStrategyFactory.getStrategy(PlayerStrategyEnum.HUMAN_STRATEGY));
+        Player player2 = new Player("test Player 2", Color.GREEN, playerStrategyFactory.getStrategy(PlayerStrategyEnum.HUMAN_STRATEGY), true);
         player2.setArmies(0);
         player2.setArmies(0);
         Continent continent = new Continent("Continent", 1);
@@ -68,7 +72,7 @@ public class PlayerTest {
     }
 
     /**
-     * Check if reinforcement selected correct country
+     * Check that during reinforce country moved to another country: country1 correctly.
      */
     @Test
     public void reinforcementSelectedCorrectCountry() {
@@ -84,7 +88,7 @@ public class PlayerTest {
     }
 
     /**
-     * Check if reinforcement not selected incorrect country
+     * Check that during reinforce the country that shouldn't be highlithed is not highlighted
      */
     @Test
     public void reinforcementNotSelectedIncorrectCountry() {
@@ -97,6 +101,9 @@ public class PlayerTest {
         assertFalse(country4.isHighlighted());
     }
 
+    /**
+     * Check that within attack phase the correct country are highlighted
+     */
     @Test
     public void attackSelectedCorrectCountry() {
         game.initialise();
@@ -109,6 +116,9 @@ public class PlayerTest {
         assertTrue(country4.isHighlighted());
     }
 
+    /**
+     * Check that during attack the country1 is not highlighted
+     */
     @Test
     public void attackNoSelectedPlayersCountries() {
         game.initialise();
@@ -123,7 +133,9 @@ public class PlayerTest {
 
 
     /**
-     * Check fortification correct transition to next player
+     * Check that during fortification the player transition works ok.
+     * Next player i.e. Player2 should be current.
+     *
      */
     @Test
     public void fortificationCorrectTransitionToNextPlayer() {
@@ -135,7 +147,7 @@ public class PlayerTest {
     }
 
     /**
-     * Check fortification that player has no actions when selected enemies counrty
+     * Check that during fortification that player has no actions when selected enemies counrty
      */
     @Test
     public void fortificationNoActionsWhenSelectedEnemiesCountry() {

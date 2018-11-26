@@ -93,62 +93,34 @@ public class Game {
         gameState.notifyObservers();
     }
 
-
     /**
-     * Reset highlights
+     * Getter for the game state. Needs to get the game state from the controller
+     * @return gameState
      */
-    public void resetToAndFrom() {
-        unHighlightCountries();
-        if (gameState.getCountryFrom() != null) {
-            gameState.getCountryFrom().unSelect(false);
-        }
-        gameState.setCountryFrom(null);
-
-        if (gameState.getCountryTo() != null) {
-            gameState.getCountryTo().unSelect(false);
-        }
-        gameState.setCountryTo(null);
-    }
-
-    /**
-     * Method that unhighlight the players countries
-     */
-    public void unHighlightCountries() {
-        for (Country c : gameState.getCountries()) {
-            c.setHighlighted(false);
-        }
-    }
-
-    /**
-     * Check if player can attack anybody or go to next turn
-     *
-     * @return
-     */
-    public boolean isMoreAttacks() {
-        for (Country country : gameState.getCountries()) {
-            if (country.getPlayer() == gameState.getCurrentPlayer() && country.getArmy() >= 2) {
-                for (Country neighbor : country.getNeighbours()) {
-                    if (neighbor.getPlayer() != gameState.getCurrentPlayer()) {
-                        return true;
-                    }
-                }
-            }
-        }
-        return false;
-    }
-
     public GameState getGameState() {
         return gameState;
     }
 
+    /**
+     * Setter for the game state. Needs to set the game state to the controller
+     * @param gameState
+     */
     public void setGameState(GameState gameState) {
         this.gameState = gameState;
     }
 
+    /**
+     * Getter for strategy of the game.
+     * @return gamePhaseStrategy
+     */
     public IGamePhaseStrategy getGamePhaseStrategy() {
         return gamePhaseStrategy;
     }
 
+    /**
+     * Setter for strategy of the game
+     * @param gamePhaseStrategy
+     */
     public void setGamePhaseStrategy(IGamePhaseStrategy gamePhaseStrategy) {
         this.gamePhaseStrategy = gamePhaseStrategy;
     }

@@ -2,9 +2,11 @@ package game.utils;
 
 import org.junit.Before;
 import org.junit.Test;
-import org.junit.BeforeClass;
 
-import static org.junit.Assert.*;
+import java.util.ArrayList;
+import java.util.List;
+
+import static org.junit.Assert.assertTrue;
 
 /**
  * The map loader test
@@ -12,7 +14,16 @@ import static org.junit.Assert.*;
  * @see MapLoader
  */
 public class MapLoaderTest {
-    static MapLoader loader = new MapLoader(2, "wrongContinentNoCountries.map", false);
+    static List<String> playersModes = new ArrayList<>();
+    MapLoader loader;
+
+    @Before
+    public void init(){
+        playersModes.add("Human");
+        playersModes.add("Human");
+        loader = new MapLoader(2, "wrongContinentNoCountries.map", false, playersModes);
+    }
+
     /**
      * Test invalid map with map wrong continent
      */
