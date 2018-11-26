@@ -1,18 +1,13 @@
 package game.strategies.PlayerStrategies;
 
-import game.Game;
 import game.model.Dice;
 import game.model.GameState;
 import game.model.enums.CardsEnum;
-import game.strategies.GamePhaseStrategies.GamePhaseStrategyFactory;
 
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
-
-import static game.strategies.GamePhaseStrategies.BasePhaseStrategy.isGameWonBy;
-import static game.strategies.GamePhaseStrategies.GamePhaseEnum.GAME_OVER;
 
 /**
  * Base player strategy. Describes the basic player features.
@@ -42,19 +37,19 @@ public class BasePlayerStrategy implements IPlayerStrategy {
         }
         if (gameState.getCountryTo().getArmy() == 0) {
             gameState.setWinBattle(true);
-            if (isGameWonBy(gameState, gameState.getCurrentPlayer())) {
-                // TODO Add message that attacker win battle
-                Game.getInstance().setGamePhaseStrategy(GamePhaseStrategyFactory.getStrategy(GAME_OVER));
-                Game.getInstance().getGamePhaseStrategy().init(gameState);
-            } else {
-                gameState.setWinBattle(true);
-                // TODO Add message that attacker win battle
-                // check if this line if fine
-                gameState.setCurrentTurnPhraseText(gameState.getCurrentPlayer().getName() + " won the battle! Move at least " + gameState.getNumberOfRedDicesSelected() + " armies to the defeated country.");
-                gameState.getCountryTo().setPlayer(gameState.getCurrentPlayer());
-                gameState.setMinArmiesToMoveAfterWin(gameState.getNumberOfRedDicesSelected());
-                gameState.setGiveACard(true);
-            }
+//            if (isGameWonBy(gameState, gameState.getCurrentPlayer())) {
+//                // TODO Add message that attacker win battle
+//                Game.getInstance().setGamePhaseStrategy(GamePhaseStrategyFactory.getStrategy(GAME_OVER));
+//                Game.getInstance().getGamePhaseStrategy().init(gameState);
+//            } else {
+            gameState.setWinBattle(true);
+            // TODO Add message that attacker win battle
+            // check if this line if fine
+            gameState.setCurrentTurnPhraseText(gameState.getCurrentPlayer().getName() + " won the battle! Move at least " + gameState.getNumberOfRedDicesSelected() + " armies to the defeated country.");
+            gameState.getCountryTo().setPlayer(gameState.getCurrentPlayer());
+            gameState.setMinArmiesToMoveAfterWin(gameState.getNumberOfRedDicesSelected());
+            gameState.setGiveACard(true);
+//            }
         }
     }
 
