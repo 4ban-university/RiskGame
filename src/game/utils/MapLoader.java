@@ -40,10 +40,10 @@ import java.util.Set;
  */
 public class MapLoader {
     public static int RADIUS = 20;
-    public static List<Country> countries = new ArrayList<>();
-    public static List<Neighbour> neighbours = new ArrayList<>();
-    public static List<Player> players = new ArrayList<>();
-    public static List<Continent> continents = new ArrayList<>();
+    public List<Country> countries = new ArrayList<>();
+    public List<Neighbour> neighbours = new ArrayList<>();
+    public List<Player> players = new ArrayList<>();
+    public List<Continent> continents = new ArrayList<>();
     public String mapPath;
     public boolean invalidMap;
 
@@ -331,7 +331,7 @@ public class MapLoader {
                 }
             }
             if (seenCountries.size() != countries.size()) {
-                throw new InvalidObjectException("Map has disconnected component.");
+                throw new InvalidObjectException("Map has disconnected component. (Graph is not connected)");
             }
 
             // TODO Check that this validation works well and written without mistakes
@@ -355,7 +355,7 @@ public class MapLoader {
                     }
                 }
                 if (seenCountriesSubgraph.size() != countriesSubgraph.size()) {
-                    throw new InvalidObjectException("Map has disconnected continent: "+ continent.getName()+".");
+                    throw new InvalidObjectException("Map has disconnected continent: "+ continent.getName()+". (Subgraph is not connected)");
                 }
             }
 
@@ -430,6 +430,20 @@ public class MapLoader {
         if(numberOfPlayers == playersModes.size()){
             for (String playermode: playersModes){
                 switch(playermode){
+                    case "Human":
+                        int humanCounter = 1;
+                        if(players.size() > 0){
+                            for (Player player: players){
+                                String existedName = player.getName();
+                                if (existedName.contains("Human")){
+                                    humanCounter+=1;
+                                }
+                            }
+                            players.add(new Player("Human Player " + humanCounter, pColors.remove(0), playerStrategyFactory.getStrategy(PlayerStrategyEnum.HUMAN_STRATEGY), false));
+                        } else {
+                            players.add(new Player("Human Player " + humanCounter, pColors.remove(0), playerStrategyFactory.getStrategy(PlayerStrategyEnum.HUMAN_STRATEGY), false));
+                        }
+                        break;
                     case "Aggressive":
                         int aggrCounter = 1;
                         // TODO Does this think will work correctly every time?
@@ -622,7 +636,7 @@ public class MapLoader {
                 }
             }
             if (seenCountries.size() != countries.size()) {
-                throw new InvalidObjectException("Map has disconnected component.");
+                throw new InvalidObjectException("Map has disconnected component. (Graph is not connected)");
             }
 
             // TODO Check that this validation works well and written without mistakes
@@ -646,7 +660,7 @@ public class MapLoader {
                     }
                 }
                 if (seenCountriesSubgraph.size() != countriesSubgraph.size()) {
-                    throw new InvalidObjectException("Map has disconnected continent: "+ continent.getName()+".");
+                    throw new InvalidObjectException("Map has disconnected continent: "+ continent.getName()+". (Subgraph is not connected)");
                 }
             }
 
