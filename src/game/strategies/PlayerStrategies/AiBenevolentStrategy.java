@@ -3,6 +3,8 @@ package game.strategies.PlayerStrategies;
 import static game.strategies.GamePhaseStrategies.BasePhaseStrategy.isGameWonBy;
 import static game.strategies.GamePhaseStrategies.GamePhaseEnum.GAME_OVER;
 import static game.utils.MapFunctionsUtil.countNeighbors;
+import static game.utils.MapFunctionsUtil.getCountryWithMaxArmy;
+import static game.utils.MapFunctionsUtil.getCountryWithMaxOpponentNeighbours;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -36,7 +38,7 @@ public class AiBenevolentStrategy extends BaseStrategy {
     	exchangeCards(gameState);
         pauseAndRefresh(gameState, PAUSE * 2);
     	System.out.println("AI Benevolent Reinforce!");
-        new PlaceArmiesWorker(gameState).execute();
+        new ReinforceWorker(gameState).execute();
         //System.out.println("Reinforcement is not implemented in " + this.getClass().getName() + " strategy.");
     }
 
@@ -91,44 +93,18 @@ public class AiBenevolentStrategy extends BaseStrategy {
          */
         @Override
         protected Void doInBackground() {
-        	System.out.println("Bene place armies");
-        	HashMap<Integer, ArrayList<Country>> armyOnCountries = new HashMap<Integer, ArrayList<Country>>();
-
-        	for (Country country : gameState.getCountries()) {
-                if (country.getPlayer() == gameState.getCurrentPlayer()) {
-                	if(armyOnCountries.containsKey(country.getArmy())) {
-                		ArrayList<Country> tmp = armyOnCountries.get(country.getArmy());
-                		tmp.add(country);
-                	}
-                	else {
-                		ArrayList<Country> tmp = new ArrayList<Country>();
-                		tmp.add(country);
-                		armyOnCountries.put(country.getArmy(), tmp);
-                	}
-                }
+            Country toPlaceArmy = null;
+            if (toPlaceArmy == null) {
+                toPlaceArmy = getCountryWithMaxOpponentNeighbours(gameState);
             }
-        	int playerArmies = gameState.getCurrentPlayer().getArmies();
-        	
-        	for(int i = 0, j = 0; i < playerArmies; j++)
-        	{
-        		ArrayList<Country> tmpCountries = armyOnCountries.get(j);
-        		if(tmpCountries == null) continue;
-        		for(int k = 0; k < tmpCountries.size(); k++) {
-        			Country cntry = tmpCountries.remove(k);
-        			cntry.setArmy(cntry.getArmy() + 1);
-        			if(armyOnCountries.containsKey(cntry.getArmy())) {
-        				armyOnCountries.get(cntry.getArmy()).add(cntry);
-        			}
-        			else {
-        				ArrayList<Country> tC = new ArrayList<Country>();
-        				tC.add(cntry);
-        				armyOnCountries.put(cntry.getArmy(), tC);
-        			}
-        			i++;
-        		}
-        	}
-        	gameState.getCurrentPlayer().setArmies(0);
-
+            if (toPlaceArmy != null) {
+                toPlaceArmy.setSelected(true);
+                toPlaceArmy.setArmy(toPlaceArmy.getArmy() + 1);
+                gameState.getCurrentPlayer().setArmies(gameState.getCurrentPlayer().getArmies() - 1);
+                String message = gameState.getCurrentPlayer().getName() + " placed army to " + toPlaceArmy.getName() + ". Armies to place: " + gameState.getCurrentPlayer().getArmies();
+                gameState.setCurrentTurnPhraseText(message);
+                publish(message);
+            }
             pauseAndRefresh(gameState, PAUSE);
             return null;
         }
@@ -178,11 +154,44 @@ public class AiBenevolentStrategy extends BaseStrategy {
          */
         @Override
         protected Void doInBackground() {
-            /*
 
-            You need to put your code here
+            System.out.println("Bene place armies");
+            HashMap<Integer, ArrayList<Country>> armyOnCountries = new HashMap<Integer, ArrayList<Country>>();
 
-             */
+            for (Country country : gameState.getCountries()) {
+                if (country.getPlayer() == gameState.getCurrentPlayer()) {
+                    if(armyOnCountries.containsKey(country.getArmy())) {
+                        ArrayList<Country> tmp = armyOnCountries.get(country.getArmy());
+                        tmp.add(country);
+                    }
+                    else {
+                        ArrayList<Country> tmp = new ArrayList<Country>();
+                        tmp.add(country);
+                        armyOnCountries.put(country.getArmy(), tmp);
+                    }
+                }
+            }
+            int playerArmies = gameState.getCurrentPlayer().getArmies();
+
+            for(int i = 0, j = 0; i < playerArmies; j++)
+            {
+                ArrayList<Country> tmpCountries = armyOnCountries.get(j);
+                if(tmpCountries == null) continue;
+                for(int k = 0; k < tmpCountries.size(); k++) {
+                    Country cntry = tmpCountries.remove(k);
+                    cntry.setArmy(cntry.getArmy() + 1);
+                    if(armyOnCountries.containsKey(cntry.getArmy())) {
+                        armyOnCountries.get(cntry.getArmy()).add(cntry);
+                    }
+                    else {
+                        ArrayList<Country> tC = new ArrayList<Country>();
+                        tC.add(cntry);
+                        armyOnCountries.put(cntry.getArmy(), tC);
+                    }
+                    i++;
+                }
+            }
+            gameState.getCurrentPlayer().setArmies(0);
 
             pauseAndRefresh(gameState, PAUSE);
             return null;
@@ -233,8 +242,6 @@ public class AiBenevolentStrategy extends BaseStrategy {
          */
         @Override
         protected Void doInBackground() {
-        	System.out.println("Bene fortifies");
-
         	HashMap<Integer, ArrayList<Country>> armyOnCountries = new HashMap<Integer, ArrayList<Country>>();
         	int min = 100;
         	Country minCountry = null;
@@ -244,15 +251,11 @@ public class AiBenevolentStrategy extends BaseStrategy {
                 	if(armyOnCountries.containsKey(country.getArmy())) {
                 		ArrayList<Country> tmp = armyOnCountries.get(country.getArmy());
                 		tmp.add(country);
-                        System.out.println("TMP: ");
-                        System.out.println(tmp);
                 	}
                 	else {
                 		ArrayList<Country> tmp = new ArrayList<Country>();
                 		tmp.add(country);
                 		armyOnCountries.put(country.getArmy(), tmp);
-                        System.out.println("armyOnCountries: ");
-                        System.out.println(armyOnCountries);
                 	}
                 	if(country.getArmy() <= min) {
                 		List<Country> neighbours = country.getNeighbours();
@@ -260,7 +263,6 @@ public class AiBenevolentStrategy extends BaseStrategy {
                 			if(neighbours.get(ctrN).getPlayer() == gameState.getCurrentPlayer()) {
                         		minCountry = country;
                         		min = country.getArmy();
-                                System.out.println(minCountry.getName() + min);
                 			}
                 		}
                 	}
@@ -280,10 +282,12 @@ public class AiBenevolentStrategy extends BaseStrategy {
         			}
         		}
 
-                System.out.println(maxArmyCountry.getName() + ": " + maxArmyCountry.getArmy());
                 int armyToFortify = maxArmyCountry.getArmy() - 1;
 
         		if(maxArmyCountry != null) {
+                    minCountry.setSelected(true);
+                    maxArmyCountry.setSelected(true);
+                    pauseAndRefresh(gameState, PAUSE * 3);
                     minCountry.setArmy(minCountry.getArmy() + armyToFortify);
                     maxArmyCountry.setArmy(1);
                     String message = gameState.getCurrentPlayer().getName() + " fortify " + minCountry.getName() + " from " + maxArmyCountry.getName() + " by " + armyToFortify;
@@ -292,7 +296,7 @@ public class AiBenevolentStrategy extends BaseStrategy {
         		}
         	}
 
-            pauseAndRefresh(gameState, PAUSE * 10);
+            pauseAndRefresh(gameState, PAUSE * 2);
             return null;
         }
 
