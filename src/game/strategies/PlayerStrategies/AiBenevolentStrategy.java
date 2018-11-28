@@ -18,14 +18,14 @@ import game.model.GameState;
 import game.strategies.GamePhaseStrategies.GamePhaseStrategyFactory;
 
 public class AiBenevolentStrategy extends BaseStrategy {
-	
+
     /**
      * Benevolent places armies on the weakest countries
      * @param gameState
      */
     @Override
     public void placeArmies(GameState gameState) {
-    	System.out.println("AI Benevolent Place Armies!");
+        System.out.println("AI Benevolent Place Armies!");
         new PlaceArmiesWorker(gameState).execute();
     }
 
@@ -35,9 +35,9 @@ public class AiBenevolentStrategy extends BaseStrategy {
      */
     @Override
     public void reinforce(GameState gameState) {
-    	exchangeCards(gameState);
+        exchangeCards(gameState);
         pauseAndRefresh(gameState, PAUSE * 2);
-    	System.out.println("AI Benevolent Reinforce!");
+        System.out.println("AI Benevolent Reinforce!");
         new ReinforceWorker(gameState).execute();
         //System.out.println("Reinforcement is not implemented in " + this.getClass().getName() + " strategy.");
     }
@@ -57,8 +57,8 @@ public class AiBenevolentStrategy extends BaseStrategy {
      */
     @Override
     public void attack(GameState gameState) {
-    	System.out.println("Bene attacks");
-    	new AttackWorker(gameState).execute();
+        System.out.println("Bene attacks");
+        new AttackWorker(gameState).execute();
     }
 
     /**
@@ -67,11 +67,11 @@ public class AiBenevolentStrategy extends BaseStrategy {
      */
     @Override
     public void fortify(GameState gameState) {
-    	System.out.println("AI Benevolent Fortify!");
+        System.out.println("AI Benevolent Fortify!");
         new FortifyWorker(gameState).execute();
         //System.out.println("Fortifying is not implemented in " + this.getClass().getName() + " strategy.");
     }
-    
+
 
     private class PlaceArmiesWorker extends SwingWorker<Void, String> {
 
@@ -242,49 +242,49 @@ public class AiBenevolentStrategy extends BaseStrategy {
          */
         @Override
         protected Void doInBackground() {
-        	HashMap<Integer, ArrayList<Country>> armyOnCountries = new HashMap<Integer, ArrayList<Country>>();
-        	int min = 100;
-        	Country minCountry = null;
+            HashMap<Integer, ArrayList<Country>> armyOnCountries = new HashMap<Integer, ArrayList<Country>>();
+            int min = 100;
+            Country minCountry = null;
 
-        	for (Country country : gameState.getCountries()) {
+            for (Country country : gameState.getCountries()) {
                 if (country.getPlayer() == gameState.getCurrentPlayer()) {
-                	if(armyOnCountries.containsKey(country.getArmy())) {
-                		ArrayList<Country> tmp = armyOnCountries.get(country.getArmy());
-                		tmp.add(country);
-                	}
-                	else {
-                		ArrayList<Country> tmp = new ArrayList<Country>();
-                		tmp.add(country);
-                		armyOnCountries.put(country.getArmy(), tmp);
-                	}
-                	if(country.getArmy() <= min) {
-                		List<Country> neighbours = country.getNeighbours();
-                		for(int ctrN = 0; ctrN < neighbours.size(); ctrN++) {
-                			if(neighbours.get(ctrN).getPlayer() == gameState.getCurrentPlayer()) {
-                        		minCountry = country;
-                        		min = country.getArmy();
-                			}
-                		}
-                	}
+                    if(armyOnCountries.containsKey(country.getArmy())) {
+                        ArrayList<Country> tmp = armyOnCountries.get(country.getArmy());
+                        tmp.add(country);
+                    }
+                    else {
+                        ArrayList<Country> tmp = new ArrayList<Country>();
+                        tmp.add(country);
+                        armyOnCountries.put(country.getArmy(), tmp);
+                    }
+                    if(country.getArmy() <= min) {
+                        List<Country> neighbours = country.getNeighbours();
+                        for(int ctrN = 0; ctrN < neighbours.size(); ctrN++) {
+                            if(neighbours.get(ctrN).getPlayer() == gameState.getCurrentPlayer()) {
+                                minCountry = country;
+                                min = country.getArmy();
+                            }
+                        }
+                    }
                 }
             }
-        	
-        	if(minCountry != null) {
-        		int max = 1;
-        		Country maxArmyCountry = null;
-        		List<Country> neighbours = minCountry.getNeighbours();
-        		for(int ctrN = 0; ctrN < neighbours.size(); ctrN++) {
-        			if(neighbours.get(ctrN).getPlayer() == gameState.getCurrentPlayer()) {
-                		if(neighbours.get(ctrN).getArmy() > max) {
-                			max = neighbours.get(ctrN).getArmy();
-                			maxArmyCountry = neighbours.get(ctrN);
-                		}
-        			}
-        		}
+
+            if(minCountry != null) {
+                int max = 1;
+                Country maxArmyCountry = null;
+                List<Country> neighbours = minCountry.getNeighbours();
+                for(int ctrN = 0; ctrN < neighbours.size(); ctrN++) {
+                    if(neighbours.get(ctrN).getPlayer() == gameState.getCurrentPlayer()) {
+                        if(neighbours.get(ctrN).getArmy() > max) {
+                            max = neighbours.get(ctrN).getArmy();
+                            maxArmyCountry = neighbours.get(ctrN);
+                        }
+                    }
+                }
 
                 int armyToFortify = maxArmyCountry.getArmy() - 1;
 
-        		if(maxArmyCountry != null) {
+                if(maxArmyCountry != null) {
                     minCountry.setSelected(true);
                     maxArmyCountry.setSelected(true);
                     pauseAndRefresh(gameState, PAUSE * 3);
@@ -293,8 +293,8 @@ public class AiBenevolentStrategy extends BaseStrategy {
                     String message = gameState.getCurrentPlayer().getName() + " fortify " + minCountry.getName() + " from " + maxArmyCountry.getName() + " by " + armyToFortify;
                     gameState.setCurrentTurnPhraseText(message);
                     publish(message);
-        		}
-        	}
+                }
+            }
 
             pauseAndRefresh(gameState, PAUSE * 2);
             return null;
@@ -320,7 +320,7 @@ public class AiBenevolentStrategy extends BaseStrategy {
             Game.getInstance().getGamePhaseStrategy().nextTurnButton(gameState);
         }
     }
-    
+
 
     /**
      * Attack phase worker for Ai
