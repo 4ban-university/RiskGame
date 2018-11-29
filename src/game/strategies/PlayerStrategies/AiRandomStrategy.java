@@ -219,6 +219,7 @@ public class AiRandomStrategy extends BaseStrategy {
          */
         @Override
         protected Void doInBackground() {
+            // TODO Luck parameter
             float randomThreshold = 0.01f;
 
             Random random = new Random();

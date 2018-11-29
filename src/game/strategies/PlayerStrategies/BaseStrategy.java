@@ -18,7 +18,7 @@ import java.util.stream.Collectors;
  */
 public class BaseStrategy implements IPlayerStrategy, Serializable {
     private static final long serialVersionUID = 1L;
-
+    // TODO Pause var
     public final int PAUSE = 3000;
     /**
      * Method describes the behavior of the game during rolling the dices. i.e. attacking phase.
