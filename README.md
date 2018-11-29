@@ -1,7 +1,9 @@
 # soen6441
 The risk game
-![2018-11-14-192350_1600x900_scrot](https://user-images.githubusercontent.com/2269864/48521601-2a9a2c80-e843-11e8-92c0-4871a4cc0aaa.jpg)
+![2018-11-29-100855_1600x900_scrot](https://user-images.githubusercontent.com/2269864/49231052-17e53300-f3bf-11e8-8d24-7731f7dda1a2.jpg)
 
+# Documentation
+Documentation cen be founded in doc folder
 
 # The Google drive folder
 Documentation for editing can be founded [here](https://drive.google.com/open?id=1huxtpM3wpLfRqsBpULZw2bwL_oJIjaIN)

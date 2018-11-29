@@ -179,6 +179,10 @@ public class Game {
         }
     }
 
+    /**
+     * Get current JFrame
+     * @return
+     */
     public JFrame getjFrame() {
         return jFrame;
     }
