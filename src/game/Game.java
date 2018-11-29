@@ -175,4 +175,20 @@ public class Game {
             e.printStackTrace();
         }
     }
+
+    /**
+     * Save game for test purposes action.
+     * Save gamestate object with all states to the file.
+     */
+    public void saveForTest() {
+        try {
+            FileOutputStream myFileOutputStream = new FileOutputStream("./test/resources/SaveTest.risk");
+            ObjectOutputStream myObjectOutputStream = new ObjectOutputStream(myFileOutputStream);
+            myObjectOutputStream.writeObject(gameState);
+            myObjectOutputStream.close();
+        } catch (Exception e) {
+            System.out.println("Error when saving to file. ");
+            e.printStackTrace();
+        }
+    }
 }
