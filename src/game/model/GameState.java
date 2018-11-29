@@ -518,25 +518,50 @@ public class GameState implements IObservable, Serializable {
         this.currentTurnNumber = currentTurnNumber;
     }
 
+    /**
+     * Get result of tournament
+     * @return result
+     */
     public String getResult() {
         return result;
     }
 
+    /**
+     * Set result of the tournament game
+     * @param result
+     */
     public void setResult(String result) {
         this.result = result;
     }
 
+    /**
+     * Is the game in tournament mode?
+     * @return
+     */
     public boolean isTurnament() {
         return turnament;
     }
 
+    /**
+     * Set tournament
+     * @param turnament
+     */
     public void setTurnament(boolean turnament) {
         this.turnament = turnament;
     }
 
+    /**
+     * Was game just loaded?
+     * @return
+     */
     public boolean isJustLoad() {
         return justLoad;
     }
+
+    /**
+     * Set that the game was just loaded
+     * @param justLoad
+     */
     public void setJustLoad(boolean justLoad) {
         this.justLoad = justLoad;
     }
